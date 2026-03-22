@@ -22,49 +22,38 @@
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
 
-  /* HERO */
   .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
-
   .hero-left { background: var(--ink); display: flex; flex-direction: column; justify-content: center; padding: 5rem 4rem 5rem 5rem; position: relative; }
   .hero-left::after { content: ''; position: absolute; top: 0; right: -1px; bottom: 0; width: 1px; background: var(--gold); opacity: 0.4; }
-
   .hero-eyebrow { font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
-
   .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(46px, 5.5vw, 72px); font-weight: 300; color: var(--white); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s; }
   .hero-name em { font-style: italic; color: var(--gold-light); }
-
   .hero-tagline { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.8; max-width: 340px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s; }
-
   .hero-langs { display: flex; gap: 1.25rem; margin-top: 3rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.8s; flex-wrap: wrap; align-items: flex-start; }
   .lang { display: flex; flex-direction: column; align-items: center; gap: 5px; }
   .lang-flag { font-size: 22px; line-height: 1; }
   .lang-code { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); display: block; text-align: center; }
   .lang-level { font-size: 9px; color: rgba(255,255,255,0.28); letter-spacing: 0.04em; display: block; text-align: center; margin-top: 1px; }
-
   .hero-right { background: var(--cream); display: flex; flex-direction: column; justify-content: center; padding: 5rem 5rem 5rem 4rem; }
   .hero-right-label { font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s; }
   .hero-proposition { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 2.6vw, 30px); font-weight: 300; color: var(--ink); line-height: 1.55; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; }
   .hero-proposition strong { font-weight: 500; }
-
   .pillars { display: flex; flex-direction: column; gap: 10px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.9s; }
   .pillar { display: flex; align-items: flex-start; gap: 14px; padding: 1rem 1.25rem; background: var(--white); border: 1px solid var(--cream-dark); border-radius: 8px; transition: border-color 0.2s; }
   .pillar:hover { border-color: var(--gold-light); }
   .pillar-icon { width: 32px; height: 32px; background: var(--ink); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
   .pillar-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
   .pillar-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.5; }
-
   .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; animation: fadeUp 0.8s ease forwards 1.2s; }
   .scroll-hint span { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); }
   .scroll-line { width: 1px; height: 40px; background: var(--gold); opacity: 0.5; animation: scrollPulse 2s ease-in-out infinite; }
 
-  /* SECTIONS */
   .section { padding: 6rem 5rem; max-width: 1100px; margin: 0 auto; }
   .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 4rem; }
   .section-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--cream-dark); line-height: 1; letter-spacing: -0.03em; flex-shrink: 0; }
   .section-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; color: var(--ink); line-height: 1.2; }
   .section-title em { font-style: italic; color: var(--gold); }
 
-  /* TIMELINE */
   .timeline { position: relative; padding-left: 2rem; }
   .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--gold-light), var(--cream-dark)); }
   .tl-item { position: relative; padding-left: 2.5rem; padding-bottom: 3rem; opacity: 0; transform: translateX(-16px); transition: all 0.6s ease; }
@@ -82,7 +71,6 @@
   .tl-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
   .tl-tag { display: inline-block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(154,128,80,0.08); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(154,128,80,0.2); }
 
-  /* RECOMMENDATION */
   .rec-section { background: var(--white); border-top: 1px solid var(--cream-dark); border-bottom: 1px solid var(--cream-dark); padding: 5rem; }
   .rec-inner { max-width: 800px; margin: 0 auto; }
   .rec-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; }
@@ -91,7 +79,6 @@
   .rec-attr { font-size: 13px; color: var(--ink-muted); padding-left: 2rem; }
   .rec-attr strong { color: var(--ink); font-weight: 500; }
 
-  /* VALUE GRID */
   .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--cream-dark); border: 1.5px solid var(--cream-dark); border-radius: 12px; overflow: hidden; }
   .value-cell { background: var(--white); padding: 2.5rem 2rem; transition: background 0.2s; }
   .value-cell:hover { background: var(--cream); }
@@ -99,7 +86,6 @@
   .value-label { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
   .value-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
 
-  /* SKILLS */
   .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
   .skill-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 2rem; transition: border-color 0.2s; }
   .skill-card:hover { border-color: var(--gold-light); }
@@ -108,18 +94,15 @@
   .skill-items { display: flex; flex-direction: column; gap: 7px; }
   .skill-item { font-size: 13px; color: var(--ink-soft); line-height: 1.55; padding-left: 1rem; position: relative; }
   .skill-item::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); }
-
   .meta-note { background: var(--cream-dark); border-radius: 10px; padding: 1.5rem 2rem; margin-top: 2rem; display: flex; gap: 1.25rem; align-items: flex-start; }
   .meta-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
   .meta-text { font-size: 13px; color: var(--ink-soft); line-height: 1.75; }
   .meta-text strong { color: var(--ink); font-weight: 500; }
 
-  /* DIVIDER */
   .gold-divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 5rem; max-width: 1100px; margin: 0 auto; }
   .gold-divider::before, .gold-divider::after { content: ''; flex: 1; height: 1px; background: var(--cream-dark); }
   .gold-divider-mark { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
 
-  /* VONTOBEL MESSAGE */
   .message-section { background: var(--ink); padding: 6rem 5rem; }
   .message-inner { max-width: 800px; margin: 0 auto; text-align: center; }
   .message-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 2rem; }
@@ -130,7 +113,6 @@
   .sig-line { width: 40px; height: 1px; background: var(--gold); opacity: 0.5; }
   .sig-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.7); font-style: italic; }
 
-  /* 90 DAYS */
   .days-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
   .day-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 2rem 1.75rem; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
   .day-card:hover { border-color: var(--gold-light); transform: translateY(-2px); }
@@ -141,16 +123,13 @@
   .day-items li { font-size: 13px; color: var(--ink-soft); line-height: 1.5; padding-left: 1rem; position: relative; }
   .day-items li::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); font-size: 12px; }
 
-  /* FOOTER */
   footer { background: var(--cream-dark); padding: 2.5rem 5rem; display: flex; justify-content: space-between; align-items: center; }
   .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--ink); font-style: italic; }
   .footer-note { font-size: 12px; color: var(--ink-muted); letter-spacing: 0.05em; }
 
-  /* ANIMATIONS */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes scrollPulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; } }
 
-  /* RESPONSIVE */
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; min-height: auto; }
     .hero-left { padding: 4rem 2rem 3rem; min-height: 65vh; }
@@ -169,34 +148,16 @@
 </head>
 <body>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">Candidate · Client Support · Vontobel Miami</div>
     <h1 class="hero-name">Joao V.<br><em>Rossi</em></h1>
     <p class="hero-tagline">An operations and client support professional shaped by institutional precision, international experience, and a standard of service excellence built at the very beginning of his career.</p>
-
     <div class="hero-langs">
-      <div class="lang">
-        <div class="lang-flag">🇧🇷</div>
-        <span class="lang-code">PT</span>
-        <span class="lang-level">Fluent · Native</span>
-      </div>
-      <div class="lang">
-        <div class="lang-flag">🇺🇸</div>
-        <span class="lang-code">EN</span>
-        <span class="lang-level">Professional</span>
-      </div>
-      <div class="lang">
-        <div class="lang-flag">🇪🇸</div>
-        <span class="lang-code">ES</span>
-        <span class="lang-level">Professional</span>
-      </div>
-      <div class="lang">
-        <div class="lang-flag">🇨🇭</div>
-        <span class="lang-code">FR</span>
-        <span class="lang-level">Working</span>
-      </div>
+      <div class="lang"><div class="lang-flag">🇧🇷</div><span class="lang-code">PT</span><span class="lang-level">Fluent · Native</span></div>
+      <div class="lang"><div class="lang-flag">🇺🇸</div><span class="lang-code">EN</span><span class="lang-level">Professional</span></div>
+      <div class="lang"><div class="lang-flag">🇪🇸</div><span class="lang-code">ES</span><span class="lang-level">Professional</span></div>
+      <div class="lang"><div class="lang-flag">🇨🇭</div><span class="lang-code">FR</span><span class="lang-level">Working</span></div>
     </div>
   </div>
 
@@ -234,14 +195,13 @@
   </div>
 </section>
 
-<!-- STORY -->
 <section class="section">
   <div class="section-header">
     <span class="section-num">01</span>
     <h2 class="section-title">A career built on<br><em>trust and precision</em></h2>
   </div>
-
   <div class="timeline">
+
     <div class="tl-item">
       <div class="tl-dot featured"></div>
       <div class="tl-period">2025 – 2026 · Most recent</div>
@@ -267,13 +227,14 @@
     <div class="tl-item">
       <div class="tl-dot"></div>
       <div class="tl-period">2019 – 2024</div>
-      <div class="tl-role">Client Services & Financial Operations</div>
-      <div class="tl-org">VR Capital LLC · Miami, FL</div>
-      <div class="tl-desc">Coordinated cross-border financial operations for international clients — wire transfers, financial reconciliation, vendor management, and compliance documentation. Served as a trusted point of contact for clients navigating U.S. markets, managing sensitive information with full discretion.</div>
+      <div class="tl-role">Operations Support & Process Coordination — Private Clients</div>
+      <div class="tl-org">Independent · Miami, FL</div>
+      <div class="tl-desc">Independent operational support to private clients — coordinating cross-border financial operations, wire transfers, financial reconciliation, vendor management, and compliance documentation. Served as a trusted point of contact for clients navigating U.S. markets, managing sensitive information with full discretion.</div>
       <div class="tl-tags">
         <span class="tl-tag">LatAm clients</span>
         <span class="tl-tag">Financial operations</span>
         <span class="tl-tag">Cross-border</span>
+        <span class="tl-tag">Independent</span>
       </div>
     </div>
 
@@ -300,10 +261,10 @@
         <span class="tl-tag">Multicultural environment</span>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- RECOMMENDATION -->
 <div class="rec-section">
   <div class="rec-inner">
     <div class="rec-eyebrow">Letter of recommendation · Consulate General of Brazil · Miami</div>
@@ -312,13 +273,11 @@
   </div>
 </div>
 
-<!-- VALUE -->
 <section class="section" style="padding-top: 5rem;">
   <div class="section-header">
     <span class="section-num">02</span>
     <h2 class="section-title">What this means<br><em>for your team</em></h2>
   </div>
-
   <div class="value-grid">
     <div class="value-cell">
       <div class="value-num">4</div>
@@ -327,26 +286,24 @@
     </div>
     <div class="value-cell">
       <div class="value-num">10+</div>
-      <div class="value-label">Years client-facing</div>
+      <div class="value-label">Years client services</div>
       <div class="value-desc">From Disneyland Paris to a diplomatic mission — a decade of building trust with demanding clients across high-stakes, multicultural environments.</div>
     </div>
     <div class="value-cell">
       <div class="value-num">↑</div>
       <div class="value-label">Continuous improvement</div>
-      <div class="value-desc">Not perfection — but a consistent drive to raise the standard. Every role has left a process better than it was found, backed by concrete initiatives and results.</div>
+      <div class="value-desc">A consistent drive to raise the standard. Every role has left a process better than it was found, backed by concrete initiatives and results.</div>
     </div>
   </div>
 </section>
 
 <div class="gold-divider"><div class="gold-divider-mark"></div></div>
 
-<!-- TECH & CREATIVE -->
 <section class="section" style="padding-top: 5rem;">
   <div class="section-header">
     <span class="section-num">03</span>
     <h2 class="section-title">Technical aptitude &<br><em>creative initiative</em></h2>
   </div>
-
   <div class="skills-grid">
     <div class="skill-card">
       <div class="skill-icon">💻</div>
@@ -370,14 +327,12 @@
       </div>
     </div>
   </div>
-
   <div class="meta-note">
     <div class="meta-icon">↗</div>
     <div class="meta-text"><strong>A note on this document itself:</strong> This brief — and the site you're reading — were created specifically for this conversation with Vontobel. Not because it was required, but because it reflects how I approach any professional challenge: with preparation, intention, and the belief that the extra mile is where the real impression is made.</div>
   </div>
 </section>
 
-<!-- VONTOBEL MESSAGE -->
 <section class="message-section">
   <div class="message-inner">
     <div class="message-eyebrow">A personal note for Vontobel</div>
@@ -391,13 +346,11 @@
   </div>
 </section>
 
-<!-- 90 DAYS -->
 <section class="section">
   <div class="section-header">
     <span class="section-num">04</span>
     <h2 class="section-title">My first<br><em>90 days</em></h2>
   </div>
-
   <div class="days-grid">
     <div class="day-card">
       <div class="day-period">Days 1 – 30</div>
