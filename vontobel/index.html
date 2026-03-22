@@ -5,357 +5,924 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Joao V. Rossi — Client Support Professional</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Spectral:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0e0e10;
-    --ink-soft: #3a3a40;
-    --ink-muted: #7a7a85;
-    --gold: #9a8050;
-    --gold-light: #c4a96a;
-    --cream: #f8f6f1;
-    --cream-dark: #ede9e0;
-    --white: #ffffff;
+    --ink:        #111113;
+    --ink-soft:   #38383f;
+    --ink-muted:  #78788a;
+    --ink-faint:  #b0b0bc;
+    --gold:       #8a7248;
+    --gold-mid:   #b09060;
+    --gold-light: #cdb47a;
+    --gold-pale:  #e8ddc8;
+    --cream:      #f7f5f0;
+    --cream-mid:  #eeebe3;
+    --white:      #ffffff;
+    --rule:       rgba(138,114,72,0.18);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
 
-  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
-  .hero-left { background: var(--ink); display: flex; flex-direction: column; justify-content: center; padding: 5rem 4rem 5rem 5rem; position: relative; }
-  .hero-left::after { content: ''; position: absolute; top: 0; right: -1px; bottom: 0; width: 1px; background: var(--gold); opacity: 0.4; }
-  .hero-eyebrow { font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
-  .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(46px, 5.5vw, 72px); font-weight: 300; color: var(--white); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s; }
-  .hero-name em { font-style: italic; color: var(--gold-light); }
-  .hero-tagline { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.8; max-width: 340px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s; }
-  .hero-langs { display: flex; gap: 1.25rem; margin-top: 3rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.8s; flex-wrap: wrap; align-items: flex-start; }
-  .lang { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-  .lang-flag { font-size: 22px; line-height: 1; }
-  .lang-code { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); display: block; text-align: center; }
-  .lang-level { font-size: 9px; color: rgba(255,255,255,0.28); letter-spacing: 0.04em; display: block; text-align: center; margin-top: 1px; }
-  .hero-right { background: var(--cream); display: flex; flex-direction: column; justify-content: center; padding: 5rem 5rem 5rem 4rem; }
-  .hero-right-label { font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s; }
-  .hero-proposition { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 2.6vw, 30px); font-weight: 300; color: var(--ink); line-height: 1.55; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; }
-  .hero-proposition strong { font-weight: 500; }
-  .pillars { display: flex; flex-direction: column; gap: 10px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.9s; }
-  .pillar { display: flex; align-items: flex-start; gap: 14px; padding: 1rem 1.25rem; background: var(--white); border: 1px solid var(--cream-dark); border-radius: 8px; transition: border-color 0.2s; }
-  .pillar:hover { border-color: var(--gold-light); }
-  .pillar-icon { width: 32px; height: 32px; background: var(--ink); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
-  .pillar-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-  .pillar-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.5; }
-  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; animation: fadeUp 0.8s ease forwards 1.2s; }
-  .scroll-hint span { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); }
-  .scroll-line { width: 1px; height: 40px; background: var(--gold); opacity: 0.5; animation: scrollPulse 2s ease-in-out infinite; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  .section { padding: 6rem 5rem; max-width: 1100px; margin: 0 auto; }
-  .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 4rem; }
-  .section-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--cream-dark); line-height: 1; letter-spacing: -0.03em; flex-shrink: 0; }
-  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; color: var(--ink); line-height: 1.2; }
-  .section-title em { font-style: italic; color: var(--gold); }
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
 
-  .timeline { position: relative; padding-left: 2rem; }
-  .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--gold-light), var(--cream-dark)); }
-  .tl-item { position: relative; padding-left: 2.5rem; padding-bottom: 3rem; opacity: 0; transform: translateX(-16px); transition: all 0.6s ease; }
-  .tl-item.visible { opacity: 1; transform: translateX(0); }
+  .hero-left {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4.5rem 6rem 5.5rem;
+    position: relative;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    top: 15%; right: 0; bottom: 15%;
+    width: 1px;
+    background: var(--gold);
+    opacity: 0.3;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.1s;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 80px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.25s;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--gold-light);
+    display: block;
+  }
+
+  .hero-tagline {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.48);
+    line-height: 1.85;
+    max-width: 320px;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.4s;
+  }
+
+  .lang-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.55s;
+    flex-wrap: wrap;
+  }
+
+  .lang {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .lang-flag { font-size: 20px; line-height: 1; }
+
+  .lang-code {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .lang-lvl {
+    font-size: 8px;
+    color: rgba(255,255,255,0.22);
+    letter-spacing: 0.04em;
+  }
+
+  /* RIGHT SIDE */
+  .hero-right {
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 5.5rem 6rem 4.5rem;
+  }
+
+  .right-label {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.3s;
+  }
+
+  .hero-prop {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.4vw, 28px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.45s;
+  }
+
+  .hero-prop strong {
+    font-weight: 400;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+  }
+
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    animation: rise 1s cubic-bezier(.22,1,.36,1) forwards 0.6s;
+  }
+
+  .pillar {
+    display: flex;
+    gap: 16px;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .pillar:first-child { border-top: 0.5px solid var(--rule); }
+
+  .pillar-mark {
+    width: 3px;
+    height: 3px;
+    background: var(--gold-mid);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .pillar-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+    letter-spacing: 0.01em;
+  }
+
+  .pillar-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* SCROLL */
+  .scroll-mark {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: rise 1s ease forwards 1.2s;
+  }
+
+  .scroll-mark span {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .scroll-mark-line {
+    width: 1px;
+    height: 36px;
+    background: var(--gold-mid);
+    opacity: 0.4;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 7rem 6rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4.5rem;
+  }
+
+  .section-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: var(--cream-mid);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .section-t {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.18;
+  }
+
+  .section-t em { font-style: italic; color: var(--gold); }
+
+  /* TIMELINE */
+  .tl { position: relative; padding-left: 2.5rem; }
+
+  .tl::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold-mid) 0%, var(--gold-pale) 70%, transparent 100%);
+  }
+
+  .tl-item {
+    position: relative;
+    padding-left: 2.5rem;
+    padding-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .tl-item.in { opacity: 1; transform: translateX(0); }
   .tl-item:last-child { padding-bottom: 0; }
-  .tl-dot { position: absolute; left: -0.45rem; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--white); border: 2px solid var(--gold); }
-  .tl-dot.featured { background: var(--gold); width: 14px; height: 14px; left: -0.6rem; top: 4px; }
-  .tl-period { font-size: 11px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-  .tl-role { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
-  .tl-org { font-size: 13px; color: var(--ink-muted); margin-bottom: 10px; }
-  .tl-desc { font-size: 14px; color: var(--ink-soft); line-height: 1.8; max-width: 560px; }
-  .tl-highlights { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; max-width: 560px; }
-  .tl-hl { font-size: 13px; color: var(--ink-soft); line-height: 1.6; padding-left: 1rem; position: relative; }
-  .tl-hl::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); }
-  .tl-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-  .tl-tag { display: inline-block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(154,128,80,0.08); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(154,128,80,0.2); }
 
-  .rec-section { background: var(--white); border-top: 1px solid var(--cream-dark); border-bottom: 1px solid var(--cream-dark); padding: 5rem; }
-  .rec-inner { max-width: 800px; margin: 0 auto; }
-  .rec-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; }
-  .rec-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 2.8vw, 30px); font-weight: 300; font-style: italic; color: var(--ink); line-height: 1.65; margin-bottom: 1.5rem; position: relative; padding-left: 2rem; }
-  .rec-quote::before { content: '\201C'; position: absolute; left: 0; top: -8px; font-size: 60px; color: var(--gold-light); opacity: 0.4; font-family: 'Cormorant Garamond', serif; line-height: 1; }
-  .rec-attr { font-size: 13px; color: var(--ink-muted); padding-left: 2rem; }
-  .rec-attr strong { color: var(--ink); font-weight: 500; }
+  .tl-node {
+    position: absolute;
+    left: -0.38rem;
+    top: 7px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 1.5px solid var(--gold-mid);
+  }
 
-  .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--cream-dark); border: 1.5px solid var(--cream-dark); border-radius: 12px; overflow: hidden; }
-  .value-cell { background: var(--white); padding: 2.5rem 2rem; transition: background 0.2s; }
-  .value-cell:hover { background: var(--cream); }
-  .value-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--gold-light); line-height: 1; margin-bottom: 0.75rem; }
-  .value-label { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
-  .value-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
+  .tl-node.primary {
+    background: var(--gold-mid);
+    width: 13px;
+    height: 13px;
+    left: -0.55rem;
+    top: 5px;
+    border-color: var(--gold);
+  }
 
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .skill-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 2rem; transition: border-color 0.2s; }
-  .skill-card:hover { border-color: var(--gold-light); }
-  .skill-icon { font-size: 22px; margin-bottom: 1rem; }
-  .skill-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 0.75rem; }
-  .skill-items { display: flex; flex-direction: column; gap: 7px; }
-  .skill-item { font-size: 13px; color: var(--ink-soft); line-height: 1.55; padding-left: 1rem; position: relative; }
-  .skill-item::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); }
-  .meta-note { background: var(--cream-dark); border-radius: 10px; padding: 1.5rem 2rem; margin-top: 2rem; display: flex; gap: 1.25rem; align-items: flex-start; }
-  .meta-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
-  .meta-text { font-size: 13px; color: var(--ink-soft); line-height: 1.75; }
-  .meta-text strong { color: var(--ink); font-weight: 500; }
+  .tl-when {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 7px;
+  }
 
-  .gold-divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 5rem; max-width: 1100px; margin: 0 auto; }
-  .gold-divider::before, .gold-divider::after { content: ''; flex: 1; height: 1px; background: var(--cream-dark); }
-  .gold-divider-mark { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+  .tl-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 3px;
+    line-height: 1.25;
+  }
 
-  .message-section { background: var(--ink); padding: 6rem 5rem; }
-  .message-inner { max-width: 800px; margin: 0 auto; text-align: center; }
-  .message-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 2rem; }
-  .message-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 3.2vw, 42px); font-weight: 300; font-style: italic; color: var(--white); line-height: 1.45; margin-bottom: 3rem; }
-  .message-quote strong { font-style: normal; font-weight: 400; color: var(--gold-light); }
-  .message-body { font-size: 15px; color: rgba(255,255,255,0.52); line-height: 1.9; max-width: 600px; margin: 0 auto 3rem; }
-  .message-signature { display: inline-flex; align-items: center; gap: 12px; padding: 1rem 2rem; border: 1px solid rgba(154,128,80,0.3); border-radius: 4px; }
-  .sig-line { width: 40px; height: 1px; background: var(--gold); opacity: 0.5; }
-  .sig-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.7); font-style: italic; }
+  .tl-where {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
 
-  .days-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .day-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 2rem 1.75rem; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
-  .day-card:hover { border-color: var(--gold-light); transform: translateY(-2px); }
-  .day-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); opacity: 0.4; }
-  .day-period { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
-  .day-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 1.25rem; line-height: 1.3; }
-  .day-items { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .day-items li { font-size: 13px; color: var(--ink-soft); line-height: 1.5; padding-left: 1rem; position: relative; }
-  .day-items li::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); font-size: 12px; }
+  .tl-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.85;
+    max-width: 560px;
+    margin-bottom: 14px;
+  }
 
-  footer { background: var(--cream-dark); padding: 2.5rem 5rem; display: flex; justify-content: space-between; align-items: center; }
-  .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--ink); font-style: italic; }
-  .footer-note { font-size: 12px; color: var(--ink-muted); letter-spacing: 0.05em; }
+  .tl-points {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 560px;
+    margin-bottom: 14px;
+  }
 
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes scrollPulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; } }
+  .tl-pt {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    padding-left: 1.1rem;
+    position: relative;
+  }
 
-  @media (max-width: 768px) {
+  .tl-pt::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold-mid);
+    font-size: 12px;
+  }
+
+  .tl-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(138,114,72,0.07);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 0.5px solid rgba(138,114,72,0.22);
+    font-weight: 400;
+  }
+
+  /* QUOTE BAND */
+  .quote-band {
+    background: var(--white);
+    border-top: 1px solid var(--cream-mid);
+    border-bottom: 1px solid var(--cream-mid);
+    padding: 5.5rem 6rem;
+  }
+
+  .quote-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 2.5rem;
+  }
+
+  .quote-inner::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gold-light);
+    opacity: 0.6;
+    border-radius: 2px;
+  }
+
+  .quote-label {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.4vw, 28px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  .quote-from {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  .quote-from strong { color: var(--ink-soft); font-weight: 500; }
+
+  /* VALUE GRID */
+  .v-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--cream-mid);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .v-cell {
+    padding: 2.75rem 2.25rem;
+    border-right: 1px solid var(--cream-mid);
+    background: var(--white);
+    transition: background 0.2s;
+  }
+
+  .v-cell:last-child { border-right: none; }
+  .v-cell:hover { background: var(--cream); }
+
+  .v-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 0.85rem;
+  }
+
+  .v-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 7px;
+    letter-spacing: 0.02em;
+  }
+
+  .v-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.7; font-weight: 300; }
+
+  /* RULE */
+  .hr {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 6rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .hr::before, .hr::after { content: ''; flex: 1; height: 1px; background: var(--cream-mid); }
+  .hr-gem { width: 5px; height: 5px; background: var(--gold-mid); transform: rotate(45deg); flex-shrink: 0; opacity: 0.7; }
+
+  /* SKILLS */
+  .skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+  .skill-card {
+    background: var(--white);
+    border: 1px solid var(--cream-mid);
+    border-radius: 10px;
+    padding: 2.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover { border-color: var(--gold-pale); }
+
+  .skill-head {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .skill-head-mark {
+    width: 18px;
+    height: 1px;
+    background: var(--gold-mid);
+    flex-shrink: 0;
+  }
+
+  .skill-pts { display: flex; flex-direction: column; gap: 8px; }
+
+  .skill-pt {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    padding-left: 1rem;
+    position: relative;
+    font-weight: 300;
+  }
+
+  .skill-pt::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); font-size: 12px; }
+
+  .meta {
+    background: var(--cream-mid);
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1.75rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .meta-arrow { color: var(--gold-mid); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .meta-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.75; font-weight: 300; }
+  .meta-copy strong { color: var(--ink); font-weight: 500; }
+
+  /* MESSAGE DARK SECTION */
+  .msg-section { background: var(--ink); padding: 7rem 6rem; }
+
+  .msg-inner { max-width: 780px; margin: 0 auto; text-align: center; }
+
+  .msg-label {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 2.5rem;
+  }
+
+  .msg-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3.5vw, 46px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 3rem;
+  }
+
+  .msg-q strong { font-style: normal; font-weight: 400; color: var(--gold-light); }
+
+  .msg-body {
+    font-size: 15px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.95;
+    max-width: 580px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+  }
+
+  .msg-sig {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0.9rem 2rem;
+    border: 0.5px solid rgba(138,114,72,0.28);
+    border-radius: 3px;
+  }
+
+  .sig-rule { width: 36px; height: 1px; background: var(--gold-mid); opacity: 0.5; }
+
+  .sig-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+
+  /* 90 DAYS */
+  .day-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  .day-card {
+    background: var(--white);
+    border: 1px solid var(--cream-mid);
+    border-radius: 10px;
+    padding: 2.25rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.25s;
+  }
+
+  .day-card:hover { border-color: var(--gold-pale); transform: translateY(-3px); }
+
+  .day-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1.5px;
+    background: var(--gold-mid);
+    opacity: 0.45;
+  }
+
+  .day-when {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+  }
+
+  .day-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .day-pts { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .day-pts li {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    padding-left: 1rem;
+    position: relative;
+    font-weight: 300;
+  }
+
+  .day-pts li::before { content: '—'; position: absolute; left: 0; color: var(--gold-light); font-size: 11px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--cream-mid);
+    padding: 2.25rem 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .footer-note { font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; }
+
+  /* ANIMATIONS */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.15; transform: scaleY(0.85); }
+    50%       { opacity: 0.55; transform: scaleY(1); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 780px) {
     .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 4rem 2rem 3rem; min-height: 65vh; }
+    .hero-left { padding: 4rem 2rem 3rem; min-height: 60vh; }
     .hero-left::after { display: none; }
     .hero-right { padding: 3rem 2rem 4rem; }
     .section { padding: 4rem 2rem; }
-    .rec-section { padding: 4rem 2rem; }
-    .message-section { padding: 4rem 2rem; }
-    .gold-divider { padding: 0 2rem; }
-    .value-grid { grid-template-columns: 1fr; }
-    .days-grid { grid-template-columns: 1fr; }
-    .skills-grid { grid-template-columns: 1fr; }
+    .quote-band { padding: 4rem 2rem; }
+    .msg-section { padding: 4rem 2rem; }
+    .hr { padding: 0 2rem; }
+    .v-grid { grid-template-columns: 1fr; }
+    .day-grid { grid-template-columns: 1fr; }
+    .skill-grid { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 2rem; }
   }
 </style>
 </head>
 <body>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow">Candidate · Client Services Support (LatAm/US Offshore) · Vontobel Miami</div>
+    <p class="eyebrow">Candidate · Client Support · Vontobel Miami</p>
     <h1 class="hero-name">Joao V.<br><em>Rossi</em></h1>
-    <p class="hero-tagline">An operations and client support professional shaped by institutional precision, international experience, and a standard of service excellence built at the very beginning of his career.</p>
-    <div class="hero-langs">
-      <div class="lang"><div class="lang-flag">🇧🇷</div><span class="lang-code">PT</span><span class="lang-level">Fluent · Native</span></div>
-      <div class="lang"><div class="lang-flag">🇺🇸</div><span class="lang-code">EN</span><span class="lang-level">Professional</span></div>
-      <div class="lang"><div class="lang-flag">🇪🇸</div><span class="lang-code">ES</span><span class="lang-level">Professional</span></div>
-      <div class="lang"><div class="lang-flag">🇨🇭</div><span class="lang-code">FR</span><span class="lang-level">Working</span></div>
+    <p class="hero-tagline">Operations & client support professional — shaped by institutional precision, cross-cultural experience, and a genuine care for the people he serves.</p>
+    <div class="lang-row">
+      <div class="lang"><span class="lang-flag">🇧🇷</span><span class="lang-code">PT</span><span class="lang-lvl">Native</span></div>
+      <div class="lang"><span class="lang-flag">🇺🇸</span><span class="lang-code">EN</span><span class="lang-lvl">Professional</span></div>
+      <div class="lang"><span class="lang-flag">🇪🇸</span><span class="lang-code">ES</span><span class="lang-lvl">Professional</span></div>
+      <div class="lang"><span class="lang-flag">🇨🇭</span><span class="lang-code">FR</span><span class="lang-lvl">Working</span></div>
     </div>
   </div>
 
   <div class="hero-right">
-    <div class="hero-right-label">What I bring to Vontobel</div>
-    <p class="hero-proposition">A professional shaped by <strong>institutional precision,</strong> cross-border client experience, and a genuine belief that every client interaction is an opportunity to exceed expectations.</p>
+    <p class="right-label">What I bring to Vontobel</p>
+    <p class="hero-prop">A service standard built at <strong>Disneyland Paris.</strong> Refined across financial services, cross-cultural environments, and a diplomatic mission.</p>
     <div class="pillars">
       <div class="pillar">
-        <div class="pillar-icon">🌎</div>
+        <div class="pillar-mark"></div>
         <div>
           <div class="pillar-title">LatAm cultural fluency</div>
-          <div class="pillar-desc">Native understanding of Brazilian and Latin American client dynamics — beyond language, into how trust is actually built.</div>
+          <div class="pillar-desc">Native understanding of how trust is built — not just communicated — with Brazilian and Latin American clients.</div>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🏛️</div>
+        <div class="pillar-mark"></div>
         <div>
           <div class="pillar-title">Compliance-aware operations</div>
-          <div class="pillar-desc">High-volume workflow management in demanding institutional environments — with continuous attention to accuracy and process improvement.</div>
+          <div class="pillar-desc">Institutional workflow management under regulatory constraints — with a consistent drive to leave processes better than found.</div>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">⚙️</div>
+        <div class="pillar-mark"></div>
         <div>
           <div class="pillar-title">Technical aptitude & initiative</div>
-          <div class="pillar-desc">Self-taught across IT and digital tools — with a track record of building solutions that make teams more efficient.</div>
+          <div class="pillar-desc">Self-taught across IT, certified, and with a track record of building tools that solve real operational problems.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="scroll-hint">
-    <div class="scroll-line"></div>
+  <div class="scroll-mark">
+    <div class="scroll-mark-line"></div>
     <span>Scroll</span>
   </div>
 </section>
 
+<!-- STORY -->
 <section class="section">
-  <div class="section-header">
-    <span class="section-num">01</span>
-    <h2 class="section-title">A career built on<br><em>trust and precision</em></h2>
+  <div class="section-head">
+    <span class="section-n">01</span>
+    <h2 class="section-t">A career built on<br><em>trust and precision</em></h2>
   </div>
-  <div class="timeline">
 
+  <div class="tl">
     <div class="tl-item">
-      <div class="tl-dot featured"></div>
-      <div class="tl-period">2025 – 2026 · Most recent</div>
-      <div class="tl-role">Administrative Operations — Consular Services</div>
-      <div class="tl-org">Consulate General of Brazil · Miami, FL · Under supervision of the Deputy Consul General</div>
-      <div class="tl-desc">Joined the Consular Operations Department during a period of reduced staffing — managing high volumes of sensitive official documentation under strict regulatory requirements. Recognized by supervising Vice Consuls for consistency, precision, and dependability throughout.</div>
-      <div class="tl-highlights">
-        <div class="tl-hl">Managed complex, multi-stage case workflows across all service channels — identifying and resolving documentation issues proactively to keep cases moving</div>
-        <div class="tl-hl">Trained and integrated new staff members, sharing procedural knowledge and contributing to team cohesion during a demanding period</div>
-        <div class="tl-hl">Designated as IT support in the absence of the responsible staff member — ensuring operational continuity for the sector through technical troubleshooting</div>
-        <div class="tl-hl">Collaborated with the IT department to map departmental workflows and translate operational needs — contributing to the development and testing of a tool that improved information management efficiency for the sector</div>
-        <div class="tl-hl">Co-developed a narrated instructional tutorial guiding applicants through the passport process — improving accessibility for citizens unfamiliar with digital systems</div>
+      <div class="tl-node primary"></div>
+      <p class="tl-when">2025 – 2026 · Most recent</p>
+      <h3 class="tl-role">Administrative Operations — Consular Services</h3>
+      <p class="tl-where">Consulate General of Brazil · Miami, FL · Under supervision of the Deputy Consul General</p>
+      <p class="tl-body">Joined the Consular Operations Department during a period of reduced staffing capacity — managing sensitive official documentation at high volume under strict regulatory requirements. Recognized by supervising Vice Consuls for consistency, precision, and dependability across the full period of service.</p>
+      <div class="tl-points">
+        <p class="tl-pt">Managed multi-stage case workflows across all service channels — resolving documentation issues proactively before they reached the client</p>
+        <p class="tl-pt">Trained and integrated new team members, transferring procedural knowledge and contributing to cohesion during a demanding period</p>
+        <p class="tl-pt">Designated as IT support during staff absence — maintaining operational continuity through technical troubleshooting</p>
+        <p class="tl-pt">Collaborated with the IT department to map departmental workflows and articulate operational requirements — contributing to the development of a tool that improved information management efficiency for the sector</p>
+        <p class="tl-pt">Co-developed a narrated instructional tutorial guiding applicants through the passport process — improving digital accessibility for the citizens served</p>
       </div>
-      <div class="tl-tags">
-        <span class="tl-tag">Institutional</span>
-        <span class="tl-tag">Compliance-aware</span>
-        <span class="tl-tag">Technical initiative</span>
-        <span class="tl-tag">Staff training</span>
-        <span class="tl-tag">Process improvement</span>
+      <div class="tl-chips">
+        <span class="chip">Institutional</span>
+        <span class="chip">Compliance-aware</span>
+        <span class="chip">Technical initiative</span>
+        <span class="chip">Staff training</span>
+        <span class="chip">Process improvement</span>
       </div>
     </div>
 
     <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">2019 – 2024</div>
-      <div class="tl-role">Operations Support & Process Coordination — Private Clients</div>
-      <div class="tl-org">Independent · Miami, FL</div>
-      <div class="tl-desc">Independent operational support to private clients — coordinating cross-border financial operations, wire transfers, financial reconciliation, vendor management, and compliance documentation. Served as a trusted point of contact for clients navigating U.S. markets, managing sensitive information with full discretion.</div>
-      <div class="tl-tags">
-        <span class="tl-tag">LatAm clients</span>
-        <span class="tl-tag">Financial operations</span>
-        <span class="tl-tag">Cross-border</span>
-        <span class="tl-tag">Independent</span>
+      <div class="tl-node"></div>
+      <p class="tl-when">2019 – 2024</p>
+      <h3 class="tl-role">Operations Support & Process Coordination — Private Clients</h3>
+      <p class="tl-where">Independent · Miami, FL</p>
+      <p class="tl-body">Independent operational support to private clients — coordinating cross-border financial workflows, wire transfers, financial reconciliation, vendor management, and compliance documentation. Trusted point of contact for clients navigating U.S. markets, managing sensitive information with full discretion.</p>
+      <div class="tl-chips">
+        <span class="chip">LatAm clients</span>
+        <span class="chip">Financial operations</span>
+        <span class="chip">Cross-border</span>
       </div>
     </div>
 
     <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Earlier career</div>
-      <div class="tl-role">Financial Services</div>
-      <div class="tl-org">Brazil · Canada</div>
-      <div class="tl-desc">Foundation in banking and financial client services across two countries — building the compliance awareness and client-first approach that has informed every role since.</div>
-      <div class="tl-tags">
-        <span class="tl-tag">Foundation</span>
-        <span class="tl-tag">Multi-country</span>
+      <div class="tl-node"></div>
+      <p class="tl-when">Earlier career</p>
+      <h3 class="tl-role">Financial Services</h3>
+      <p class="tl-where">Brazil · Canada</p>
+      <p class="tl-body">Foundation in banking and client services across two countries — building the compliance awareness and client-first approach that has informed every role since.</p>
+      <div class="tl-chips">
+        <span class="chip">Foundation</span>
+        <span class="chip">Multi-country</span>
       </div>
     </div>
 
     <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Origin</div>
-      <div class="tl-role">Hôte d'Accueil Touristique</div>
-      <div class="tl-org">Disneyland Resort Paris · France</div>
-      <div class="tl-desc">Where the service standard was set. Working in one of the world's most demanding guest experience environments — in a second language, across cultures — established something permanent: the difference between a good interaction and a memorable one is the person behind it, and how much they genuinely care.</div>
-      <div class="tl-tags">
-        <span class="tl-tag">The origin of the standard</span>
-        <span class="tl-tag">Multicultural environment</span>
+      <div class="tl-node"></div>
+      <p class="tl-when">Origin</p>
+      <h3 class="tl-role">Hôte d'Accueil Touristique</h3>
+      <p class="tl-where">Disneyland Resort Paris · France</p>
+      <p class="tl-body">Where the standard was set. Working in one of the world's most demanding guest experience environments — in a second language, across cultures — established something that has never left: the difference between a good interaction and a memorable one is the person behind it, and how much they genuinely care.</p>
+      <div class="tl-chips">
+        <span class="chip">The origin of the standard</span>
+        <span class="chip">Cross-cultural</span>
       </div>
     </div>
-
   </div>
 </section>
 
-<div class="rec-section">
-  <div class="rec-inner">
-    <div class="rec-eyebrow">Letter of recommendation · Consulate General of Brazil · Miami</div>
-    <p class="rec-quote">He conducted himself with professionalism and composure. His profile reflects institutional reliability, professional integrity, and the capacity to contribute with genuine purpose in demanding environments.</p>
-    <p class="rec-attr"><strong>Deputy Consul General</strong> · Consulate General of Brazil, Miami · Brazilian Foreign Service</p>
+<!-- QUOTE -->
+<div class="quote-band">
+  <div class="quote-inner">
+    <p class="quote-label">Letter of recommendation · Consulate General of Brazil · Miami</p>
+    <p class="quote-text">He conducted himself with professionalism and composure. His profile reflects institutional reliability, professional integrity, and the capacity to contribute with genuine purpose in demanding environments.</p>
+    <p class="quote-from"><strong>Deputy Consul General</strong> · Brazilian Foreign Service · Consulate General of Brazil, Miami</p>
   </div>
 </div>
 
-<section class="section" style="padding-top: 5rem;">
-  <div class="section-header">
-    <span class="section-num">02</span>
-    <h2 class="section-title">What this means<br><em>for your team</em></h2>
+<!-- VALUE -->
+<section class="section" style="padding-top:5rem;">
+  <div class="section-head">
+    <span class="section-n">02</span>
+    <h2 class="section-t">What this means<br><em>for your team</em></h2>
   </div>
-  <div class="value-grid">
-    <div class="value-cell">
-      <div class="value-num">4</div>
-      <div class="value-label">Languages</div>
-      <div class="value-desc">Portuguese (native), English, Spanish (professional fluency), French (working) — real cultural bridges for your LatAm and US offshore relationships.</div>
+  <div class="v-grid">
+    <div class="v-cell">
+      <div class="v-n">4</div>
+      <div class="v-label">Languages</div>
+      <div class="v-desc">Portuguese (native), English and Spanish (professional), French (working) — real cultural fluency for your LatAm and US offshore client relationships.</div>
     </div>
-    <div class="value-cell">
-      <div class="value-num">10+</div>
-      <div class="value-label">Years client services</div>
-      <div class="value-desc">From Disneyland Paris to a diplomatic mission — a decade of building trust with demanding clients across high-stakes, multicultural environments.</div>
+    <div class="v-cell">
+      <div class="v-n">10+</div>
+      <div class="v-label">Years client services</div>
+      <div class="v-desc">From Disneyland Paris to a diplomatic mission — a decade of building trust with demanding clients across high-stakes, cross-cultural environments.</div>
     </div>
-    <div class="value-cell">
-      <div class="value-num">↑</div>
-      <div class="value-label">Continuous improvement</div>
-      <div class="value-desc">A consistent drive to raise the standard. Every role has left a process better than it was found, backed by concrete initiatives and results.</div>
+    <div class="v-cell">
+      <div class="v-n">↑</div>
+      <div class="v-label">Continuous improvement</div>
+      <div class="v-desc">A consistent drive to raise the standard. Every role has left a process better than it was found — backed by concrete initiatives and results.</div>
     </div>
   </div>
 </section>
 
-<div class="gold-divider"><div class="gold-divider-mark"></div></div>
+<div class="hr"><div class="hr-gem"></div></div>
 
-<section class="section" style="padding-top: 5rem;">
-  <div class="section-header">
-    <span class="section-num">03</span>
-    <h2 class="section-title">Technical aptitude &<br><em>creative initiative</em></h2>
+<!-- SKILLS -->
+<section class="section" style="padding-top:5rem;">
+  <div class="section-head">
+    <span class="section-n">03</span>
+    <h2 class="section-t">Technical aptitude &<br><em>creative initiative</em></h2>
   </div>
-  <div class="skills-grid">
+  <div class="skill-grid">
     <div class="skill-card">
-      <div class="skill-icon">💻</div>
-      <div class="skill-title">Technology proficiency</div>
-      <div class="skill-items">
-        <div class="skill-item">Microsoft Office Suite — Word, Excel, Outlook, PowerPoint</div>
-        <div class="skill-item">IT troubleshooting and technical support (designated role at the Consulate)</div>
-        <div class="skill-item">CompTIA Network+ · CompTIA Security+ · Azure AZ-900 — self-taught and certified</div>
-        <div class="skill-item">Process documentation, workflow mapping, and systems onboarding</div>
-        <div class="skill-item">Strong aptitude for learning new platforms quickly — demonstrated consistently across roles</div>
+      <div class="skill-head"><div class="skill-head-mark"></div>Technology proficiency</div>
+      <div class="skill-pts">
+        <p class="skill-pt">Microsoft Office Suite — Word, Excel, Outlook, PowerPoint</p>
+        <p class="skill-pt">IT troubleshooting and technical support — designated role at the Consulate</p>
+        <p class="skill-pt">CompTIA Network+ · CompTIA Security+ · Azure AZ-900 — self-taught and certified</p>
+        <p class="skill-pt">Process documentation, workflow mapping, systems onboarding</p>
+        <p class="skill-pt">Demonstrated ability to learn new platforms quickly and independently</p>
       </div>
     </div>
     <div class="skill-card">
-      <div class="skill-icon">✦</div>
-      <div class="skill-title">Creative & proactive approach</div>
-      <div class="skill-items">
-        <div class="skill-item">Contributed to building an efficiency tool for the Consulate's passport department — from workflow mapping to real-world testing</div>
-        <div class="skill-item">Co-produced a public-facing instructional tutorial improving digital accessibility for consular applicants</div>
-        <div class="skill-item">Designed this candidate brief and the site behind the QR code as a demonstration of how I approach any professional challenge</div>
-        <div class="skill-item">The instinct to go further — because that's where real trust is built</div>
+      <div class="skill-head"><div class="skill-head-mark"></div>Creative & proactive approach</div>
+      <div class="skill-pts">
+        <p class="skill-pt">Contributed to building an efficiency tool for the Consulate's passport department — from mapping workflows to testing in production</p>
+        <p class="skill-pt">Co-produced a public-facing instructional tutorial that improved digital accessibility for consular applicants</p>
+        <p class="skill-pt">Designed this candidate brief and the site behind the QR code as a demonstration of how I approach any professional challenge</p>
+        <p class="skill-pt">The instinct to go further — because that's where real trust is built</p>
       </div>
     </div>
   </div>
-  <div class="meta-note">
-    <div class="meta-icon">↗</div>
-    <div class="meta-text"><strong>A note on this document itself:</strong> This brief — and the site you're reading — were created specifically for this conversation with Vontobel. Not because it was required, but because it reflects how I approach any professional challenge: with preparation, intention, and the belief that the extra mile is where the real impression is made.</div>
+  <div class="meta">
+    <span class="meta-arrow">↗</span>
+    <p class="meta-copy"><strong>A note on this document itself:</strong> This brief — and the site behind the QR code — were created specifically for this conversation with Vontobel. Not because it was required, but because it reflects how I approach any professional challenge: with preparation, intention, and the belief that the extra mile is where the real impression is made.</p>
   </div>
 </section>
 
-<section class="message-section">
-  <div class="message-inner">
-    <div class="message-eyebrow">A personal note for Vontobel</div>
-    <p class="message-quote">"I didn't apply to Vontobel because it was available.<br>I applied because <strong>it made sense.</strong>"</p>
-    <p class="message-body">The LatAm focus, the Swiss precision, the culture of long-term thinking — these aren't things I discovered in the job description. They resonate with who I am and how I work. I spent time in Switzerland as a young person, and something about that country's relationship with standards and professionalism stayed with me for life. Seeing those same qualities reflected in a firm like Vontobel made this feel less like an application and more like a natural next step.</p>
-    <div class="message-signature">
-      <div class="sig-line"></div>
-      <span class="sig-text">Joao V. Rossi</span>
-      <div class="sig-line"></div>
+<!-- PERSONAL NOTE -->
+<section class="msg-section">
+  <div class="msg-inner">
+    <p class="msg-label">A personal note for Vontobel</p>
+    <p class="msg-q">"I didn't apply to Vontobel because it was available.<br>I applied because <strong>it made sense.</strong>"</p>
+    <p class="msg-body">The LatAm focus, the Swiss precision, the culture of long-term thinking — these aren't things I discovered in the job description. They resonate with who I am and how I work. I spent time in Switzerland as a young person, and something about that country's relationship with standards and professionalism stayed with me for life. Seeing those same qualities reflected in a firm like Vontobel made this feel less like an application and more like a natural next step.</p>
+    <div class="msg-sig">
+      <div class="sig-rule"></div>
+      <span class="sig-name">Joao V. Rossi</span>
+      <div class="sig-rule"></div>
     </div>
   </div>
 </section>
 
+<!-- 90 DAYS -->
 <section class="section">
-  <div class="section-header">
-    <span class="section-num">04</span>
-    <h2 class="section-title">My first<br><em>90 days</em></h2>
+  <div class="section-head">
+    <span class="section-n">04</span>
+    <h2 class="section-t">My first<br><em>90 days</em></h2>
   </div>
-  <div class="days-grid">
+  <div class="day-grid">
     <div class="day-card">
-      <div class="day-period">Days 1 – 30</div>
-      <div class="day-title">Listen, learn, map</div>
-      <ul class="day-items">
+      <p class="day-when">Days 1 – 30</p>
+      <h3 class="day-title">Listen, learn, map</h3>
+      <ul class="day-pts">
         <li>Understand the team's workflows and priorities</li>
         <li>Get fully up to speed on Salesforce and internal tools</li>
         <li>Shadow advisors to understand client profiles</li>
@@ -364,9 +931,9 @@
       </ul>
     </div>
     <div class="day-card">
-      <div class="day-period">Days 31 – 60</div>
-      <div class="day-title">Contribute, own, refine</div>
-      <ul class="day-items">
+      <p class="day-when">Days 31 – 60</p>
+      <h3 class="day-title">Contribute, own, refine</h3>
+      <ul class="day-pts">
         <li>Own client account management tasks independently</li>
         <li>Support event coordination and roadshow logistics</li>
         <li>Ensure meeting prep is proactive, not reactive</li>
@@ -375,11 +942,11 @@
       </ul>
     </div>
     <div class="day-card">
-      <div class="day-period">Days 61 – 90</div>
-      <div class="day-title">Deliver, anticipate, grow</div>
-      <ul class="day-items">
+      <p class="day-when">Days 61 – 90</p>
+      <h3 class="day-title">Deliver, anticipate, grow</h3>
+      <ul class="day-pts">
         <li>Be fully autonomous across all core responsibilities</li>
-        <li>Anticipate team needs before they're asked</li>
+        <li>Anticipate team needs before they are asked</li>
         <li>Build trusted relationships with key clients</li>
         <li>Contribute to team culture, not just task completion</li>
         <li>Begin identifying longer-term growth opportunities</li>
@@ -394,15 +961,13 @@
 </footer>
 
 <script>
-  const items = document.querySelectorAll('.tl-item');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 120);
-      }
-    });
-  }, { threshold: 0.1 });
-  items.forEach(item => observer.observe(item));
+const els = document.querySelectorAll('.tl-item');
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('in'), i * 100);
+  });
+}, { threshold: 0.12 });
+els.forEach(el => io.observe(el));
 </script>
 
 </body>
