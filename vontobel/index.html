@@ -209,33 +209,8 @@
   }
 
   /* SCROLL */
-  .scroll-mark {
-    position: absolute;
-    bottom: 2.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    opacity: 0;
-    animation: rise 1s ease forwards 1.2s;
-  }
-
-  .scroll-mark span {
-    font-size: 9px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-
-  .scroll-mark-line {
-    width: 1px;
-    height: 36px;
-    background: var(--gold-mid);
-    opacity: 0.4;
-    animation: pulse 2.4s ease-in-out infinite;
-  }
+ 
+ 
 
   /* ── SECTIONS ── */
   .section {
@@ -688,10 +663,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.15; transform: scaleY(0.85); }
-    50%       { opacity: 0.55; transform: scaleY(1); }
-  }
 
   /* RESPONSIVE */
   @media (max-width: 780px) {
@@ -754,10 +725,7 @@
     </div>
   </div>
 
-  <div class="scroll-mark">
-    <div class="scroll-mark-line"></div>
-    <span>Scroll</span>
-  </div>
+ 
 </section>
 
 <!-- STORY -->
