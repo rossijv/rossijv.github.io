@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Joao V. Rossi · Candidate Briefing Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dk:#0a1628;--dk2:#0e1e38;--ac:#c8a84b;--ac2:#e8c86a;
+  --acb:rgba(200,168,75,0.08);--lt:#f8f7f4;--cm:#e4e0d8;
+  --rule:rgba(200,168,75,0.14);--muted:#5a6272;--soft:#1e2d44;--faint:#8a9ab0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── GATE ── */
+#gate{position:fixed;inset:0;background:var(--dk);display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .7s ease,visibility .7s ease}
+#gate.gone{opacity:0;visibility:hidden;pointer-events:none}
+.gi{text-align:center;padding:2rem;max-width:380px}
+.g-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ac2);letter-spacing:.08em;margin-bottom:.4rem}
+.g-logo span{display:block;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,168,75,.38);font-family:'DM Sans',sans-serif;margin-top:.3rem}
+.g-divider{width:28px;height:.5px;background:rgba(200,168,75,.18);margin:1.5rem auto}
+.g-title{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.26);margin-bottom:.875rem}
+.g-sub{font-size:13px;color:rgba(255,255,255,.2);margin-bottom:2.25rem;font-weight:300;line-height:1.9}
+.g-form{display:flex;flex-direction:column;align-items:center;gap:.875rem}
+.g-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.26)}
+.g-in{background:rgba(255,255,255,.04);border:.5px solid rgba(200,168,75,.18);border-radius:4px;padding:12px 20px;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:#fff;font-family:'DM Sans',sans-serif;text-align:center;width:210px;outline:none;transition:border-color .25s}
+.g-in:focus{border-color:rgba(200,168,75,.48)}
+.g-in::placeholder{color:rgba(255,255,255,.12)}
+.g-btn{background:rgba(200,168,75,.1);border:.5px solid rgba(200,168,75,.32);border-radius:30px;padding:10px 30px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.78);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.g-btn:hover{background:rgba(200,168,75,.18);border-color:rgba(200,168,75,.6);color:var(--ac2)}
+.g-err{font-size:11px;color:rgba(220,100,100,.62);min-height:16px;letter-spacing:.04em}
+.g-lock{font-size:11px;color:rgba(220,100,100,.48);min-height:16px}
+
+/* ── PORTAL ── */
+#portal{opacity:0;transition:opacity .9s ease .15s}
+#portal.show{opacity:1}
+
+/* ── LANG BAR ── */
+.lang-bar{position:fixed;top:0;left:0;right:0;z-index:101;background:rgba(10,22,40,.97);backdrop-filter:blur(16px);border-bottom:.5px solid rgba(200,168,75,.13);height:34px;display:flex;align-items:center;padding:0 3rem;gap:0}
+.lt{padding:0 14px;height:100%;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.32);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center}
+.lt:hover{color:rgba(255,255,255,.6)}
+.lt.on{color:rgba(200,168,75,.9);border-bottom-color:var(--ac2)}
+
+/* ── NAV ── */
+.nav{position:fixed;top:34px;left:0;right:0;height:52px;background:rgba(248,247,244,.96);backdrop-filter:blur(16px);border-bottom:.5px solid var(--rule);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;z-index:100;transition:box-shadow .3s}
+.nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.nav-id{display:flex;align-items:center;gap:1.25rem}
+.nav-eye{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ac);opacity:.7}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--dk)}
+.nav-links{display:flex;gap:1.5rem}
+.nav-link{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:color .2s;position:relative}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--ac);transform:scaleX(0);transition:transform .2s;transform-origin:left}
+.nav-link:hover{color:var(--dk)}
+.nav-link:hover::after{transform:scaleX(1)}
+.nav-admin-btns{display:flex;align-items:center;gap:.625rem}
+.nav-edit-btn{background:transparent;border:.5px solid rgba(200,168,75,.28);border-radius:30px;padding:5px 13px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.7);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.nav-edit-btn:hover{border-color:rgba(200,168,75,.6);color:#e8c86a}
+.nav-deact{font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:rgba(140,140,155,.48);border:.5px solid rgba(140,140,155,.16);border-radius:30px;padding:5px 11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.nav-deact:hover{color:rgba(200,80,80,.7);border-color:rgba(200,80,80,.28)}
+
+/* ── ANNOTATIONS ── */
+.anno{position:relative;display:inline-flex;align-items:center;gap:5px}
+.at{width:18px;height:18px;border-radius:50%;background:rgba(200,168,75,.1);border:.5px solid rgba(200,168,75,.22);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--ac);cursor:pointer;flex-shrink:0;transition:all .2s;user-select:none}
+.at:hover{background:rgba(200,168,75,.18);border-color:rgba(200,168,75,.45)}
+.at.open{background:rgba(200,168,75,.2);border-color:var(--ac)}
+.ap{display:none;position:fixed;z-index:600;background:#fff;border:.5px solid rgba(200,168,75,.18);border-radius:8px;padding:.875rem 1rem;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.ap.show{display:block;animation:apIn .18s ease}
+@keyframes apIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.ap-label{font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:.4rem}
+.ap-text{font-size:12px;color:var(--soft);line-height:1.72}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:86px;position:relative}
+.hero-L{background:var(--dk);display:flex;flex-direction:column;justify-content:center;padding:5rem 4.5rem 5rem 5rem;position:relative;overflow:hidden}
+.hero-L::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ac),var(--ac2),var(--ac))}
+.hero-L::after{content:'';position:absolute;top:15%;right:0;bottom:15%;width:.5px;background:var(--ac);opacity:.18}
+
+/* Ambient glow */
+.hero-L-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(200,168,75,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:glow 8s ease-in-out infinite;pointer-events:none}
+@keyframes glow{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.22}50%{opacity:.52}}
+@keyframes slideR{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+.h-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ac2);margin-bottom:2rem;opacity:0}
+.h-eye.animate{animation:rise .9s cubic-bezier(.22,1,.36,1) forwards}
+.h-name{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,5vw,70px);font-weight:300;color:#fff;line-height:.95;letter-spacing:-.025em;margin-bottom:2rem;opacity:0}
+.h-name.animate{animation:rise .9s cubic-bezier(.22,1,.36,1) forwards .15s}
+.h-name em{display:block;font-style:italic;color:var(--ac2)}
+.h-tag{font-size:14px;font-weight:300;color:rgba(255,255,255,.66);line-height:1.88;max-width:300px;opacity:0}
+.h-tag.animate{animation:rise .9s cubic-bezier(.22,1,.36,1) forwards .3s}
+.h-langs{display:flex;gap:0;margin-top:2.5rem;border-top:.5px solid rgba(200,168,75,.13);opacity:0}
+.h-langs.animate{animation:rise .9s cubic-bezier(.22,1,.36,1) forwards .45s}
+.h-lang{padding:.75rem 1.25rem .75rem 0;border-right:.5px solid rgba(200,168,75,.1);margin-right:1.25rem}
+.h-lang:last-child{border-right:none;margin-right:0}
+.h-lang-name{font-size:10px;font-weight:500;color:rgba(255,255,255,.9);display:block;letter-spacing:.04em;margin-bottom:2px}
+.h-lang-lvl{font-size:8.5px;color:rgba(255,255,255,.52);display:block}
+
+.hero-R{background:var(--lt);display:flex;flex-direction:column;justify-content:center;padding:5rem 5rem 5rem 4.5rem}
+.r-label{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ac);margin-bottom:1.75rem;opacity:0}
+.r-label.animate{animation:slideR .9s cubic-bezier(.22,1,.36,1) forwards .2s}
+.r-prop{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.1vw,24px);font-weight:300;color:var(--dk);line-height:1.68;margin-bottom:2.5rem;opacity:0}
+.r-prop.animate{animation:slideR .9s cubic-bezier(.22,1,.36,1) forwards .35s}
+.r-prop em{font-style:italic;color:var(--ac)}
+.r-pillars{opacity:0}
+.r-pillars.animate{animation:slideR .9s cubic-bezier(.22,1,.36,1) forwards .5s}
+.r-pillar{display:flex;gap:12px;padding:.875rem 0;border-bottom:.5px solid var(--rule);transition:background .2s}
+.r-pillar:first-child{border-top:.5px solid var(--rule)}
+.r-dot{width:3px;height:3px;background:var(--ac2);border-radius:50%;flex-shrink:0;margin-top:7px;opacity:.6}
+.r-pt{font-size:13px;font-weight:500;color:var(--dk);margin-bottom:3px}
+.r-pd{font-size:12px;color:var(--muted);line-height:1.65;font-weight:300}
+.sc-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0}
+.sc-cue.animate{animation:fadeIn .9s ease forwards .8s}
+.sc-txt{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+.sc-line{width:1px;height:30px;background:var(--ac2);opacity:.28;animation:pulse 2.4s ease-in-out infinite}
+
+/* SECTIONS */
+.section{padding:6rem 5rem;max-width:1080px;margin:0 auto}
+.sec-head{display:flex;align-items:baseline;gap:1.25rem;margin-bottom:3.25rem}
+.sec-n{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:#c8c4bc;line-height:1;letter-spacing:-.04em;flex-shrink:0;user-select:none}
+.sec-t{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--dk);line-height:1.2}
+.sec-t em{font-style:italic;color:var(--ac)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2.25rem}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:.5px;background:linear-gradient(to bottom,var(--ac2),rgba(200,168,75,.15),transparent)}
+.tl-item{position:relative;padding-left:2.25rem;padding-bottom:3rem;opacity:0;transform:translateX(-12px);transition:opacity .75s ease,transform .75s ease}
+.tl-item.in{opacity:1;transform:none}
+.tl-item:last-child{padding-bottom:0}
+.tl-node{position:absolute;left:-.4rem;top:6px;width:10px;height:10px;border-radius:50%;background:var(--lt);border:1.5px solid var(--ac2)}
+.tl-node.prim{background:var(--ac2);width:13px;height:13px;left:-.52rem;top:4px;border-color:var(--ac)}
+.tl-when{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:6px}
+.tl-role{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:400;color:var(--dk);margin-bottom:3px;line-height:1.2}
+.tl-where{font-size:12px;color:var(--muted);margin-bottom:.75rem;font-weight:300}
+.tl-body{font-size:13px;color:var(--soft);line-height:1.88;max-width:560px;margin-bottom:.75rem}
+.tl-pts{display:flex;flex-direction:column;gap:8px;max-width:560px;margin-bottom:.75rem}
+.tl-pt{font-size:13px;color:var(--soft);line-height:1.68;padding-left:1.25rem;position:relative}
+.tl-pt::before{content:'—';position:absolute;left:0;color:var(--ac2);font-size:12px}
+.tl-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:.25rem}
+.chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);background:var(--acb);padding:3px 10px;border-radius:20px;border:.5px solid rgba(200,168,75,.2)}
+
+/* ROLE FIT */
+.relevance-band{background:var(--dk);padding:5rem}
+.rb-inner{max-width:900px;margin:0 auto}
+.rb-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,168,75,.58);margin-bottom:1.25rem}
+.rb-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:#fff;margin-bottom:3rem;line-height:1.25}
+.rb-title em{font-style:italic;color:var(--ac2)}
+.rb-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.rb-item{border:.5px solid rgba(200,168,75,.13);border-radius:8px;padding:1.25rem;background:rgba(255,255,255,.03);transition:border-color .25s,background .25s}
+.rb-item:hover{border-color:rgba(200,168,75,.28);background:rgba(255,255,255,.05)}
+.rb-item-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac2);opacity:.68;margin-bottom:.625rem}
+.rb-item-req{font-size:12px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:.5rem}
+.rb-item-match{font-size:12px;color:rgba(255,255,255,.42);line-height:1.68}
+.rb-item-match em{color:rgba(200,168,75,.75);font-style:normal;font-weight:500}
+
+/* QUOTE */
+.quote-band{background:var(--lt);border-top:.5px solid var(--cm);border-bottom:.5px solid var(--cm);padding:5rem}
+.qb-inner{max-width:780px;margin:0 auto}
+.qb-mark{display:flex;align-items:center;gap:.875rem;margin-bottom:2rem}
+.qb-line{width:20px;height:.5px;background:var(--ac2);opacity:.38;flex-shrink:0}
+.qb-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.5vw,28px);font-style:italic;font-weight:300;color:var(--dk);line-height:1.74;margin-bottom:1.75rem}
+.qb-attr{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.qb-attr strong{color:var(--soft);font-weight:500}
+.qb-verify{font-size:11px;color:var(--faint);margin-top:.75rem;font-style:italic}
+
+/* SCHEDULE */
+.sched-band{background:var(--dk);padding:4.5rem 5rem;text-align:center;position:relative;overflow:hidden}
+.sched-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(200,168,75,.06) 0%,transparent 65%);pointer-events:none}
+.sb-inner{max-width:500px;margin:0 auto;position:relative}
+.sb-eye{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,168,75,.52);margin-bottom:1.25rem}
+.sb-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:#fff;margin-bottom:.875rem;line-height:1.25}
+.sb-title em{font-style:italic;color:var(--ac2)}
+.sb-sub{font-size:13px;color:rgba(255,255,255,.38);line-height:1.82;margin-bottom:2rem}
+.sb-btn{background:transparent;border:.5px solid rgba(200,168,75,.38);border-radius:30px;padding:13px 34px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ac);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .25s;margin-bottom:1rem;display:inline-block}
+.sb-btn:hover{border-color:rgba(200,168,75,.8);background:rgba(200,168,75,.08);color:var(--ac2)}
+.sb-note{font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.02em}
+
+/* CHATBOT */
+#chatbot{position:fixed;bottom:2rem;right:1.5rem;z-index:200;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem}
+.cb-btn{display:flex;align-items:center;gap:.625rem;background:var(--dk);border:.5px solid rgba(200,168,75,.36);border-radius:30px;padding:.625rem 1.125rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .22s;box-shadow:0 4px 24px rgba(0,0,0,.26)}
+.cb-btn:hover{border-color:rgba(200,168,75,.68);transform:translateY(-2px);box-shadow:0 6px 32px rgba(0,0,0,.32)}
+.cb-btn-icon{font-size:14px;color:var(--ac2)}
+.cb-btn-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:500}
+.cb-btn-dot{width:6px;height:6px;background:#4caf80;border-radius:50%;flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+.cb-win{width:340px;background:var(--dk);border:.5px solid rgba(200,168,75,.16);border-radius:12px;overflow:hidden;display:none;box-shadow:0 16px 56px rgba(0,0,0,.44)}
+.cb-win.show{display:block;animation:apIn .22s ease}
+.cb-head{background:linear-gradient(135deg,rgba(200,168,75,.1),rgba(200,168,75,.04));padding:1rem 1.25rem;border-bottom:.5px solid rgba(200,168,75,.08);display:flex;align-items:flex-start;gap:.75rem}
+.cb-avatar{width:36px;height:36px;border-radius:50%;background:rgba(200,168,75,.12);border:.5px solid rgba(200,168,75,.26);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cb-head-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;color:#fff;line-height:1.2}
+.cb-head-sub{font-size:10px;color:rgba(255,255,255,.36);letter-spacing:.04em;margin-top:2px}
+.cb-status{display:flex;align-items:center;gap:5px;margin-top:4px}
+.cb-status-dot{width:5px;height:5px;background:#4caf80;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.cb-status-txt{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.06em;text-transform:uppercase}
+.cb-email-z{padding:.875rem 1.25rem;border-bottom:.5px solid rgba(200,168,75,.07)}
+.cb-email-lbl{font-size:11px;color:rgba(255,255,255,.48);line-height:1.62;margin-bottom:.625rem}
+.cb-email-lbl em{color:rgba(255,255,255,.26);font-style:normal}
+.cb-email-row{display:flex;gap:.5rem}
+.cb-ei{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(200,168,75,.13);border-radius:4px;padding:.5rem .75rem;font-size:12px;color:#fff;font-family:'DM Sans',sans-serif;outline:none;min-width:0}
+.cb-ei::placeholder{color:rgba(255,255,255,.16)}
+.cb-eg{background:rgba(200,168,75,.14);border:.5px solid rgba(200,168,75,.28);border-radius:4px;padding:.5rem 1rem;font-size:11px;color:var(--ac2);font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s}
+.cb-eg:hover{background:rgba(200,168,75,.24)}
+.cb-skip{display:block;text-align:right;font-size:10px;color:rgba(255,255,255,.28);cursor:pointer;margin-top:.5rem;letter-spacing:.04em;text-decoration:underline;text-underline-offset:2px}
+.cb-skip:hover{color:rgba(255,255,255,.52)}
+.cb-badge{font-size:9.5px;background:rgba(200,168,75,.05);color:rgba(255,255,255,.36);padding:.4rem 1.25rem;border-bottom:.5px solid rgba(200,168,75,.06);letter-spacing:.04em;display:none}
+.cb-badge.show{display:block}
+.cb-msgs{padding:1rem;display:flex;flex-direction:column;gap:.875rem;max-height:240px;overflow-y:auto;display:none}
+.cb-msgs.show{display:flex}
+.cbm{display:flex;flex-direction:column;gap:4px}
+.cbm-who{font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.cbm-txt{font-size:12px;line-height:1.67;padding:.625rem .875rem;border-radius:8px}
+.cbm-txt.rec{background:rgba(255,255,255,.06);color:rgba(255,255,255,.76)}
+.cbm-txt.bot{background:rgba(200,168,75,.09);color:rgba(255,255,255,.84);border:.5px solid rgba(200,168,75,.14)}
+.cb-ir{display:flex;gap:.5rem;padding:.875rem 1rem;border-top:.5px solid rgba(200,168,75,.07);display:none}
+.cb-ir.show{display:flex}
+.cb-in{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(200,168,75,.12);border-radius:6px;padding:.5rem .75rem;font-size:12px;color:#fff;font-family:'DM Sans',sans-serif;outline:none;min-width:0}
+.cb-in::placeholder{color:rgba(255,255,255,.2)}
+.cb-send{background:rgba(200,168,75,.14);border:.5px solid rgba(200,168,75,.26);border-radius:6px;padding:.5rem 1rem;font-size:11px;color:var(--ac2);font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;font-weight:500;transition:all .2s}
+.cb-send:hover{background:rgba(200,168,75,.24)}
+
+/* DEACT */
+.deact-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:700;align-items:center;justify-content:center}
+.deact-bg.show{display:flex}
+.dm{background:#fff;border-radius:10px;padding:2rem;max-width:360px;width:90%;text-align:center;font-family:'DM Sans',sans-serif}
+.dm-title{font-size:16px;font-weight:500;color:var(--dk);margin-bottom:.75rem}
+.dm-text{font-size:13px;color:var(--muted);line-height:1.68;margin-bottom:1.5rem}
+.dm-btns{display:flex;gap:.75rem}
+.dm-cancel{flex:1;padding:10px;border:.5px solid var(--rule);border-radius:6px;background:#fff;color:var(--muted);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.dm-confirm{flex:1;padding:10px;background:#c8102e;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* FOOTER */
+.portal-footer{background:var(--dk);border-top:.5px solid rgba(200,168,75,.07);padding:2.25rem 5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.pf-left{font-size:12px;color:rgba(255,255,255,.45);letter-spacing:.03em;line-height:1.78}
+.pf-right{font-size:10px;color:rgba(255,255,255,.26);letter-spacing:.08em;text-transform:uppercase}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:33px;left:0;height:1px;background:linear-gradient(90deg,var(--ac),var(--ac2));z-index:102;transition:width .1s linear;width:0%}
+
+/* EDIT PANEL */
+#edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:799;transition:opacity .28s;opacity:0;pointer-events:none}
+#edit-overlay.show{opacity:1;pointer-events:all}
+#edit-panel{position:fixed;top:0;right:0;bottom:0;width:380px;background:#0a1628;border-left:.5px solid rgba(200,168,75,.16);z-index:800;overflow-y:auto;transform:translateX(100%);transition:transform .32s cubic-bezier(.22,1,.36,1);font-family:'DM Sans',sans-serif}
+#edit-panel.open{transform:translateX(0)}
+.ep-header{padding:1.25rem 1.5rem;border-bottom:.5px solid rgba(200,168,75,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0a1628;z-index:10}
+.ep-eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.55);margin-bottom:3px}
+.ep-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:#fff}
+.ep-close{background:transparent;border:none;color:rgba(255,255,255,.32);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;transition:color .2s}
+.ep-close:hover{color:rgba(255,255,255,.7)}
+.ep-body{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.125rem}
+.ep-section{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,168,75,.42);padding:.5rem 0;border-bottom:.5px solid rgba(200,168,75,.07)}
+.ep-field label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);display:block;margin-bottom:5px}
+.ep-field textarea{width:100%;background:rgba(255,255,255,.04);border:.5px solid rgba(200,168,75,.14);border-radius:5px;padding:.5rem .75rem;font-size:11.5px;color:rgba(255,255,255,.8);font-family:'DM Sans',sans-serif;resize:vertical;outline:none;line-height:1.62;transition:border-color .2s}
+.ep-field textarea:focus{border-color:rgba(200,168,75,.38)}
+.ep-note{font-size:10px;color:rgba(255,255,255,.25);line-height:1.72;border:.5px solid rgba(200,168,75,.08);border-radius:5px;padding:.75rem;background:rgba(200,168,75,.02)}
+.ep-footer{position:sticky;bottom:0;background:#0a1628;border-top:.5px solid rgba(200,168,75,.1);padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.625rem}
+.ep-feedback{font-size:10px;text-align:center;min-height:14px;transition:opacity .4s;opacity:0;letter-spacing:.04em}
+.ep-actions{display:flex;gap:.625rem}
+.ep-revert{flex:1;padding:10px;background:transparent;border:.5px solid rgba(200,168,75,.18);border-radius:5px;color:rgba(200,168,75,.52);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.ep-revert:hover{border-color:rgba(200,168,75,.42);color:rgba(200,168,75,.82)}
+.ep-save{flex:2;padding:10px;background:rgba(200,168,75,.12);border:.5px solid rgba(200,168,75,.38);border-radius:5px;color:var(--ac2);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s}
+.ep-save:hover{background:rgba(200,168,75,.2)}
+
+/* Lang checkboxes */
+.ep-lang-row{display:flex;align-items:center;gap:.625rem;cursor:pointer}
+.ep-lang-row input{accent-color:var(--ac);width:14px;height:14px;cursor:pointer}
+.ep-lang-row span{font-size:12px;color:rgba(255,255,255,.68)}
+
+/* Advanced lang row */
+.ep-lang-row-adv{display:flex;align-items:center;gap:.5rem}
+.ep-primary-btn{font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:20px;border:.5px solid rgba(200,168,75,.2);background:transparent;color:rgba(200,168,75,.42);font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .18s;flex-shrink:0}
+.ep-primary-btn:hover{border-color:rgba(200,168,75,.6);color:rgba(200,168,75,.85)}
+.ep-primary-btn.active{background:rgba(200,168,75,.16);border-color:rgba(200,168,75,.6);color:var(--ac2)}
+
+/* Toggle switch */
+.ep-toggle-wrap{cursor:pointer;flex-shrink:0}
+.ep-toggle-track{display:block;width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.1);border:.5px solid rgba(255,255,255,.14);position:relative;transition:background .2s,border-color .2s}
+.ep-toggle-track.on{background:rgba(200,168,75,.28);border-color:rgba(200,168,75,.5)}
+.ep-toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.4);transition:transform .2s,background .2s}
+.ep-toggle-track.on .ep-toggle-thumb{transform:translateX(16px);background:var(--ac2)}
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="gate">
+  <div class="gi">
+    <div class="g-logo">Joao V. Rossi<span>Candidate Briefing Portal</span></div>
+    <div class="g-divider"></div>
+    <div class="g-title" id="g-title">Restricted Access</div>
+    <div class="g-sub" id="g-sub">Exclusive candidate briefing.<br>Authorized access only.</div>
+    <div class="g-form">
+      <div class="g-lbl" id="g-lbl">Access code</div>
+      <input class="g-in" id="pwd" type="password" placeholder="· · · · · · · ·" maxlength="24" onkeydown="if(event.key==='Enter')unlock()">
+      <button class="g-btn" onclick="unlock()" id="g-btn">Enter</button>
+      <div class="g-err" id="gerr"></div>
+      <div class="g-lock" id="glock"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- PORTAL -->
+<div id="portal">
+
+  <!-- LANG TABS -->
+  <div class="lang-bar">
+    <div class="lt on" data-lang="en" onclick="setLang('en')">English</div>
+    <div class="lt" data-lang="es" onclick="setLang('es')">Español</div>
+    <div class="lt" data-lang="pt" onclick="setLang('pt')">Português</div>
+    <div class="lt" data-lang="fr" onclick="setLang('fr')">Français</div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" id="main-nav">
+    <div class="nav-id">
+      <span class="nav-eye" id="nav-eye">Application briefing · Guest Relations Coordinator</span>
+      <span class="nav-name">Joao V. Rossi</span>
+    </div>
+    <div class="nav-links">
+      <span class="nav-link" id="nl-exp" onclick="goTo('.exp-sec')">Experience</span>
+      <span class="nav-link" id="nl-fit" onclick="goTo('.relevance-band')">Role fit</span>
+      <span class="nav-link" id="nl-rec" onclick="goTo('.quote-band')">Recommendation</span>
+      <span class="nav-link" id="nl-ask" onclick="toggleChat()">Ask Joao</span>
+    </div>
+    <!-- Admin buttons — hidden by default, shown only in admin mode -->
+    <div class="nav-admin-btns" id="admin-btns" style="display:none">
+      <button class="nav-edit-btn" onclick="openEditPanel()">✎ Edit</button>
+      <button class="nav-deact" id="nav-deact" onclick="showDeact()">Deactivate</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-L">
+      <div class="hero-L-glow"></div>
+      <div class="h-eye" id="h-eye">Guest Relations Coordinator · FIFA World Cup 2026 · Miami</div>
+      <div class="h-name">Joao V.<br><em>Rossi</em></div>
+      <div class="h-tag" id="h-tag">Guest relations and operations professional — shaped by the highest service standards in hospitality, international cruise operations, diplomatic protocol, and five years of client coordination for international investors in Miami.</div>
+      <div class="h-langs">
+        <div class="h-lang"><span class="h-lang-name" id="hl-pt">Portuguese</span><span class="h-lang-lvl" id="hl-pt-lvl">Native · bilingual</span></div>
+        <div class="h-lang"><span class="h-lang-name" id="hl-en">English</span><span class="h-lang-lvl" id="hl-en-lvl">Professional working</span></div>
+        <div class="h-lang"><span class="h-lang-name" id="hl-es">Spanish</span><span class="h-lang-lvl" id="hl-es-lvl">Professional working</span></div>
+        <div class="h-lang"><span class="h-lang-name" id="hl-fr">French</span><span class="h-lang-lvl" id="hl-fr-lvl">Professional working</span></div>
+      </div>
+    </div>
+    <div class="hero-R">
+      <div class="r-label">
+        <span id="r-label-txt">What this application brings</span>
+        <span class="anno">
+          <span class="at" onclick="showAnno(this,event)">✦</span>
+          <div class="ap">
+            <div class="ap-label" id="ap-pillars-label">Design logic</div>
+            <div class="ap-text" id="ap-pillars-text">Three pillars mapped directly to role requirements — service standard, data precision, multilingual reach. Each is evidenced, not claimed. The structure mirrors how a senior reviewer reads a brief: requirement first, proof second.</div>
+          </div>
+        </span>
+      </div>
+      <div class="r-prop" id="r-prop">The service standard starts at Disneyland Paris — and builds from there. International cruise guests, a diplomatic mission's public, and international investors in Miami. The guests will encounter that same level of care.</div>
+      <div class="r-pillars">
+        <div class="r-pillar"><div class="r-dot"></div><div><div class="r-pt" id="rp1t">Four languages across the key guest corridors</div><div class="r-pd" id="rp1d">Native Portuguese, professional English and Spanish, working French — covering the majority of Americas and European guest groups as a core operational capability, not a bonus.</div></div></div>
+        <div class="r-pillar"><div class="r-dot"></div><div><div class="r-pt" id="rp2t">Guest data and records management at scale</div><div class="r-pd" id="rp2d">High-volume management at consular level — status tracking, discrepancy resolution, data accuracy across parallel channels. Directly analogous to IFES guest profile workflows.</div></div></div>
+        <div class="r-pillar"><div class="r-dot"></div><div><div class="r-pt" id="rp3t">Cross-stakeholder service delivery under visibility</div><div class="r-pd" id="rp3d">Event coordination and invitation management in a diplomatic environment where every touchpoint is observed and quality is non-negotiable.</div></div></div>
+      </div>
+    </div>
+    <div class="sc-cue"><span class="sc-txt" id="sc-txt">Continue</span><div class="sc-line"></div></div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section exp-sec">
+    <div class="sec-head">
+      <div class="sec-n">01</div>
+      <div class="sec-t" id="sec-exp-t">Career <em>context</em></div>
+      <span class="anno" style="align-self:center;margin-left:.5rem">
+        <span class="at" onclick="showAnno(this,event)">✦</span>
+        <div class="ap">
+          <div class="ap-label" id="ap-exp-label">Design logic</div>
+          <div class="ap-text" id="ap-exp-text">Sequenced by relevance, not chronology. The consular role leads because it demonstrates institutional-scale guest and data management with a verifiable letter of endorsement attached — the closest structural analogue to this role.</div>
+        </div>
+      </span>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-node prim"></div>
+        <div class="tl-when" id="tl1-when">Jun 2025 — Mar 2026</div>
+        <div class="tl-role" id="tl1-role">Administrative Assistant — Consular Section</div>
+        <div class="tl-where" id="tl1-where">Consulate General of Brazil · Miami, FL</div>
+        <div class="tl-body" id="tl1-body">High-volume public-facing operations in an institutional environment — managing applicant flow, maintaining data accuracy, and delivering consistent service quality under sustained demand. The operational profile of consular services in Miami maps directly to large-scale guest management at a major international event.</div>
+        <div class="tl-pts">
+          <div class="tl-pt" id="tl1-pt1">Part of a team managing high volumes of in-person appointments and mail-in applications daily — each requiring individual compliance review, status tracking, and accurate data entry across all case records</div>
+          <div class="tl-pt" id="tl1-pt2">Processed and validated official documentation under institutional protocols — zero compliance deviations throughout tenure</div>
+          <div class="tl-pt" id="tl1-pt3">Supported coordination of public events, outreach activities, and institutional scheduling across the Cultural and Education Department</div>
+          <div class="tl-pt" id="tl1-pt4">Co-developed a narrated visual tutorial to streamline the applicant journey — reducing repetitive requests and improving the guest experience end-to-end</div>
+          <div class="tl-pt" id="tl1-pt5">Trained incoming staff on internal procedures and service workflows</div>
+        </div>
+        <div class="tl-chips">
+          <span class="chip" id="tl1-c1">Guest data management</span><span class="chip" id="tl1-c2">High-volume intake</span><span class="chip" id="tl1-c3">Records compliance</span><span class="chip" id="tl1-c4">Event coordination</span><span class="chip" id="tl1-c5">Staff training</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-node prim"></div>
+        <div class="tl-when" id="tl2-when">Jul 2019 — Present</div>
+        <div class="tl-role" id="tl2-role">Operations &amp; Client Coordination</div>
+        <div class="tl-where" id="tl2-where">VR Capital LLC · Miami, FL · International private clients</div>
+        <div class="tl-body" id="tl2-body">Five-year engagement as primary point of contact for international investors and clients — coordinating logistics, documentation, vendor management, and service delivery across multi-party environments. Built the operational discipline of tracking multiple active priorities simultaneously, without dropping a thread.</div>
+        <div class="tl-pts">
+          <div class="tl-pt" id="tl2-pt1">Served as primary liaison for international clients — managing requests, coordinating service providers, and ensuring seamless delivery across complex logistical environments</div>
+          <div class="tl-pt" id="tl2-pt2">Coordinated financial workflows including wire transfers — where precision in documentation was non-negotiable</div>
+          <div class="tl-pt" id="tl2-pt3">Developed internal workflow documentation and tracking structures to ensure continuity across extended project timelines</div>
+        </div>
+        <div class="tl-chips">
+          <span class="chip" id="tl2-c1">Client liaison</span><span class="chip" id="tl2-c2">Multi-vendor coordination</span><span class="chip" id="tl2-c3">Process documentation</span><span class="chip" id="tl2-c4">International clients</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-node prim"></div>
+        <div class="tl-when" id="tl3-when">Earlier experience</div>
+        <div class="tl-role" id="tl3-role">Guest Relations · Disneyland Resort Paris</div>
+        <div class="tl-where" id="tl3-where">Walt Disney Company · Paris, France</div>
+        <div class="tl-body" id="tl3-body">Where the standard was set. Guest-facing operations at one of the world's highest-volume hospitality environments — multilingual, multicultural, and held to the strictest service quality benchmarks in the industry. The expectation was not competent service. It was a consistently exceptional experience, for every guest, every time.</div>
+        <div class="tl-chips">
+          <span class="chip" id="tl3-c1">Guest relations</span><span class="chip" id="tl3-c2">Multilingual service</span><span class="chip" id="tl3-c3">High-volume hospitality</span><span class="chip" id="tl3-c4">Service quality standards</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-node"></div>
+        <div class="tl-when" id="tl4-when">International cruise &amp; financial services</div>
+        <div class="tl-role" id="tl4-role">Customer Service · Financial Services</div>
+        <div class="tl-where" id="tl4-where">International Cruise Operations, Latin America · Banks in Brazil &amp; Quebec, Canada</div>
+        <div class="tl-body" id="tl4-body">Guest and client service across cruise operations covering LatAm markets, and banking environments in Brazil and Canada. Extended the multilingual service experience beyond hospitality into client-facing financial services contexts.</div>
+        <div class="tl-chips">
+          <span class="chip" id="tl4-c1">Cruise guest operations</span><span class="chip" id="tl4-c2">LatAm markets</span><span class="chip" id="tl4-c3">Financial services</span><span class="chip" id="tl4-c4">Bilingual client service</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ROLE FIT -->
+  <div class="relevance-band">
+    <div class="rb-inner">
+      <div class="rb-eye" id="rb-eye">Role alignment</div>
+      <div class="rb-title" id="rb-title">What the role requires.<br><em>What this profile delivers.</em></div>
+      <div class="rb-grid">
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl1">Requirement</div>
+          <div class="rb-item-req" id="rb1-req">Guest invitation coordination &amp; guest list management</div>
+          <div class="rb-item-match" id="rb1-match">Consulate event coordination + VR Capital multi-party logistics. <em>Same structure, different scale.</em></div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl2">Requirement</div>
+          <div class="rb-item-req" id="rb2-req">Guest data maintenance in IFES (profiles, travel, accommodation)</div>
+          <div class="rb-item-match" id="rb2-match">High-volume consular applicant intake across in-person and mail channels — maintaining data accuracy across all case records. <em>Directly analogous.</em></div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl3">Requirement</div>
+          <div class="rb-item-req" id="rb3-req">Consistent service quality across all guest touchpoints</div>
+          <div class="rb-item-match" id="rb3-match">Disneyland Paris, cruise operations, consular public service. <em>The standard has been held across three distinct institutional environments.</em></div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl4">Requirement</div>
+          <div class="rb-item-req" id="rb4-req">Fluent English + Spanish and/or French proficiency</div>
+          <div class="rb-item-match" id="rb4-match">Portuguese (native), English (professional), Spanish (professional), French (professional working). <em>All four languages active.</em></div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl5">Requirement</div>
+          <div class="rb-item-req" id="rb5-req">MS Office proficiency including Excel, Word, PowerPoint</div>
+          <div class="rb-item-match" id="rb5-match">Documented in all roles. Process documentation, reporting, presentation prep across sustained engagements. <em>Proficient across the full suite.</em></div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-item-label" id="rbl6">Requirement</div>
+          <div class="rb-item-req" id="rb6-req">Progress reports &amp; continuous improvement</div>
+          <div class="rb-item-match" id="rb6-match">Workflow documentation and tutorial development at the Consulate — improving operational consistency and reducing friction. <em>Improvement mindset is demonstrated, not claimed.</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-band">
+    <div class="qb-inner">
+      <div class="qb-mark">
+        <div class="qb-line"></div>
+        <span class="anno">
+          <span class="at" onclick="showAnno(this,event)">✦</span>
+          <div class="ap">
+            <div class="ap-label" id="ap-rec-label">Design logic</div>
+            <div class="ap-text" id="ap-rec-text">Signed letter on official government letterhead from a named Deputy Consul General — with verifiable institutional contact. A third-party endorsement at this level, from a named signatory with a direct line, is rare at any career stage.</div>
+          </div>
+        </span>
+      </div>
+      <div class="qb-quote" id="qb-quote">"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."</div>
+      <div class="qb-attr" id="qb-attr"><strong>Fernando Augusto Moreira Costa</strong> · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026</div>
+      <div class="qb-verify" id="qb-verify">Verifiable · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="650401080c0b0c16114b080c04080c250c110408041704111c4b020a134b0717">[email&#160;protected]</a> · +1 (305) 285-6230</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <section class="sched-band">
+    <div class="sb-inner">
+      <div class="sb-eye" id="sb-eye">Next step</div>
+      <div class="sb-title" id="sb-title">Ready to <em>connect?</em></div>
+      <div class="sb-sub" id="sb-sub">If what you've read adds context to this application, a conversation is one click away.</div>
+      <button class="sb-btn" id="sb-btn" onclick="contactAction()">Get in touch ✦</button>
+      <div class="sb-note" id="sb-note"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="177d61657864647e7b57707a767e7b3974787a">[email&#160;protected]</a> · +1 (786) 609-3110</div>
+    </div>
+  </section>
+
+  <footer class="portal-footer">
+    <div class="pf-left" id="pf-left">Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026</div>
+    <div class="pf-right">rossijv.github.io/fifa2026</div>
+  </footer>
+</div>
+
+<!-- CHATBOT -->
+<div id="chatbot">
+  <div class="cb-win" id="cb-win">
+    <div class="cb-head">
+      <div class="cb-avatar">✦</div>
+      <div>
+        <div class="cb-head-name" id="cb-head-name">Ask Joao</div>
+        <div class="cb-head-sub">Guest Relations application</div>
+        <div class="cb-status"><div class="cb-status-dot"></div><span class="cb-status-txt" id="cb-status-txt">Available now</span></div>
+      </div>
+    </div>
+    <div class="cb-email-z" id="cb-email-z">
+      <div class="cb-email-lbl" id="cb-email-lbl">To notify Joao of your visit, share your email? <em>(optional)</em></div>
+      <div class="cb-email-row">
+        <input class="cb-ei" id="cb-ei" placeholder="your@email.com" type="email">
+        <button class="cb-eg" onclick="startChat(true)" id="cb-start-btn">Start</button>
+      </div>
+      <span class="cb-skip" onclick="startChat(false)" id="cb-skip-lnk">Continue as guest →</span>
+    </div>
+    <div class="cb-badge" id="cb-badge">AI assistant · Guest Relations application</div>
+    <div class="cb-msgs" id="cb-msgs"></div>
+    <div class="cb-ir" id="cb-ir">
+      <input class="cb-in" id="cb-in" placeholder="Ask anything about this application..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="cb-send" onclick="sendChat()" id="cb-send-btn">Send</button>
+    </div>
+  </div>
+  <div class="cb-btn" onclick="toggleChat()">
+    <span class="cb-btn-icon">✦</span>
+    <span class="cb-btn-label" id="cb-btn-label">Ask Joao</span>
+    <span class="cb-btn-dot"></span>
+  </div>
+</div>
+
+<!-- DEACT -->
+<div class="deact-bg" id="deact-bg">
+  <div class="dm">
+    <div class="dm-title" id="dm-title">Deactivate this portal?</div>
+    <div class="dm-text" id="dm-text">The briefing will go offline immediately. Your data is retained for 90 days, then permanently deleted on request.</div>
+    <div class="dm-btns">
+      <button class="dm-cancel" onclick="document.getElementById('deact-bg').classList.remove('show')" id="dm-cancel">Keep active</button>
+      <button class="dm-confirm" onclick="deactivate()" id="dm-confirm">Deactivate now</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT OVERLAY -->
+<div id="edit-overlay" onclick="closeEditPanel()"></div>
+
+<!-- EDIT PANEL -->
+<div id="edit-panel">
+  <div class="ep-header">
+    <div>
+      <div class="ep-eyebrow">Admin · Edit content</div>
+      <div class="ep-title">Joao V. Rossi · Portal</div>
+    </div>
+    <button class="ep-close" onclick="closeEditPanel()">✕</button>
+  </div>
+  <div class="ep-body">
+
+
+    <div class="ep-section">Colour palette</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Based on the target company's visual identity, industry standard, and modern positioning. Select the palette that best matches your strategic intent.</div>
+    <div id="ep-palettes" style="display:flex;flex-direction:column;gap:.75rem">
+      <!-- Palette A -->
+      <div class="ep-palette-card" id="pal-A" onclick="selectPalette('A')" style="border:.5px solid rgba(200,168,75,.5);border-radius:7px;padding:.875rem 1rem;cursor:pointer;position:relative;background:rgba(200,168,75,.06)">
+        <div style="position:absolute;top:.5rem;right:.625rem;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#c8a84b;background:rgba(200,168,75,.15);border:.5px solid rgba(200,168,75,.4);border-radius:20px;padding:2px 8px">★ Recommended</div>
+        <div style="display:flex;gap:6px;margin-bottom:.5rem">
+          <div style="width:20px;height:20px;border-radius:3px;background:#0a1628"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#c8a84b"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#f8f7f4;border:.5px solid rgba(0,0,0,.08)"></div>
+        </div>
+        <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:2px">FIFA Navy &amp; Gold</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.6">Mirrors the visual language of elite sporting institutions — authority, precision, international prestige. Signals fluency in the event's own aesthetic.</div>
+      </div>
+      <!-- Palette B -->
+      <div class="ep-palette-card" id="pal-B" onclick="selectPalette('B')" style="border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:.875rem 1rem;cursor:pointer;background:rgba(255,255,255,.02)">
+        <div style="display:flex;gap:6px;margin-bottom:.5rem">
+          <div style="width:20px;height:20px;border-radius:3px;background:#2a2b33"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#aa8f5c"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#faf8f4;border:.5px solid rgba(0,0,0,.08)"></div>
+        </div>
+        <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:2px">Ardoise — Warm Authority</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.6">For hospitality and guest experience roles. Softer than navy — warmer, more relational. Signals service culture over institutional hierarchy.</div>
+      </div>
+      <!-- Palette C -->
+      <div class="ep-palette-card" id="pal-C" onclick="selectPalette('C')" style="border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:.875rem 1rem;cursor:pointer;background:rgba(255,255,255,.02)">
+        <div style="display:flex;gap:6px;margin-bottom:.5rem">
+          <div style="width:20px;height:20px;border-radius:3px;background:#18181f"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#8a8a9c"></div>
+          <div style="width:20px;height:20px;border-radius:3px;background:#f2f0ed;border:.5px solid rgba(0,0,0,.08)"></div>
+        </div>
+        <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:2px">Onyx &amp; Platine — Modern Precision</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.6">Tech-forward or systematic profiles. Contemporary minimalism — signals analytical rigour and modern operational sensibility.</div>
+      </div>
+    </div>
+
+    <div class="ep-section">Name display</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Choose how the candidate name appears in the hero section.</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="two" checked onchange="setNameFormat('two')" style="accent-color:var(--ac);cursor:pointer"><span>Two lines — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. / Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="one" onchange="setNameFormat('one')" style="accent-color:var(--ac);cursor:pointer"><span>One line — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="first" onchange="setNameFormat('first')" style="accent-color:var(--ac);cursor:pointer"><span>First name only — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao</em></span></label>
+    </div>
+
+    <div class="ep-section">Language tabs</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Choose which languages appear in the nav bar, set the primary (default) language, and optionally apply it to the portal immediately.</div>
+
+    <!-- Language rows: checkbox + label + "Set as primary" -->
+    <div style="display:flex;flex-direction:column;gap:.625rem">
+      <!-- EN (always on, but can be set as primary) -->
+      <div class="ep-lang-row-adv">
+        <div style="display:flex;align-items:center;gap:.5rem;flex:1">
+          <input type="checkbox" checked disabled style="accent-color:var(--ac);width:14px;height:14px;opacity:.4;cursor:not-allowed">
+          <span style="font-size:12px;color:rgba(255,255,255,.68)">English <em style="font-size:10px;color:rgba(255,255,255,.28);font-style:normal">(always on)</em></span>
+        </div>
+        <button class="ep-primary-btn" id="ep-primary-en" onclick="setPrimaryLang('en')" title="Set as primary language">★ Primary</button>
+      </div>
+      <!-- ES -->
+      <div class="ep-lang-row-adv">
+        <label style="display:flex;align-items:center;gap:.5rem;flex:1;cursor:pointer">
+          <input type="checkbox" id="ep-lang-es" checked onchange="toggleLangTab('es',this.checked)" style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
+          <span style="font-size:12px;color:rgba(255,255,255,.68)">Español</span>
+        </label>
+        <button class="ep-primary-btn" id="ep-primary-es" onclick="setPrimaryLang('es')" title="Set as primary language">★ Primary</button>
+      </div>
+      <!-- PT -->
+      <div class="ep-lang-row-adv">
+        <label style="display:flex;align-items:center;gap:.5rem;flex:1;cursor:pointer">
+          <input type="checkbox" id="ep-lang-pt" checked onchange="toggleLangTab('pt',this.checked)" style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
+          <span style="font-size:12px;color:rgba(255,255,255,.68)">Português</span>
+        </label>
+        <button class="ep-primary-btn" id="ep-primary-pt" onclick="setPrimaryLang('pt')" title="Set as primary language">★ Primary</button>
+      </div>
+      <!-- FR -->
+      <div class="ep-lang-row-adv">
+        <label style="display:flex;align-items:center;gap:.5rem;flex:1;cursor:pointer">
+          <input type="checkbox" id="ep-lang-fr" checked onchange="toggleLangTab('fr',this.checked)" style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
+          <span style="font-size:12px;color:rgba(255,255,255,.68)">Français</span>
+        </label>
+        <button class="ep-primary-btn" id="ep-primary-fr" onclick="setPrimaryLang('fr')" title="Set as primary language">★ Primary</button>
+      </div>
+    </div>
+
+    <!-- Apply to portal toggle -->
+    <div style="margin-top:.625rem;padding:.625rem .75rem;background:rgba(200,168,75,.04);border:.5px solid rgba(200,168,75,.1);border-radius:5px;display:flex;align-items:center;justify-content:space-between;gap:.75rem">
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-bottom:2px">Apply primary language to portal</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.28);line-height:1.5">Portal loads and displays in the selected primary language</div>
+      </div>
+      <label class="ep-toggle-wrap">
+        <input type="checkbox" id="ep-lang-apply-portal" onchange="setApplyLangToPortal(this.checked)" style="display:none">
+        <span class="ep-toggle-track" id="ep-toggle-track">
+          <span class="ep-toggle-thumb"></span>
+        </span>
+      </label>
+    </div>
+    <div id="ep-primary-status" style="font-size:10px;color:rgba(200,168,75,.6);min-height:14px;letter-spacing:.04em;text-align:center"></div>
+
+    <div class="ep-section">Hero</div>
+    <div class="ep-field"><label>Role eyebrow</label><textarea id="ep-h-eye" rows="2"></textarea></div>
+    <div class="ep-field"><label>Tagline</label><textarea id="ep-h-tag" rows="4"></textarea></div>
+    <div class="ep-field"><label>Proposition</label><textarea id="ep-r-prop" rows="4"></textarea></div>
+
+    <div class="ep-section">Three pillars</div>
+    <div class="ep-field"><label>Pillar 1 — title</label><textarea id="ep-rp1t" rows="2"></textarea></div>
+    <div class="ep-field"><label>Pillar 1 — body</label><textarea id="ep-rp1d" rows="3"></textarea></div>
+    <div class="ep-field"><label>Pillar 2 — title</label><textarea id="ep-rp2t" rows="2"></textarea></div>
+    <div class="ep-field"><label>Pillar 2 — body</label><textarea id="ep-rp2d" rows="3"></textarea></div>
+    <div class="ep-field"><label>Pillar 3 — title</label><textarea id="ep-rp3t" rows="2"></textarea></div>
+    <div class="ep-field"><label>Pillar 3 — body</label><textarea id="ep-rp3d" rows="3"></textarea></div>
+
+    <div class="ep-section">Recommendation</div>
+    <div class="ep-field"><label>Quote</label><textarea id="ep-quote" rows="4"></textarea></div>
+    <div class="ep-field"><label>Attribution</label><textarea id="ep-attr" rows="2"></textarea></div>
+    <div class="ep-field"><label>Verification line</label><textarea id="ep-verify" rows="2"></textarea></div>
+
+    <div class="ep-section">Contact &amp; chatbot</div>
+    <div class="ep-field"><label>Schedule subtitle</label><textarea id="ep-sb-sub" rows="2"></textarea></div>
+    <div class="ep-field"><label>Contact line</label><textarea id="ep-contact" rows="1"></textarea></div>
+    <div class="ep-field"><label>Contact button URL (mailto: or Calendly)</label><textarea id="ep-calendly" rows="2"></textarea></div>
+    <div class="ep-field"><label>Chatbot name</label><textarea id="ep-bot-name" rows="1"></textarea></div>
+
+    <div class="ep-note">Changes save to this browser via localStorage. Design is locked — content only. To deactivate or transfer the portal, log in to ventureready.co.</div>
+  </div>
+  <div class="ep-footer">
+    <div class="ep-feedback" id="ep-feedback"></div>
+    <div class="ep-actions">
+      <button class="ep-revert" onclick="revertEdits()">↩ Revert</button>
+      <button class="ep-save" onclick="saveEdits()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ═══════════════════════════════════════
+   PASSWORDS
+   VISITOR_PWD  — on the one-pager, given to hiring manager
+   ADMIN_PWD    — known only to candidate / VR client
+   Admin mode shows Edit + Deactivate buttons
+═══════════════════════════════════════ */
+const VISITOR_PWD = 'FIFA2026';
+const ADMIN_PWD   = 'JVRADMIN2026'; // candidate changes this via edit panel (future: platform sync)
+let isAdmin = false;
+let attempts = 0, locked = false;
+
+function unlock(){
+  if(locked) return;
+  const v = document.getElementById('pwd').value.toUpperCase().replace(/\s/g,'');
+  if(v === VISITOR_PWD || v === ADMIN_PWD){
+    isAdmin = (v === ADMIN_PWD);
+    document.getElementById('gate').classList.add('gone');
+    document.getElementById('portal').classList.add('show');
+    if(isAdmin) document.getElementById('admin-btns').style.display = 'flex';
+    setTimeout(initPortal, 600);
+  } else {
+    attempts++;
+    if(attempts >= 5){
+      locked = true;
+      document.getElementById('glock').textContent = 'Too many attempts. Please wait 10 minutes.';
+      document.getElementById('pwd').disabled = true;
+      document.getElementById('g-btn').disabled = true;
+      setTimeout(()=>{locked=false;attempts=0;document.getElementById('pwd').disabled=false;document.getElementById('g-btn').disabled=false;document.getElementById('glock').textContent=''},600000);
+    } else {
+      document.getElementById('gerr').textContent = `Incorrect. ${5-attempts} attempt${5-attempts!==1?'s':''} remaining.`;
+      document.getElementById('pwd').value = '';
+      document.getElementById('pwd').focus();
+      setTimeout(()=>document.getElementById('gerr').textContent='',3000);
+    }
+  }
+}
+document.getElementById('pwd').addEventListener('keydown', e=>{ if(e.key==='Enter') unlock(); });
+
+function initPortal(){
+  // Trigger hero animations now that portal is visible
+  setTimeout(()=>{
+    ['.h-eye','.h-name','.h-tag','.h-langs','.r-label','.r-prop','.r-pillars','.sc-cue'].forEach(sel=>{
+      const el = document.querySelector(sel);
+      if(el){ el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate'); }
+    });
+  }, 200);
+
+  // Scroll-repeat IntersectionObserver for ALL animated sections
+  const animObs = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.remove('in');
+        void e.target.offsetWidth; // reflow
+        e.target.classList.add('in');
+      } else {
+        e.target.classList.remove('in'); // reset so it re-animates on scroll back
+      }
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.tl-item').forEach(el=>animObs.observe(el));
+
+  // Section reveal observer (role fit cards, quote band)
+  const fadeObs = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      e.target.style.opacity = e.isIntersecting ? '1' : '0';
+      e.target.style.transform = e.isIntersecting ? 'none' : 'translateY(20px)';
+    });
+  },{threshold:.08});
+  document.querySelectorAll('.rb-item,.qb-inner,.sb-inner').forEach(el=>{
+    el.style.transition='opacity .65s ease,transform .65s ease';
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    fadeObs.observe(el);
+  });
+
+  // Apply saved edits
+  applySavedEdits();
+
+  // Nav scroll shadow + progress
+  window.addEventListener('scroll', ()=>{
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('scroll-progress').style.width = (window.scrollY/max*100)+'%';
+  });
+}
+
+/* ═══════════════════════════════════════
+   LANGUAGE SYSTEM — full content object
+   Every visible string has an ID and lives here.
+═══════════════════════════════════════ */
+const L = {
+  en: {
+    /* gate */ 'g-title':'Restricted Access','g-lbl':'Access code','g-sub':'Exclusive candidate briefing.<br>Authorized access only.',
+    /* nav */  'nav-eye':'Application briefing · Guest Relations Coordinator','nl-exp':'Experience','nl-fit':'Role fit','nl-rec':'Recommendation','nl-ask':'Ask Joao','nav-deact':'Deactivate',
+    /* hero */ 'h-eye':'Guest Relations Coordinator · FIFA World Cup 2026 · Miami',
+               'h-tag':'Guest relations and operations professional — shaped by the highest service standards in hospitality, international cruise operations, diplomatic protocol, and five years of client coordination for international investors in Miami.',
+               'r-label-txt':'What this application brings',
+               'r-prop':"The service standard starts at Disneyland Paris — and builds from there. International cruise guests, a diplomatic mission's public, and international investors in Miami. The guests will encounter that same level of care.",
+    /* pillars */'rp1t':'Four languages across the key guest corridors','rp1d':'Native Portuguese, professional English and Spanish, working French — covering the majority of Americas and European guest groups as a core operational capability, not a bonus.',
+               'rp2t':'Guest data and records management at scale','rp2d':'High-volume management at consular level — status tracking, discrepancy resolution, data accuracy across parallel channels. Directly analogous to IFES guest profile workflows.',
+               'rp3t':'Cross-stakeholder service delivery under visibility','rp3d':'Event coordination and invitation management in a diplomatic environment where every touchpoint is observed and quality is non-negotiable.',
+    /* langs */ 'hl-pt':'Portuguese','hl-pt-lvl':'Native · bilingual','hl-en':'English','hl-en-lvl':'Professional working','hl-es':'Spanish','hl-es-lvl':'Professional working','hl-fr':'French','hl-fr-lvl':'Professional working',
+    /* cue */   'sc-txt':'Continue',
+    /* exp */   'sec-exp-t':'Career <em>context</em>',
+                'ap-exp-label':'Design logic','ap-exp-text':'Sequenced by relevance, not chronology. The consular role leads because it demonstrates institutional-scale guest and data management with a verifiable letter of endorsement attached — the closest structural analogue to this role.',
+                'tl1-when':'Jun 2025 — Mar 2026','tl1-role':'Administrative Assistant — Consular Section','tl1-where':'Consulate General of Brazil · Miami, FL',
+                'tl1-body':'High-volume public-facing operations in an institutional environment — managing applicant flow, maintaining data accuracy, and delivering consistent service quality under sustained demand. The operational profile of consular services in Miami maps directly to large-scale guest management at a major international event.',
+                'tl1-pt1':'Part of a team managing high volumes of in-person appointments and mail-in applications daily — each requiring individual compliance review, status tracking, and accurate data entry across all case records',
+                'tl1-pt2':'Processed and validated official documentation under institutional protocols — zero compliance deviations throughout tenure',
+                'tl1-pt3':'Supported coordination of public events, outreach activities, and institutional scheduling across the Cultural and Education Department',
+                'tl1-pt4':'Co-developed a narrated visual tutorial to streamline the applicant journey — reducing repetitive requests and improving the guest experience end-to-end',
+                'tl1-pt5':'Trained incoming staff on internal procedures and service workflows',
+                'tl1-c1':'Guest data management','tl1-c2':'High-volume intake','tl1-c3':'Records compliance','tl1-c4':'Event coordination','tl1-c5':'Staff training',
+                'tl2-when':'Jul 2019 — Present','tl2-role':'Operations & Client Coordination','tl2-where':'VR Capital LLC · Miami, FL · International private clients',
+                'tl2-body':'Five-year engagement as primary point of contact for international investors and clients — coordinating logistics, documentation, vendor management, and service delivery across multi-party environments. Built the operational discipline of tracking multiple active priorities simultaneously, without dropping a thread.',
+                'tl2-pt1':'Served as primary liaison for international clients — managing requests, coordinating service providers, and ensuring seamless delivery across complex logistical environments',
+                'tl2-pt2':'Coordinated financial workflows including wire transfers — where precision in documentation was non-negotiable',
+                'tl2-pt3':'Developed internal workflow documentation and tracking structures to ensure continuity across extended project timelines',
+                'tl2-c1':'Client liaison','tl2-c2':'Multi-vendor coordination','tl2-c3':'Process documentation','tl2-c4':'International clients',
+                'tl3-when':'Earlier experience','tl3-role':'Guest Relations · Disneyland Resort Paris','tl3-where':'Walt Disney Company · Paris, France',
+                'tl3-body':"Where the standard was set. Guest-facing operations at one of the world's highest-volume hospitality environments — multilingual, multicultural, and held to the strictest service quality benchmarks in the industry. The expectation was not competent service. It was a consistently exceptional experience, for every guest, every time.",
+                'tl3-c1':'Guest relations','tl3-c2':'Multilingual service','tl3-c3':'High-volume hospitality','tl3-c4':'Service quality standards',
+                'tl4-when':'International cruise & financial services','tl4-role':'Customer Service · Financial Services','tl4-where':'International Cruise Operations, Latin America · Banks in Brazil & Quebec, Canada',
+                'tl4-body':'Guest and client service across cruise operations covering LatAm markets, and banking environments in Brazil and Canada. Extended the multilingual service experience beyond hospitality into client-facing financial services contexts.',
+                'tl4-c1':'Cruise guest operations','tl4-c2':'LatAm markets','tl4-c3':'Financial services','tl4-c4':'Bilingual client service',
+    /* fit */   'rb-eye':'Role alignment','rb-title':'What the role requires.<br><em>What this profile delivers.</em>',
+                'rbl1':'Requirement','rbl2':'Requirement','rbl3':'Requirement','rbl4':'Requirement','rbl5':'Requirement','rbl6':'Requirement',
+                'rb1-req':'Guest invitation coordination & guest list management','rb1-match':'Consulate event coordination + VR Capital multi-party logistics. <em>Same structure, different scale.</em>',
+                'rb2-req':'Guest data maintenance in IFES (profiles, travel, accommodation)','rb2-match':'High-volume consular applicant intake across in-person and mail channels — maintaining data accuracy across all case records. <em>Directly analogous.</em>',
+                'rb3-req':'Consistent service quality across all guest touchpoints','rb3-match':'Disneyland Paris, cruise operations, consular public service. <em>The standard has been held across three distinct institutional environments.</em>',
+                'rb4-req':'Fluent English + Spanish and/or French proficiency','rb4-match':'Portuguese (native), English (professional), Spanish (professional), French (professional working). <em>All four languages active.</em>',
+                'rb5-req':'MS Office proficiency including Excel, Word, PowerPoint','rb5-match':'Documented in all roles. Process documentation, reporting, presentation prep across sustained engagements. <em>Proficient across the full suite.</em>',
+                'rb6-req':'Progress reports & continuous improvement','rb6-match':'Workflow documentation and tutorial development at the Consulate — improving operational consistency and reducing friction. <em>Improvement mindset is demonstrated, not claimed.</em>',
+    /* rec */   'ap-rec-label':'Design logic','ap-rec-text':'Signed letter on official government letterhead from a named Deputy Consul General — with verifiable institutional contact. A third-party endorsement at this level, from a named signatory with a direct line, is rare at any career stage.',
+                'qb-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
+                'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026',
+                'qb-verify':'Verifiable · administ.miami@itamaraty.gov.br · +1 (305) 285-6230',
+    /* sched */ 'sb-eye':'Next step','sb-title':'Ready to <em>connect?</em>','sb-sub':"If what you've read adds context to this application, a conversation is one click away.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
+    /* footer */'pf-left':'Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026',
+    /* chat */  'cb-head-name':'Ask Joao','cb-email-lbl':'To notify Joao of your visit, share your email? <em>(optional)</em>','cb-start-btn':'Start','cb-skip-lnk':'Continue as guest →','cb-btn-label':'Ask Joao','cb-status-txt':'Available now',
+    /* deact */ 'dm-title':'Deactivate this portal?','dm-text':'The briefing will go offline immediately. Your data is retained for 90 days, then permanently deleted on request.','dm-cancel':'Keep active','dm-confirm':'Deactivate now',
+    /* anno pillar */'ap-pillars-label':'Design logic','ap-pillars-text':'Three pillars mapped directly to role requirements — service standard, data precision, multilingual reach. Each is evidenced, not claimed. The structure mirrors how a senior reviewer reads a brief: requirement first, proof second.'
+  },
+
+  es: {
+    'g-title':'Acceso restringido','g-lbl':'Código de acceso','g-sub':'Expediente exclusivo del candidato.<br>Solo acceso autorizado.',
+    'nav-eye':'Expediente · Coordinador de Relaciones con Invitados','nl-exp':'Experiencia','nl-fit':'Alineación','nl-rec':'Recomendación','nl-ask':'Preguntar a Joao','nav-deact':'Desactivar',
+    'h-eye':'Coordinador de Relaciones con Invitados · Copa del Mundo FIFA 2026 · Miami',
+    'h-tag':'Profesional de relaciones con invitados y operaciones — formado en los más altos estándares de hospitalidad, operaciones de cruceros internacionales, protocolo diplomático y cinco años coordinando clientes internacionales en Miami.',
+    'r-label-txt':'Lo que trae esta candidatura',
+    'r-prop':'El estándar de servicio comienza en Disneyland París — y se construye desde ahí. Invitados de cruceros internacionales, el público de una misión diplomática e inversores internacionales en Miami. Los invitados encontrarán ese mismo nivel de atención.',
+    'rp1t':'Cuatro idiomas para los principales grupos de invitados','rp1d':'Portugués nativo, inglés y español profesional, francés funcional — cubriendo la mayoría de los grupos de invitados de las Américas y Europa como capacidad operativa central, no como un plus.',
+    'rp2t':'Gestión de datos de invitados y registros a escala','rp2d':'Gestión de alto volumen a nivel consular — seguimiento de estados, resolución de discrepancias, precisión de datos en canales paralelos. Directamente análogo a los flujos de trabajo de perfiles en IFES.',
+    'rp3t':'Coordinación de servicio multistakeholder bajo visibilidad','rp3d':'Coordinación de eventos y gestión de invitaciones en un entorno diplomático donde cada punto de contacto es observado y la calidad es innegociable.',
+    'hl-pt':'Portugués','hl-pt-lvl':'Nativo · bilingüe','hl-en':'Inglés','hl-en-lvl':'Competencia profesional','hl-es':'Español','hl-es-lvl':'Competencia profesional','hl-fr':'Francés','hl-fr-lvl':'Competencia funcional',
+    'sc-txt':'Continuar',
+    'sec-exp-t':'Trayectoria <em>profesional</em>',
+    'ap-exp-label':'Lógica de diseño','ap-exp-text':'Ordenado por relevancia, no por cronología. El rol consular lidera porque demuestra gestión de invitados y datos a escala institucional con una carta de respaldo verificable — el análogo estructural más cercano a este cargo.',
+    'tl1-when':'Jun 2025 — Mar 2026','tl1-role':'Asistente Administrativo — Sección Consular','tl1-where':'Consulado General de Brasil · Miami, FL',
+    'tl1-body':'Operaciones públicas de alto volumen en un entorno institucional — gestión de flujo de solicitantes, mantenimiento de la precisión de datos y entrega de calidad de servicio consistente bajo demanda sostenida. El perfil operativo de los servicios consulares en Miami se corresponde directamente con la gestión de invitados a gran escala en un evento internacional de primer nivel.',
+    'tl1-pt1':'Parte de un equipo que gestionó altos volúmenes de citas presenciales y solicitudes por correo diariamente — cada una requiriendo revisión de cumplimiento individual, seguimiento de estado e ingreso de datos preciso en todos los registros',
+    'tl1-pt2':'Procesó y validó documentación oficial bajo protocolos institucionales — cero desviaciones de cumplimiento durante todo el período',
+    'tl1-pt3':'Apoyó la coordinación de eventos públicos, actividades de divulgación y programación institucional en el Departamento Cultural y de Educación',
+    'tl1-pt4':'Codesarrolló un tutorial visual narrado para optimizar el proceso del solicitante — reduciendo solicitudes repetitivas y mejorando la experiencia del usuario de principio a fin',
+    'tl1-pt5':'Capacitó al personal entrante en procedimientos internos y flujos de trabajo de servicio',
+    'tl1-c1':'Gestión de datos de invitados','tl1-c2':'Ingreso de alto volumen','tl1-c3':'Cumplimiento de registros','tl1-c4':'Coordinación de eventos','tl1-c5':'Capacitación de personal',
+    'tl2-when':'Jul 2019 — Presente','tl2-role':'Operaciones y Coordinación de Clientes','tl2-where':'VR Capital LLC · Miami, FL · Clientes privados internacionales',
+    'tl2-body':'Cinco años como punto de contacto principal para inversores y clientes internacionales — coordinando logística, documentación, gestión de proveedores y prestación de servicios en entornos multi-parte. Desarrolló la disciplina operativa de gestionar múltiples prioridades activas simultáneamente, sin perder ningún hilo.',
+    'tl2-pt1':'Sirvió como enlace principal para clientes internacionales — gestionando solicitudes, coordinando proveedores de servicios y asegurando una entrega fluida en entornos logísticos complejos',
+    'tl2-pt2':'Coordinó flujos de trabajo financieros incluyendo transferencias bancarias — donde la precisión en la documentación era innegociable',
+    'tl2-pt3':'Desarrolló documentación de flujos de trabajo internos y estructuras de seguimiento para garantizar la continuidad a lo largo de proyectos extendidos',
+    'tl2-c1':'Enlace con clientes','tl2-c2':'Coordinación multi-proveedor','tl2-c3':'Documentación de procesos','tl2-c4':'Clientes internacionales',
+    'tl3-when':'Experiencia anterior','tl3-role':'Relaciones con Invitados · Disneyland Resort París','tl3-where':'The Walt Disney Company · París, Francia',
+    'tl3-body':'Donde se estableció el estándar. Operaciones de cara al público en uno de los entornos de hospitalidad de mayor volumen del mundo — multilingüe, multicultural y mantenido bajo los criterios de calidad de servicio más estrictos de la industria. La expectativa no era un servicio competente. Era una experiencia consistentemente excepcional, para cada invitado, cada vez.',
+    'tl3-c1':'Relaciones con invitados','tl3-c2':'Servicio multilingüe','tl3-c3':'Hospitalidad de alto volumen','tl3-c4':'Estándares de calidad de servicio',
+    'tl4-when':'Cruceros internacionales y servicios financieros','tl4-role':'Servicio al Cliente · Servicios Financieros','tl4-where':'Operaciones de Cruceros Internacionales, América Latina · Bancos en Brasil y Quebec, Canadá',
+    'tl4-body':'Servicio a clientes e invitados en operaciones de cruceros que cubren mercados latinoamericanos y entornos bancarios en Brasil y Canadá. Extendió la experiencia de servicio multilingüe más allá de la hospitalidad hacia contextos de servicios financieros orientados al cliente.',
+    'tl4-c1':'Operaciones de cruceros','tl4-c2':'Mercados LatAm','tl4-c3':'Servicios financieros','tl4-c4':'Servicio bilingüe al cliente',
+    'rb-eye':'Alineación con el cargo','rb-title':'Lo que el cargo requiere.<br><em>Lo que este perfil entrega.</em>',
+    'rbl1':'Requisito','rbl2':'Requisito','rbl3':'Requisito','rbl4':'Requisito','rbl5':'Requisito','rbl6':'Requisito',
+    'rb1-req':'Coordinación de invitaciones y gestión de listas de invitados','rb1-match':'Coordinación de eventos en el Consulado + logística multi-parte de VR Capital. <em>Misma estructura, diferente escala.</em>',
+    'rb2-req':'Mantenimiento de datos de invitados en IFES (perfiles, viajes, alojamiento)','rb2-match':'Ingreso de alto volumen de solicitantes consulares en canales presenciales y por correo — manteniendo la precisión de datos en todos los registros. <em>Directamente análogo.</em>',
+    'rb3-req':'Calidad de servicio consistente en todos los puntos de contacto','rb3-match':'Disneyland París, operaciones de cruceros, servicio público consular. <em>El estándar se ha mantenido en tres entornos institucionales distintos.</em>',
+    'rb4-req':'Inglés fluido + competencia en español y/o francés','rb4-match':'Portugués (nativo), inglés (profesional), español (profesional), francés (funcional). <em>Los cuatro idiomas activos.</em>',
+    'rb5-req':'Dominio de MS Office incluyendo Excel, Word, PowerPoint','rb5-match':'Documentado en todos los roles. Documentación de procesos, informes, preparación de presentaciones. <em>Competente en toda la suite.</em>',
+    'rb6-req':'Informes de progreso y mejora continua','rb6-match':'Documentación de flujos de trabajo y desarrollo de tutoriales en el Consulado — mejorando la consistencia operativa y reduciendo fricciones. <em>La mentalidad de mejora está demostrada, no reclamada.</em>',
+    'ap-rec-label':'Lógica de diseño','ap-rec-text':'Carta firmada en papel timbrado oficial de un Cónsul General Adjunto nombrado — con contacto institucional verificable. Un respaldo de terceros a este nivel, de un signatario nombrado con línea directa, es poco común en cualquier etapa de carrera.',
+    'qb-quote':'"Su perfil refleja confiabilidad institucional, integridad profesional y la capacidad de contribuir con propósito y efectividad en entornos exigentes. Recomiendo al Sr. João Victor Rossi sin reservas."',
+    'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Cónsul General Adjunto · Consulado General de Brasil en Miami · 24 de marzo de 2026',
+    'qb-verify':'Verificable · administ.miami@itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Próximo paso','sb-title':'¿Listo para <em>conectar?</em>','sb-sub':'Si lo que has leído añade contexto a esta candidatura, una conversación está a un clic de distancia.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
+    'pf-left':'Expediente del candidato · Joao V. Rossi · Candidatura a Coordinador de Relaciones con Invitados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
+    'cb-head-name':'Preguntar a Joao','cb-email-lbl':'Para notificar a Joao de su visita, ¿comparte su email? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como invitado →','cb-btn-label':'Preguntar a Joao','cb-status-txt':'Disponible ahora',
+    'dm-title':'¿Desactivar este portal?','dm-text':'El expediente quedará offline de inmediato. Sus datos se conservan 90 días y luego se eliminan permanentemente a solicitud.','dm-cancel':'Mantener activo','dm-confirm':'Desactivar ahora',
+    'ap-pillars-label':'Lógica de diseño','ap-pillars-text':'Tres pilares mapeados directamente a los requisitos del cargo — estándar de servicio, precisión de datos, alcance multilingüe. Cada uno está evidenciado, no reclamado. La estructura refleja cómo un evaluador senior lee un expediente: requisito primero, prueba después.'
+  },
+
+  pt: {
+    'g-title':'Acesso restrito','g-lbl':'Código de acesso','g-sub':'Dossiê exclusivo do candidato.<br>Apenas acesso autorizado.',
+    'nav-eye':'Dossiê de candidatura · Coordenador de Relações com Convidados','nl-exp':'Experiência','nl-fit':'Alinhamento','nl-rec':'Recomendação','nl-ask':'Perguntar ao Joao','nav-deact':'Desativar',
+    'h-eye':'Coordenador de Relações com Convidados · Copa do Mundo FIFA 2026 · Miami',
+    'h-tag':'Profissional de relações com convidados e operações — formado pelos mais altos padrões de hospitalidade, operações de cruzeiros internacionais, protocolo diplomático e cinco anos coordenando clientes internacionais em Miami.',
+    'r-label-txt':'O que esta candidatura traz',
+    'r-prop':'O padrão de serviço começa na Disneyland Paris — e se constrói a partir daí. Convidados de cruzeiros internacionais, o público de uma missão diplomática e investidores internacionais em Miami. Os convidados encontrarão esse mesmo nível de cuidado.',
+    'rp1t':'Quatro idiomas para os principais corredores de convidados','rp1d':'Português nativo, inglês e espanhol profissional, francês funcional — cobrindo a maioria dos grupos de convidados das Américas e da Europa como capacidade operacional central, não como bônus.',
+    'rp2t':'Gestão de dados de convidados e registros em escala','rp2d':'Gestão de alto volume em nível consular — rastreamento de status, resolução de discrepâncias, precisão de dados em canais paralelos. Diretamente análogo aos fluxos de trabalho de perfis no IFES.',
+    'rp3t':'Coordenação de serviço multi-stakeholder sob visibilidade','rp3d':'Coordenação de eventos e gestão de convites em ambiente diplomático onde cada ponto de contato é observado e a qualidade é inegociável.',
+    'hl-pt':'Português','hl-pt-lvl':'Nativo · bilíngue','hl-en':'Inglês','hl-en-lvl':'Proficiência profissional','hl-es':'Espanhol','hl-es-lvl':'Proficiência profissional','hl-fr':'Francês','hl-fr-lvl':'Proficiência funcional',
+    'sc-txt':'Continuar',
+    'sec-exp-t':'Trajetória <em>profissional</em>',
+    'ap-exp-label':'Lógica de design','ap-exp-text':'Ordenado por relevância, não por cronologia. O cargo consular lidera porque demonstra gestão de convidados e dados em escala institucional com uma carta de respaldo verificável — o análogo estrutural mais próximo a este cargo.',
+    'tl1-when':'Jun 2025 — Mar 2026','tl1-role':'Assistente Administrativo — Seção Consular','tl1-where':'Consulado Geral do Brasil · Miami, FL',
+    'tl1-body':'Operações públicas de alto volume em ambiente institucional — gerenciamento de fluxo de solicitantes, manutenção da precisão de dados e entrega de qualidade de serviço consistente sob demanda sustentada. O perfil operacional dos serviços consulares em Miami se corresponde diretamente à gestão de convidados em larga escala em um evento internacional de grande porte.',
+    'tl1-pt1':'Parte de uma equipe que gerenciou altos volumes de atendimentos presenciais e solicitações por correio diariamente — cada um exigindo revisão individual de conformidade, rastreamento de status e entrada precisa de dados em todos os registros',
+    'tl1-pt2':'Processou e validou documentação oficial sob protocolos institucionais — zero desvios de conformidade durante todo o período',
+    'tl1-pt3':'Apoiou a coordenação de eventos públicos, atividades de divulgação e programação institucional no Departamento Cultural e de Educação',
+    'tl1-pt4':'Co-desenvolveu um tutorial visual narrado para otimizar a jornada do solicitante — reduzindo solicitações repetitivas e melhorando a experiência do usuário de ponta a ponta',
+    'tl1-pt5':'Treinou novos funcionários em procedimentos internos e fluxos de trabalho de atendimento',
+    'tl1-c1':'Gestão de dados de convidados','tl1-c2':'Triagem de alto volume','tl1-c3':'Conformidade de registros','tl1-c4':'Coordenação de eventos','tl1-c5':'Treinamento de equipe',
+    'tl2-when':'Jul 2019 — Presente','tl2-role':'Operações e Coordenação de Clientes','tl2-where':'VR Capital LLC · Miami, FL · Clientes privados internacionais',
+    'tl2-body':'Cinco anos de atuação como ponto de contato principal para investidores e clientes internacionais — coordenando logística, documentação, gestão de fornecedores e entrega de serviços em ambientes multi-partes. Desenvolveu a disciplina operacional de gerenciar múltiplas prioridades ativas simultaneamente, sem perder nenhum fio.',
+    'tl2-pt1':'Atuou como principal liaison para clientes internacionais — gerenciando solicitações, coordenando prestadores de serviços e garantindo entrega eficiente em ambientes logísticos complexos',
+    'tl2-pt2':'Coordenou fluxos de trabalho financeiros incluindo transferências bancárias — onde a precisão na documentação era inegociável',
+    'tl2-pt3':'Desenvolveu documentação de fluxos de trabalho internos e estruturas de acompanhamento para garantir continuidade ao longo de projetos extensos',
+    'tl2-c1':'Liaison com clientes','tl2-c2':'Coordenação multi-fornecedor','tl2-c3':'Documentação de processos','tl2-c4':'Clientes internacionais',
+    'tl3-when':'Experiência anterior','tl3-role':'Relações com Convidados · Disneyland Resort Paris','tl3-where':'The Walt Disney Company · Paris, França',
+    'tl3-body':'Onde o padrão foi definido. Operações de atendimento ao público em um dos ambientes de hospitalidade de maior volume do mundo — multilíngue, multicultural e mantido sob os padrões mais rígidos de qualidade de serviço da indústria. A expectativa não era um serviço competente. Era uma experiência consistentemente excepcional, para cada convidado, a cada vez.',
+    'tl3-c1':'Relações com convidados','tl3-c2':'Serviço multilíngue','tl3-c3':'Hospitalidade de alto volume','tl3-c4':'Padrões de qualidade de serviço',
+    'tl4-when':'Cruzeiros internacionais e serviços financeiros','tl4-role':'Atendimento ao Cliente · Serviços Financeiros','tl4-where':'Operações de Cruzeiros Internacionais, América Latina · Bancos no Brasil e Quebec, Canadá',
+    'tl4-body':'Atendimento a clientes e convidados em operações de cruzeiros cobrindo mercados da América Latina, e em ambientes bancários no Brasil e no Canadá. Expandiu a experiência de serviço multilíngue para além da hospitalidade em contextos de serviços financeiros voltados ao cliente.',
+    'tl4-c1':'Operações de cruzeiros','tl4-c2':'Mercados LatAm','tl4-c3':'Serviços financeiros','tl4-c4':'Atendimento bilíngue ao cliente',
+    'rb-eye':'Alinhamento com o cargo','rb-title':'O que o cargo exige.<br><em>O que este perfil entrega.</em>',
+    'rbl1':'Requisito','rbl2':'Requisito','rbl3':'Requisito','rbl4':'Requisito','rbl5':'Requisito','rbl6':'Requisito',
+    'rb1-req':'Coordenação de convites e gestão de lista de convidados','rb1-match':'Coordenação de eventos no Consulado + logística multi-parte da VR Capital. <em>Mesma estrutura, escala diferente.</em>',
+    'rb2-req':'Manutenção de dados de convidados no IFES (perfis, viagens, hospedagem)','rb2-match':'Triagem de alto volume de solicitantes consulares em canais presenciais e por correio — mantendo a precisão dos dados em todos os registros. <em>Diretamente análogo.</em>',
+    'rb3-req':'Qualidade de serviço consistente em todos os pontos de contato','rb3-match':'Disneyland Paris, operações de cruzeiros, serviço público consular. <em>O padrão foi mantido em três ambientes institucionais distintos.</em>',
+    'rb4-req':'Inglês fluente + proficiência em espanhol e/ou francês','rb4-match':'Português (nativo), inglês (profissional), espanhol (profissional), francês (funcional). <em>Os quatro idiomas ativos.</em>',
+    'rb5-req':'Proficiência em MS Office incluindo Excel, Word, PowerPoint','rb5-match':'Documentado em todos os cargos. Documentação de processos, relatórios, preparação de apresentações. <em>Proficiente em todo o pacote.</em>',
+    'rb6-req':'Relatórios de progresso e melhoria contínua','rb6-match':'Documentação de fluxos de trabalho e desenvolvimento de tutoriais no Consulado — melhorando a consistência operacional e reduzindo fricções. <em>A mentalidade de melhoria está demonstrada, não apenas afirmada.</em>',
+    'ap-rec-label':'Lógica de design','ap-rec-text':'Carta assinada em papel timbrado oficial de um Cônsul-Geral Adjunto nomeado — com contato institucional verificável. Um respaldo de terceiros nesse nível, de um signatário nomeado com linha direta, é raro em qualquer estágio de carreira.',
+    'qb-quote':'"Seu perfil reflete confiabilidade institucional, integridade profissional e a capacidade de contribuir com propósito e efetividade em ambientes exigentes. Recomendo o Sr. João Victor Rossi sem reservas."',
+    'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Cônsul-Geral Adjunto · Consulado Geral do Brasil em Miami · 24 de março de 2026',
+    'qb-verify':'Verificável · administ.miami@itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Próximo passo','sb-title':'Pronto para <em>conectar?</em>','sb-sub':'Se o que você leu adiciona contexto a esta candidatura, uma conversa está a um clique de distância.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
+    'pf-left':'Dossiê do candidato · Joao V. Rossi · Candidatura a Coordenador de Relações com Convidados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
+    'cb-head-name':'Perguntar ao Joao','cb-email-lbl':'Para notificar o Joao da sua visita, compartilha seu e-mail? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como visitante →','cb-btn-label':'Perguntar ao Joao','cb-status-txt':'Disponível agora',
+    'dm-title':'Desativar este portal?','dm-text':'O dossiê ficará offline imediatamente. Seus dados são retidos por 90 dias e excluídos permanentemente mediante solicitação.','dm-cancel':'Manter ativo','dm-confirm':'Desativar agora',
+    'ap-pillars-label':'Lógica de design','ap-pillars-text':'Três pilares mapeados diretamente aos requisitos do cargo — padrão de serviço, precisão de dados, alcance multilíngue. Cada um é evidenciado, não afirmado. A estrutura espelha como um avaliador sênior lê um dossiê: requisito primeiro, prova depois.'
+  },
+
+  fr: {
+    'g-title':'Accès restreint','g-lbl':'Code d\'accès','g-sub':'Dossier exclusif du candidat.<br>Accès autorisé uniquement.',
+    'nav-eye':'Dossier de candidature · Coordinateur des Relations Invités','nl-exp':'Expérience','nl-fit':'Alignement','nl-rec':'Recommandation','nl-ask':'Demander à Joao','nav-deact':'Désactiver',
+    'h-eye':'Coordinateur des Relations avec les Invités · Coupe du Monde FIFA 2026 · Miami',
+    'h-tag':"Professionnel des relations avec les invités et des opérations — façonné par les plus hauts standards de l'hospitalité, des opérations de croisières internationales, du protocole diplomatique et de cinq ans de coordination de clients internationaux à Miami.",
+    'r-label-txt':'Ce que cette candidature apporte',
+    'r-prop':"Le standard de service commence à Disneyland Paris — et se construit à partir de là. Clients des croisières internationales, public d'une mission diplomatique et investisseurs internationaux à Miami. Les invités trouveront ce même niveau de soin.",
+    'rp1t':'Quatre langues pour les principaux corridors d\'invités','rp1d':"Portugais natif, anglais et espagnol professionnels, français fonctionnel — couvrant la majorité des groupes d'invités des Amériques et d'Europe comme capacité opérationnelle centrale, pas comme bonus.",
+    'rp2t':'Gestion des données et registres des invités à grande échelle','rp2d':'Gestion de volumes élevés au niveau consulaire — suivi des statuts, résolution des écarts, précision des données sur des canaux parallèles. Directement analogue aux flux de travail des profils IFES.',
+    'rp3t':'Coordination de service multi-parties sous visibilité','rp3d':"Coordination d'événements et gestion des invitations dans un environnement diplomatique où chaque point de contact est observé et la qualité est non négociable.",
+    'hl-pt':'Portugais','hl-pt-lvl':'Natif · bilingue','hl-en':'Anglais','hl-en-lvl':'Compétence professionnelle','hl-es':'Espagnol','hl-es-lvl':'Compétence professionnelle','hl-fr':'Français','hl-fr-lvl':'Compétence professionnelle',
+    'sc-txt':'Continuer',
+    'sec-exp-t':'Parcours <em>professionnel</em>',
+    'ap-exp-label':'Logique de design','ap-exp-text':"Séquencé par pertinence, pas par chronologie. Le rôle consulaire est en tête car il démontre une gestion des invités et des données à l'échelle institutionnelle avec une lettre d'appui vérifiable — l'analogue structurel le plus proche de ce poste.",
+    'tl1-when':'Juin 2025 — Mars 2026','tl1-role':'Assistant Administratif — Section Consulaire','tl1-where':'Consulat Général du Brésil · Miami, FL',
+    'tl1-body':"Opérations publiques à haut volume dans un environnement institutionnel — gestion du flux de demandeurs, maintien de la précision des données et prestation de qualité de service cohérente sous une demande soutenue. Le profil opérationnel des services consulaires à Miami correspond directement à la gestion des invités à grande échelle lors d'un événement international majeur.",
+    'tl1-pt1':"Partie d'une équipe gérant de hauts volumes de rendez-vous en personne et de demandes par courrier quotidiennement — chacun nécessitant une révision de conformité individuelle, un suivi d'état et une saisie précise des données dans tous les dossiers",
+    'tl1-pt2':"Traitement et validation de la documentation officielle sous des protocoles institutionnels — zéro déviation de conformité pendant toute la durée du mandat",
+    'tl1-pt3':"Soutien à la coordination d'événements publics, d'activités de sensibilisation et de planification institutionnelle au sein du Département Culturel et Éducatif",
+    'tl1-pt4':"Co-développement d'un tutoriel visuel narré pour optimiser le parcours du demandeur — réduisant les demandes répétitives et améliorant l'expérience de bout en bout",
+    'tl1-pt5':"Formation du personnel entrant sur les procédures internes et les flux de travail de service",
+    'tl1-c1':'Gestion des données invités','tl1-c2':'Traitement à haut volume','tl1-c3':'Conformité des registres','tl1-c4':"Coordination d'événements",'tl1-c5':'Formation du personnel',
+    'tl2-when':'Juil. 2019 — Présent','tl2-role':'Opérations et Coordination des Clients','tl2-where':'VR Capital LLC · Miami, FL · Clients privés internationaux',
+    'tl2-body':"Cinq ans d'engagement en tant que point de contact principal pour les investisseurs et clients internationaux — coordination de la logistique, de la documentation, de la gestion des fournisseurs et de la prestation de services dans des environnements multi-parties.",
+    'tl2-pt1':"Servit de liaison principal pour les clients internationaux — gestion des demandes, coordination des prestataires et garantie d'une livraison fluide dans des environnements logistiques complexes",
+    'tl2-pt2':"Coordination des flux de travail financiers incluant les virements — où la précision dans la documentation était non négociable",
+    'tl2-pt3':"Développement de la documentation des flux de travail internes et des structures de suivi pour assurer la continuité sur des projets étendus",
+    'tl2-c1':'Liaison clients','tl2-c2':'Coordination multi-fournisseurs','tl2-c3':'Documentation des processus','tl2-c4':'Clients internationaux',
+    'tl3-when':'Expérience antérieure','tl3-role':'Relations Invités · Disneyland Resort Paris','tl3-where':'The Walt Disney Company · Paris, France',
+    'tl3-body':"Là où le standard a été défini. Opérations face au public dans l'un des environnements d'hospitalité à plus haut volume du monde — multilingue, multiculturel, et maintenu selon les critères de qualité de service les plus stricts de l'industrie.",
+    'tl3-c1':'Relations invités','tl3-c2':'Service multilingue','tl3-c3':'Hospitalité à haut volume','tl3-c4':'Standards de qualité de service',
+    'tl4-when':'Croisières internationales et services financiers','tl4-role':'Service Client · Services Financiers','tl4-where':'Opérations de Croisières Internationales, Amérique Latine · Banques au Brésil et Québec, Canada',
+    'tl4-body':"Service aux clients et invités dans des opérations de croisières couvrant les marchés d'Amérique Latine, et dans des environnements bancaires au Brésil et au Canada.",
+    'tl4-c1':'Opérations de croisières','tl4-c2':'Marchés LatAm','tl4-c3':'Services financiers','tl4-c4':'Service client bilingue',
+    'rb-eye':'Alignement avec le poste','rb-title':'Ce que le poste exige.<br><em>Ce que ce profil apporte.</em>',
+    'rbl1':'Exigence','rbl2':'Exigence','rbl3':'Exigence','rbl4':'Exigence','rbl5':'Exigence','rbl6':'Exigence',
+    'rb1-req':"Coordination des invitations et gestion des listes d'invités",'rb1-match':"Coordination d'événements au Consulat + logistique multi-parties VR Capital. <em>Même structure, échelle différente.</em>",
+    'rb2-req':'Maintenance des données invités dans IFES (profils, voyages, hébergement)','rb2-match':"Traitement consulaire à haut volume sur canaux présentiel et courrier — maintien de la précision des données. <em>Directement analogue.</em>",
+    'rb3-req':'Qualité de service cohérente sur tous les points de contact','rb3-match':"Disneyland Paris, croisières, service public consulaire. <em>Le standard a été maintenu dans trois environnements institutionnels distincts.</em>",
+    'rb4-req':'Anglais courant + maîtrise de l\'espagnol et/ou du français','rb4-match':'Portugais (natif), anglais (professionnel), espagnol (professionnel), français (professionnel). <em>Les quatre langues actives.</em>',
+    'rb5-req':'Maîtrise de MS Office dont Excel, Word, PowerPoint','rb5-match':"Documenté dans tous les postes. Documentation de processus, rapports, préparation de présentations. <em>Compétent sur toute la suite.</em>",
+    'rb6-req':'Rapports d\'avancement et amélioration continue','rb6-match':"Documentation des flux de travail et développement de tutoriels au Consulat. <em>L'état d'esprit d'amélioration est démontré, pas seulement affirmé.</em>",
+    'ap-rec-label':'Logique de design','ap-rec-text':"Lettre signée sur papier à en-tête officiel d'un Consul Général Adjoint nommé — avec coordonnées institutionnelles vérifiables. Un soutien tiers à ce niveau, d'un signataire nommé avec une ligne directe, est rare à tout stade de carrière.",
+    'qb-quote':'"Son profil reflète la fiabilité institutionnelle, l\'intégrité professionnelle et la capacité de contribuer avec purpose et efficacité dans des environnements exigeants. Je recommande M. João Victor Rossi sans réserve."',
+    'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Consul Général Adjoint · Consulat Général du Brésil à Miami · 24 mars 2026',
+    'qb-verify':'Vérifiable · administ.miami@itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Prochaine étape','sb-title':'Prêt à <em>échanger?</em>','sb-sub':"Si ce que vous avez lu apporte du contexte à cette candidature, une conversation est à un clic.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
+    'pf-left':'Dossier du candidat · Joao V. Rossi · Candidature au poste de Coordinateur des Relations Invités<br>Préparé exclusivement pour cette candidature · Avril 2026',
+    'cb-head-name':'Demander à Joao','cb-email-lbl':'Pour notifier Joao de votre visite, partagez votre email ? <em>(optionnel)</em>','cb-start-btn':'Démarrer','cb-skip-lnk':'Continuer en tant qu\'invité →','cb-btn-label':'Demander à Joao','cb-status-txt':'Disponible maintenant',
+    'dm-title':'Désactiver ce portail ?','dm-text':"Le dossier sera mis hors ligne immédiatement. Vos données sont conservées 90 jours puis supprimées définitivement sur demande.",'dm-cancel':'Maintenir actif','dm-confirm':'Désactiver maintenant',
+    'ap-pillars-label':'Logique de design','ap-pillars-text':"Trois piliers mappés directement aux exigences du poste — standard de service, précision des données, portée multilingue. Chacun est étayé, pas simplement affirmé. La structure reflète la façon dont un évaluateur senior lit un dossier : exigence d'abord, preuve ensuite."
+  }
+};
+
+// IDs that must use textContent (have child elements or event listeners we must preserve)
+const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
+
+let currentLang = 'en';
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('.lt').forEach(el=>el.classList.toggle('on', el.dataset.lang===lang));
+  const t = L[lang];
+  Object.keys(t).forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(TEXT_ONLY.has(id)) el.textContent = t[id];
+    else el.innerHTML = t[id];
+  });
+}
+
+function goTo(sel){ const el=document.querySelector(sel); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+/* ── ANNOTATIONS ── */
+let openAnno = null;
+function showAnno(trigger, event){
+  event.stopPropagation();
+  const box = trigger.nextElementSibling;
+  if(openAnno && openAnno!==box){ openAnno.classList.remove('show'); document.querySelectorAll('.at.open').forEach(t=>t.classList.remove('open')); }
+  const isOpen = box.classList.contains('show');
+  box.classList.toggle('show',!isOpen); trigger.classList.toggle('open',!isOpen);
+  if(!isOpen){
+    openAnno = box;
+    const r = trigger.getBoundingClientRect();
+    box.style.top = (r.bottom+10)+'px';
+    box.style.left = Math.max(12, Math.min(r.left, window.innerWidth-300))+'px';
+  } else openAnno = null;
+}
+document.addEventListener('click',()=>{
+  if(openAnno){ openAnno.classList.remove('show'); document.querySelectorAll('.at.open').forEach(t=>t.classList.remove('open')); openAnno=null; }
+});
+
+/* ── CHATBOT ── */
+let chatOpen = false;
+function toggleChat(){ chatOpen=!chatOpen; document.getElementById('cb-win').classList.toggle('show',chatOpen); }
+function startChat(withEmail){
+  document.getElementById('cb-email-z').style.display='none';
+  document.getElementById('cb-badge').classList.add('show');
+  document.getElementById('cb-msgs').classList.add('show');
+  document.getElementById('cb-ir').classList.add('show');
+  if(withEmail){ const e=document.getElementById('cb-ei').value.trim(); if(e) console.log('Visitor email:',e); }
+  addBot("Hi — I'm set up to answer questions about Joao's background and application. What would you like to know?");
+}
+function addBot(txt){
+  const m=document.getElementById('cb-msgs');
+  const d=document.createElement('div'); d.className='cbm';
+  d.innerHTML=`<div class="cbm-who">Joao's assistant</div><div class="cbm-txt bot">${txt}</div>`;
+  m.appendChild(d); m.scrollTop=m.scrollHeight;
+}
+const KB=[
+  {keys:['disney','paris','disneyland','hospitality'],ans:"Joao worked at Disneyland Resort Paris in guest-facing operations — one of the world's highest-volume hospitality environments. The standard wasn't just competence: it was a consistently exceptional experience for every guest, every visit. That benchmark has carried through every role since."},
+  {keys:['language','portuguese','spanish','french','multilingual'],ans:"Joao speaks four languages: Portuguese natively, English and Spanish at professional working proficiency, and French at professional working proficiency. These cover the primary Americas and European guest corridors directly — an operational match, not a background detail."},
+  {keys:['ifes','data','guest list','database','system','profile','record'],ans:"His consular work involved high-volume applicant intake — tracking status, maintaining data accuracy, and resolving discrepancies across in-person and mail channels simultaneously. The operational structure is directly analogous to IFES guest profile management."},
+  {keys:['consul','brazil','consulate','diplomatic'],ans:"Joao worked at the Consulate General of Brazil in Miami — first in Cultural and Education supporting event coordination, then in the Consular Section managing high-volume applicant flow. He has a recommendation letter from the Deputy Consul General, Fernando Augusto Moreira Costa, dated March 2026, with verifiable contact details in this portal."},
+  {keys:['event','coordinate','logistic','invitation'],ans:"His consular experience includes supporting public events, outreach activities, and institutional scheduling — managing logistics, on-site execution, and stakeholder coordination. Event coordination at scale is a consistent thread across his career."},
+  {keys:['excel','office','word','powerpoint','software'],ans:"Proficient across the full MS Office suite — Excel, Word, PowerPoint — documented across all roles. Used for process documentation, operational tracking, and reporting throughout sustained engagements."},
+  {keys:['recommendation','reference','letter','endorse'],ans:"The recommendation is from Fernando Augusto Moreira Costa, Deputy Consul General of Brazil in Miami, dated March 24, 2026. It's on official government letterhead with verifiable contact: administ.miami@itamaraty.gov.br and +1 (305) 285-6230."},
+  {keys:['available','start','when','miami'],ans:"Joao is based in Miami, FL — the role's location. No relocation required."},
+  {keys:['cruise','ship','latin america'],ans:"Joao worked in international cruise operations serving Latin American markets — multilingual, multicultural guest service at scale. Combined with Disneyland Paris, it represents the international hospitality foundation this type of role requires."}
+];
+function sendChat(){
+  const inp=document.getElementById('cb-in'); const q=inp.value.trim(); if(!q) return;
+  const m=document.getElementById('cb-msgs');
+  const rd=document.createElement('div'); rd.className='cbm';
+  rd.innerHTML=`<div class="cbm-who">Visitor</div><div class="cbm-txt rec">${q}</div>`;
+  m.appendChild(rd); inp.value=''; m.scrollTop=m.scrollHeight;
+  setTimeout(()=>{
+    const ql=q.toLowerCase();
+    let ans="Based on Joao's profile: institutional guest service across Disneyland Paris, international cruise operations, the Consulate General of Brazil, and five years of client coordination in Miami. Four languages active. Happy to answer anything more specific.";
+    for(const e of KB){ if(e.keys.some(k=>ql.includes(k))){ ans=e.ans; break; } }
+    addBot(ans);
+  },800);
+}
+
+/* ── CONTACT ── */
+// Works locally (opens mail client) and online. Client replaces with Calendly URL via edit panel.
+function contactAction(){
+  const url = localStorage.getItem('vr_fifa_ep-calendly') || 'mailto:jvrossil@gmail.com?subject=Guest%20Relations%20Coordinator%20Application';
+  window.open(url, '_blank');
+}
+
+/* ── DEACT ── */
+function showDeact(){ document.getElementById('deact-bg').classList.add('show'); }
+function deactivate(){
+  document.getElementById('portal').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--lt);font-family:'DM Sans',sans-serif;text-align:center;padding:2rem"><div><div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--dk);margin-bottom:.75rem">This portal is no longer active.</div><div style="font-size:13px;color:var(--muted);line-height:1.8">This briefing has been taken offline by the candidate.<br>For inquiries: jvrossil@gmail.com</div></div></div>`;
+  document.getElementById('deact-bg').classList.remove('show');
+}
+
+/* ── PALETTE PICKER ── */
+const PALETTES = {
+  A: { dk:'#0a1628', ac:'#c8a84b', ac2:'#e8c86a', lt:'#f8f7f4', acb:'rgba(200,168,75,0.08)', rule:'rgba(200,168,75,0.14)' },
+  B: { dk:'#2a2b33', ac:'#aa8f5c', ac2:'#c4a870', lt:'#faf8f4', acb:'rgba(170,143,92,0.08)', rule:'rgba(170,143,92,0.14)' },
+  C: { dk:'#18181f', ac:'#8a8a9c', ac2:'#a0a0b4', lt:'#f2f0ed', acb:'rgba(138,138,156,0.08)', rule:'rgba(138,138,156,0.14)' }
+};
+let activePalette = localStorage.getItem('vr_fifa_palette') || 'A';
+
+function selectPalette(key){
+  activePalette = key;
+  localStorage.setItem('vr_fifa_palette', key);
+  applyPalette(key);
+  // Update card borders
+  document.querySelectorAll('.ep-palette-card').forEach(c=>{
+    const isActive = c.id === 'pal-'+key;
+    c.style.border = isActive ? '.5px solid rgba(200,168,75,.5)' : '.5px solid rgba(255,255,255,.08)';
+    c.style.background = isActive ? 'rgba(200,168,75,.06)' : 'rgba(255,255,255,.02)';
+  });
+}
+function applyPalette(key){
+  const p = PALETTES[key]; if(!p) return;
+  const r = document.documentElement.style;
+  r.setProperty('--dk', p.dk);
+  r.setProperty('--ac', p.ac);
+  r.setProperty('--ac2', p.ac2);
+  r.setProperty('--lt', p.lt);
+  r.setProperty('--acb', p.acb);
+  r.setProperty('--rule', p.rule);
+}
+
+/* ── NAME FORMAT ── */
+function setNameFormat(fmt){
+  const nameEl = document.querySelector('.h-name');
+  if(!nameEl) return;
+  localStorage.setItem('vr_fifa_name_fmt', fmt);
+  if(fmt === 'two')   nameEl.innerHTML = 'Joao V.<br><em>Rossi</em>';
+  if(fmt === 'one')   nameEl.innerHTML = 'Joao V. Rossi';
+  if(fmt === 'first') nameEl.innerHTML = 'Joao';
+}
+function loadNameFormat(){
+  const fmt = localStorage.getItem('vr_fifa_name_fmt') || 'two';
+  document.querySelector(`input[name="ep-name-fmt"][value="${fmt}"]`).checked = true;
+  setNameFormat(fmt);
+}
+
+/* ── LANG TAB TOGGLE (admin) ── */
+function toggleLangTab(lang, show){
+  const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
+  if(!tab) return;
+  tab.style.display = show ? '' : 'none';
+  localStorage.setItem('vr_fifa_tab_'+lang, show ? '1' : '0');
+  // If hiding the current primary, reset primary to 'en'
+  if(!show && localStorage.getItem('vr_fifa_primary_lang') === lang){
+    setPrimaryLang('en');
+  }
+  // If hiding the currently active language, switch to primary
+  if(!show && currentLang === lang){
+    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+    setLang(primary);
+  }
+}
+
+/* ── PRIMARY LANGUAGE SYSTEM ── */
+function setPrimaryLang(lang){
+  // Don't allow setting a hidden lang as primary
+  if(lang !== 'en'){
+    const savedVis = localStorage.getItem('vr_fifa_tab_'+lang);
+    if(savedVis === '0'){
+      showPrimaryStatus('⚠ Enable this language tab first', 'rgba(220,160,60,.8)');
+      return;
+    }
+  }
+  localStorage.setItem('vr_fifa_primary_lang', lang);
+  renderPrimaryBtns();
+  showPrimaryStatus('✓ Primary set to ' + langName(lang), '#4caf80');
+
+  // If "apply to portal" is on, immediately switch the portal language
+  const applyOn = localStorage.getItem('vr_fifa_apply_lang_to_portal') === '1';
+  if(applyOn) setLang(lang);
+}
+
+function langName(lang){
+  return {en:'English',es:'Español',pt:'Português',fr:'Français'}[lang] || lang;
+}
+
+function renderPrimaryBtns(){
+  const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  ['en','es','pt','fr'].forEach(l=>{
+    const btn = document.getElementById('ep-primary-'+l);
+    if(!btn) return;
+    btn.classList.toggle('active', l === primary);
+    btn.textContent = l === primary ? '★ Primary' : '☆ Primary';
+  });
+}
+
+function setApplyLangToPortal(on){
+  localStorage.setItem('vr_fifa_apply_lang_to_portal', on ? '1' : '0');
+  const track = document.getElementById('ep-toggle-track');
+  if(track) track.classList.toggle('on', on);
+  if(on){
+    // Immediately apply primary lang to portal
+    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+    setLang(primary);
+    showPrimaryStatus('✓ Portal now displays in ' + langName(primary), '#4caf80');
+  }
+}
+
+function loadPrimaryLangUI(){
+  const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  renderPrimaryBtns();
+  const applyOn = localStorage.getItem('vr_fifa_apply_lang_to_portal') === '1';
+  const cb = document.getElementById('ep-lang-apply-portal');
+  if(cb) cb.checked = applyOn;
+  const track = document.getElementById('ep-toggle-track');
+  if(track) track.classList.toggle('on', applyOn);
+}
+
+function showPrimaryStatus(msg, color){
+  const el = document.getElementById('ep-primary-status');
+  if(!el) return;
+  el.textContent = msg; el.style.color = color;
+  setTimeout(()=>{ el.textContent = ''; }, 2800);
+}
+
+/* ── EDIT PANEL ── */
+const DEFAULTS = {
+  'ep-h-eye':'Guest Relations Coordinator · FIFA World Cup 2026 · Miami',
+  'ep-h-tag':'Guest relations and operations professional — shaped by the highest service standards in hospitality, international cruise operations, diplomatic protocol, and five years of client coordination for international investors in Miami.',
+  'ep-r-prop':"The service standard starts at Disneyland Paris — and builds from there. International cruise guests, a diplomatic mission's public, and international investors in Miami. The guests will encounter that same level of care.",
+  'ep-rp1t':'Four languages across the key guest corridors','ep-rp1d':'Native Portuguese, professional English and Spanish, working French — covering the majority of Americas and European guest groups as a core operational capability, not a bonus.',
+  'ep-rp2t':'Guest data and records management at scale','ep-rp2d':'High-volume management at consular level — status tracking, discrepancy resolution, data accuracy across parallel channels. Directly analogous to IFES guest profile workflows.',
+  'ep-rp3t':'Cross-stakeholder service delivery under visibility','ep-rp3d':'Event coordination and invitation management in a diplomatic environment where every touchpoint is observed and quality is non-negotiable.',
+  'ep-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
+  'ep-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026',
+  'ep-verify':'Verifiable · administ.miami@itamaraty.gov.br · +1 (305) 285-6230',
+  'ep-sb-sub':"If what you've read adds context to this application, a conversation is one click away.",
+  'ep-contact':'jvrossil@gmail.com · +1 (786) 609-3110',
+  'ep-calendly':'mailto:jvrossil@gmail.com?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
+  'ep-bot-name':'Ask Joao'
+};
+
+const FIELD_MAP = {
+  'ep-h-eye':   {id:'h-eye',    prop:'textContent'},
+  'ep-h-tag':   {id:'h-tag',    prop:'textContent'},
+  'ep-r-prop':  {id:'r-prop',   prop:'innerHTML'},
+  'ep-rp1t':    {id:'rp1t',     prop:'textContent'},
+  'ep-rp1d':    {id:'rp1d',     prop:'textContent'},
+  'ep-rp2t':    {id:'rp2t',     prop:'textContent'},
+  'ep-rp2d':    {id:'rp2d',     prop:'textContent'},
+  'ep-rp3t':    {id:'rp3t',     prop:'textContent'},
+  'ep-rp3d':    {id:'rp3d',     prop:'textContent'},
+  'ep-quote':   {id:'qb-quote', prop:'textContent'},
+  'ep-attr':    {id:'qb-attr',  prop:'textContent'},
+  'ep-verify':  {id:'qb-verify',prop:'textContent'},
+  'ep-sb-sub':  {id:'sb-sub',   prop:'textContent'},
+  'ep-contact': {id:'sb-note',  prop:'textContent'},
+  'ep-calendly':{id:'sb-btn',   prop:'',isBtn:true},
+  'ep-bot-name':{id:'cb-head-name',prop:'textContent'}
+};
+
+function openEditPanel(){
+  ['es','pt','fr'].forEach(lang=>{
+    const saved=localStorage.getItem('vr_fifa_tab_'+lang);
+    const cb=document.getElementById('ep-lang-'+lang);
+    if(cb && saved!==null) cb.checked = saved==='1';
+  });
+  loadPrimaryLangUI();
+  Object.keys(DEFAULTS).forEach(key=>{
+    const el=document.getElementById(key); if(!el) return;
+    const saved=localStorage.getItem('vr_fifa_'+key);
+    el.value = saved!==null ? saved : DEFAULTS[key];
+  });
+  document.getElementById('edit-panel').classList.add('open');
+  document.getElementById('edit-overlay').classList.add('show');
+}
+function closeEditPanel(){
+  document.getElementById('edit-panel').classList.remove('open');
+  document.getElementById('edit-overlay').classList.remove('show');
+}
+function saveEdits(){
+  Object.keys(DEFAULTS).forEach(key=>{
+    const el=document.getElementById(key); if(!el) return;
+    const val=el.value.trim()||DEFAULTS[key];
+    localStorage.setItem('vr_fifa_'+key, val);
+    applyField(key, val);
+  });
+  showEpFeedback('✓ Saved','#4caf80');
+  setTimeout(closeEditPanel, 700);
+}
+function revertEdits(){
+  if(!confirm('Revert all fields to original content?')) return;
+  Object.keys(DEFAULTS).forEach(key=>{
+    localStorage.removeItem('vr_fifa_'+key);
+    const el=document.getElementById(key); if(el) el.value=DEFAULTS[key];
+    applyField(key, DEFAULTS[key]);
+  });
+  ['es','pt','fr'].forEach(lang=>{
+    localStorage.removeItem('vr_fifa_tab_'+lang);
+    const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
+    if(tab) tab.style.display='';
+    const cb=document.getElementById('ep-lang-'+lang); if(cb) cb.checked=true;
+  });
+  localStorage.removeItem('vr_fifa_palette'); applyPalette('A'); selectPalette('A');
+  localStorage.removeItem('vr_fifa_name_fmt'); loadNameFormat();
+  localStorage.removeItem('vr_fifa_primary_lang');
+  localStorage.removeItem('vr_fifa_apply_lang_to_portal');
+  renderPrimaryBtns();
+  const applyTrack = document.getElementById('ep-toggle-track');
+  if(applyTrack) applyTrack.classList.remove('on');
+  const applyCb = document.getElementById('ep-lang-apply-portal');
+  if(applyCb) applyCb.checked = false;
+  setLang('en');
+  showEpFeedback('↩ Reverted','#c8a84b');
+}
+function applyField(key, val){
+  const map=FIELD_MAP[key]; if(!map) return;
+  const el=document.getElementById(map.id); if(!el) return;
+  if(map.isBtn){ el.onclick=()=>{ window.location.href=val; }; }
+  else if(map.prop==='innerHTML') el.innerHTML=val;
+  else el.textContent=val;
+}
+function showEpFeedback(msg,color){
+  const fb=document.getElementById('ep-feedback');
+  fb.textContent=msg; fb.style.color=color; fb.style.opacity='1';
+  setTimeout(()=>fb.style.opacity='0',2200);
+}
+function applySavedEdits(){
+  // Restore palette
+  const savedPal = localStorage.getItem('vr_fifa_palette');
+  if(savedPal) { applyPalette(savedPal); activePalette = savedPal; selectPalette(savedPal); }
+  // Restore name format
+  loadNameFormat();
+  ['es','pt','fr'].forEach(lang=>{
+    const saved=localStorage.getItem('vr_fifa_tab_'+lang);
+    if(saved !== null){
+      const tab = document.querySelector(`.lt[data-lang="${lang}"]`);
+      if(tab) tab.style.display = saved==='1' ? '' : 'none';
+    }
+  });
+  // Restore saved content fields
+  Object.keys(DEFAULTS).forEach(key=>{
+    const saved = localStorage.getItem('vr_fifa_'+key);
+    if(saved !== null) applyField(key, saved);
+  });
+  // Restore primary language & apply to portal if set
+  const primaryLang = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  const applyToPortal = localStorage.getItem('vr_fifa_apply_lang_to_portal') === '1';
+  if(applyToPortal) setLang(primaryLang);
+}
+</script>
+</body>
+</html>
