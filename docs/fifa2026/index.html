@@ -1847,7 +1847,7 @@ function ghCreds(){
   return {
     token: localStorage.getItem('vr_gh_token')||'',
     repo:  localStorage.getItem('vr_gh_repo')||'',
-    path:  localStorage.getItem('vr_gh_path')||'config.json'
+    path:  localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json'
   };
 }
 function buildConfig(){
@@ -1937,16 +1937,22 @@ function showGhToast(){
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
 }
 function saveGhCreds(){
-  const t=document.getElementById('ep-gh-token'); const r=document.getElementById('ep-gh-repo'); const p=document.getElementById('ep-gh-path');
-  if(t) localStorage.setItem('vr_gh_token',t.value.trim());
-  if(r) localStorage.setItem('vr_gh_repo',r.value.trim());
-  if(p&&p.value.trim()) localStorage.setItem('vr_gh_path',p.value.trim());
+  const t=document.getElementById('ep-gh-token');
+  const r=document.getElementById('ep-gh-repo');
+  const p=document.getElementById('ep-gh-path');
+  if(t && t.value.trim()) localStorage.setItem('vr_gh_token', t.value.trim());
+  if(r && r.value.trim()) localStorage.setItem('vr_gh_repo',  r.value.trim());
+  if(p && p.value.trim()) localStorage.setItem('vr_gh_path',  p.value.trim());
+  else localStorage.setItem('vr_gh_path', 'docs/fifa2026/config.json');
 }
 function loadGhCreds(){
-  const {token,repo,path}=ghCreds();
+  // Always read fresh from localStorage
+  const token = localStorage.getItem('vr_gh_token') || '';
+  const repo  = localStorage.getItem('vr_gh_repo')  || '';
+  const path  = localStorage.getItem('vr_gh_path')  || 'docs/fifa2026/config.json';
   const t=document.getElementById('ep-gh-token'); if(t) t.value=token;
-  const r=document.getElementById('ep-gh-repo'); if(r) r.value=repo;
-  const p=document.getElementById('ep-gh-path'); if(p) p.value=path;
+  const r=document.getElementById('ep-gh-repo');  if(r) r.value=repo;
+  const p=document.getElementById('ep-gh-path');  if(p) p.value=path;
 }
 function commitLocalEdits(){
   Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
