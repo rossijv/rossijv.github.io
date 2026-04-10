@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.9">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -375,9 +374,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   <!-- LANG TABS -->
   <div class="lang-bar">
     <div class="lt on" data-lang="en" onclick="setLang('en')">English</div>
-    <div class="lt" data-lang="es" onclick="setLang('es')" style="display:none">Español</div>
-    <div class="lt" data-lang="pt" onclick="setLang('pt')" style="display:none">Português</div>
-    <div class="lt" data-lang="fr" onclick="setLang('fr')" style="display:none">Français</div>
+    <div class="lt" data-lang="es" onclick="setLang('es')">Español</div>
+    <div class="lt" data-lang="pt" onclick="setLang('pt')">Português</div>
+    <div class="lt" data-lang="fr" onclick="setLang('fr')">Français</div>
   </div>
 
   <!-- NAV -->
@@ -578,10 +577,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
   </section>
 
-  <footer class="portal-footer" style="justify-content:center;padding:1.25rem 3rem">
-    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center">Prepared exclusively for this application &middot; Not for redistribution</div>
+  <footer class="portal-footer">
+    <div class="pf-left" id="pf-left">Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026</div>
+    <div class="pf-right">rossijv.github.io/fifa2026</div>
   </footer>
 
+  <!-- EXCLUSIVITY BANNER — non-editable by visitor, set by admin -->
+  <div id="excl-banner" style="background:#0a1628;border-top:1px solid rgba(200,168,75,.15);padding:.875rem 3rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+    <div style="width:16px;height:.5px;background:rgba(200,168,75,.35);flex-shrink:0"></div>
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,168,75,.55);text-align:center" id="excl-banner-txt">Prepared exclusively for this application · Not for redistribution</div>
+    <div style="width:16px;height:.5px;background:rgba(200,168,75,.35);flex-shrink:0"></div>
+  </div>
 </div>
 
 <!-- GITHUB SAVE TOAST -->
@@ -689,31 +695,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div class="ep-mobile-warn-txt"><strong>Edit panel is designed for desktop.</strong> Some fields may be hard to use on mobile. For the best experience, open the admin portal on a computer.</div>
     </div>
 
-    <!-- ── CANDIDATE IDENTITY — top of panel ── -->
-    <div class="ep-section" style="color:var(--ac2);border-color:rgba(200,168,75,.2)">✦ Candidate &amp; Application</div>
-    <div class="ep-field">
-      <label>Candidate name</label>
-      <textarea id="ep-excl-candidate" rows="1" placeholder="Joao V. Rossi"></textarea>
-    </div>
-    <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.6;margin-bottom:.625rem">Choose how the name appears in the hero section:</div>
-    <div style="display:flex;flex-direction:column;gap:.375rem;margin-bottom:.875rem;background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:5px;padding:.625rem .75rem">
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="two" onchange="setNameFormat('two')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">Two lines — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao V. / Rossi</em></span></label>
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="one" onchange="setNameFormat('one')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">One line — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao V. Rossi</em></span></label>
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="first" onchange="setNameFormat('first')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">First name only — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao</em></span></label>
-    </div>
-
-    <div class="ep-field" style="margin-bottom:.25rem">
-      <label>Target role &amp; company</label>
-      <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026 · Guest Relations Coordinator"></textarea>
-    </div>
-    <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">These appear in the footer as a locked, non-editable line — proof this briefing was created for this specific application.</div>
-
     <!-- GitHub Persistence — VR managed -->
+    <div class="ep-section">💾 Sync — Save for all visitors</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.625rem">Click <strong style="color:var(--ac2)">Save &amp; Sync</strong> to push your changes to all devices and browsers instantly.</div>
+    <div class="ep-gh-section" id="ep-gh-section">
+      <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
+        Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
+      </div>
+      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
+      <div class="ep-gh-status" id="ep-gh-status"></div>
+      <!-- VR master config — hidden from normal view, shown only with master key -->
+      <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
+        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.45);margin-bottom:.5rem">VR Admin — GitHub Config</div>
+        <div class="ep-field" style="margin-bottom:.375rem"><label>Token</label><textarea id="ep-gh-token" rows="1" placeholder="ghp_..."></textarea></div>
+        <div class="ep-field" style="margin-bottom:.375rem"><label>Repository</label><textarea id="ep-gh-repo" rows="1" placeholder="ventureready/joao-rossi-fifa2026"></textarea></div>
+        <div class="ep-field" style="margin-bottom:.375rem"><label>Config path</label><textarea id="ep-gh-path" rows="1" placeholder="config.json"></textarea></div>
+        <button onclick="saveGhCreds();showEpFeedback('✓ VR config saved','#4caf80')" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 12px;color:rgba(255,255,255,.45);cursor:pointer;font-family:'DM Sans',sans-serif">Save VR config</button>
+      </div>
+      <div style="text-align:right;margin-top:.375rem"><button onclick="toggleVrMaster()" style="font-size:9px;color:rgba(255,255,255,.22);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em">VR ···</button></div>
+    </div>
 
-    <div class="ep-section">Language settings</div>
-    <div id="ep-lang-advanced"></div>
 
-        <div class="ep-section">Colour palette</div>
+    <div class="ep-section">Colour palette</div>
     <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Based on the target company's visual identity, industry standard, and modern positioning. Select the palette that best matches your strategic intent.</div>
     <div id="ep-palettes" style="display:flex;flex-direction:column;gap:.75rem">
       <!-- Palette A -->
@@ -749,7 +752,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       </div>
     </div>
 
-
+    <div class="ep-section">Name display</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Choose how the candidate name appears in the hero section.</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="two" checked onchange="setNameFormat('two')" style="accent-color:var(--ac);cursor:pointer"><span>Two lines — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. / Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="one" onchange="setNameFormat('one')" style="accent-color:var(--ac);cursor:pointer"><span>One line — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="first" onchange="setNameFormat('first')" style="accent-color:var(--ac);cursor:pointer"><span>First name only — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao</em></span></label>
+    </div>
     <div class="ep-section">Hero</div>
     <div class="ep-field"><label>Role eyebrow</label><textarea id="ep-h-eye" rows="2"></textarea></div>
     <div class="ep-field"><label>Tagline</label><textarea id="ep-h-tag" rows="4"></textarea></div>
@@ -767,6 +776,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <div class="ep-field"><label>Quote</label><textarea id="ep-quote" rows="4"></textarea></div>
     <div class="ep-field"><label>Attribution</label><textarea id="ep-attr" rows="2"></textarea></div>
     <div class="ep-field"><label>Verification line</label><textarea id="ep-verify" rows="2"></textarea></div>
+
+    <!-- ── LANGUAGE SECTION ── -->
+    <div class="ep-section">Language settings</div>
+    <div id="ep-lang-advanced"></div>
 
     <!-- ── TEXT HIGHLIGHT EDITOR ── -->
     <div class="ep-section">Text highlights</div>
@@ -824,15 +837,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 
     <!-- ── CHATBOT SECTION ── -->
     <div class="ep-section">Ask Joao — Chatbot</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.75rem">Answers questions about this application. Redirects all other topics toward direct contact.</div>
-    <div class="ep-field" style="margin-bottom:.5rem">
-      <label>Chatbot personality</label>
-      <select id="ep-bot-tone" onchange="localStorage.setItem('vr_fifa_bot_tone',this.value)" style="width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(200,168,75,.18);border-radius:5px;padding:.5rem .75rem;font-size:12px;color:rgba(255,255,255,.8);font-family:'DM Sans',sans-serif;outline:none;cursor:pointer">
-        <option value="friendly">😊 Friendly &amp; witty — warm, light humor, approachable</option>
-        <option value="professional">🎯 Professional &amp; direct — confident, concise, no fluff</option>
-        <option value="executive">🏛 Executive &amp; formal — measured, authoritative, precise</option>
-      </select>
-    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.75rem">The chatbot answers questions about this application. It runs entirely offline — no API cost, no third-party service.</div>
 
     <label class="ep-lang-row" style="margin-bottom:.875rem">
       <input type="checkbox" id="ep-chatbot-enabled" checked onchange="onChatbotToggle(this.checked)" style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
@@ -863,44 +868,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px">⚠ After saving, you will need to re-enter the new admin password to access this panel.</div>
     </div>
 
-
-
-    <div class="ep-note">Changes save locally. Use Save &amp; Sync above to push to all devices.</div>
-
-    <div class="ep-section">💾 Sync — Save for all visitors</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.625rem">Click <strong style="color:var(--ac2)">Save &amp; Sync</strong> to push your changes to all devices and browsers instantly.</div>
-    <div class="ep-gh-section" id="ep-gh-section">
-      <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
-        Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
-      </div>
-      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
-      <div class="ep-gh-status" id="ep-gh-status"></div>
-      <!-- VR master config — hidden from normal view, shown only with master key -->
-      <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
-        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.45);margin-bottom:.5rem">VR Admin — GitHub Config</div>
-        <div class="ep-field" style="margin-bottom:.375rem">
-          <label>Token (stored encrypted)</label>
-          <textarea id="ep-gh-token" rows="1" placeholder="ghp_... or github_pat_..."></textarea>
-          <div id="ep-gh-token-status" style="font-size:9px;color:rgba(200,168,75,.6);margin-top:3px"></div>
-        </div>
-        <div class="ep-field" style="margin-bottom:.375rem"><label>Repository</label><textarea id="ep-gh-repo" rows="1" placeholder="ventureready/joao-rossi-fifa2026"></textarea></div>
-        <div class="ep-field" style="margin-bottom:.375rem"><label>Config path</label><textarea id="ep-gh-path" rows="1" placeholder="config.json"></textarea></div>
-        <button onclick="saveGhCreds();showEpFeedback('✓ VR config saved','#4caf80')" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 12px;color:rgba(255,255,255,.45);cursor:pointer;font-family:'DM Sans',sans-serif">Save VR config</button>
-      </div>
-
+    <!-- ── EXCLUSIVITY LOCK ── -->
+    <div class="ep-section">Target company (locked)</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.75rem">Appears as a non-editable banner on the portal — confirms this briefing was prepared exclusively for this engagement.</div>
+    <div class="ep-field">
+      <label>Candidate name</label>
+      <textarea id="ep-excl-candidate" rows="1" placeholder="Joao V. Rossi"></textarea>
+    </div>
+    <div class="ep-field">
+      <label>Target company / role</label>
+      <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026 · Guest Relations Coordinator"></textarea>
     </div>
 
-
-    <!-- ── LANGUAGE SECTION ── -->
+    <div class="ep-note">Changes save locally. Use Save &amp; Sync above to push to all devices.</div>
   </div>
   <div class="ep-footer">
     <div class="ep-feedback" id="ep-feedback"></div>
     <div class="ep-actions">
       <button class="ep-revert" onclick="revertEdits()">↩ Revert</button>
-      <button class="ep-save" onclick="saveEdits()" style="flex:2;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.55);color:#e8c86a;font-weight:500">⬆ Save &amp; Sync</button>
-    </div>
-    <div style="text-align:center;margin-top:.5rem;padding-top:.375rem;border-top:.5px solid rgba(255,255,255,.05)">
-      <button onclick="toggleVrMaster()" style="font-size:8px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px">· · · VR · · ·</button>
+      <button class="ep-save" onclick="saveEdits()">Save changes</button>
     </div>
   </div>
 </div>
@@ -916,70 +902,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 const VISITOR_PWD = 'FIFA2026';
 const ADMIN_PWD   = 'JVRADMIN2026';
 let VISITOR_PWD_RUNTIME = localStorage.getItem('vr_fifa_pwd_visitor') || VISITOR_PWD;
-
-/* ══════════════════════════════════════
-   SECURITY — Token encryption
-   Token is encrypted with AES-GCM using
-   the admin password as key. Stored in
-   config.json — safe to be in public repo.
-   Only the admin password can decrypt.
-══════════════════════════════════════ */
-async function deriveKey(password){
-  const enc = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
-  return crypto.subtle.deriveKey(
-    {name:'PBKDF2', salt:enc.encode('vr-salt-2026'), iterations:100000, hash:'SHA-256'},
-    keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']
-  );
-}
-async function encryptToken(token, password){
-  const key = await deriveKey(password);
-  const enc = new TextEncoder();
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(token));
-  const combined = new Uint8Array(iv.byteLength + encrypted.byteLength);
-  combined.set(iv, 0);
-  combined.set(new Uint8Array(encrypted), iv.byteLength);
-  return btoa(String.fromCharCode(...combined));
-}
-async function decryptToken(encryptedB64, password){
-  try{
-    const key = await deriveKey(password);
-    const combined = Uint8Array.from(atob(encryptedB64), c=>c.charCodeAt(0));
-    const iv = combined.slice(0,12);
-    const data = combined.slice(12);
-    const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, data);
-    return new TextDecoder().decode(decrypted);
-  }catch(e){ return ''; }
-}
-// Runtime decrypted token — populated after admin unlocks
-let DECRYPTED_TOKEN = '';
-async function initToken(adminPassword){
-  const encrypted = localStorage.getItem('vr_gh_token_enc') || '';
-  if(encrypted){
-    DECRYPTED_TOKEN = await decryptToken(encrypted, adminPassword);
-    if(DECRYPTED_TOKEN) localStorage.setItem('vr_gh_token', DECRYPTED_TOKEN);
-  } else {
-    DECRYPTED_TOKEN = localStorage.getItem('vr_gh_token') || '';
-  }
-}
-
-/* ── VERSION CHECK — forces Safari/iOS to reload when new HTML is deployed ──
-   The meta vr-version tag is bumped on every deploy by the VR agent.
-   If the stored version doesn't match, the page reloads once to get fresh HTML. */
-(function checkVersion(){
-  const metaEl = document.querySelector('meta[name="vr-version"]');
-  if(!metaEl) return;
-  const currentV = metaEl.content;
-  const storedV  = sessionStorage.getItem('vr_html_version');
-  if(storedV && storedV !== currentV){
-    // New version detected — clear session flag and hard reload
-    sessionStorage.removeItem('vr_html_version');
-    window.location.reload(true);
-    return;
-  }
-  sessionStorage.setItem('vr_html_version', currentV);
-})();
 let ADMIN_PWD_RUNTIME   = localStorage.getItem('vr_fifa_pwd_admin')   || ADMIN_PWD;
 let isAdmin = false;
 let attempts = 0, locked = false;
@@ -994,10 +916,7 @@ function unlock(){
     isAdmin = (v === ADMIN_PWD_RUNTIME);
     document.getElementById('gate').classList.add('gone');
     document.getElementById('portal').classList.add('show');
-    if(isAdmin){
-      document.getElementById('admin-btns').style.display = 'flex';
-      initToken(v); // decrypt token using admin password as key
-    }
+    if(isAdmin) document.getElementById('admin-btns').style.display = 'flex';
     setTimeout(initPortal, 600);
   } else {
     attempts++;
@@ -1379,29 +1298,13 @@ const KB = [
     ans:`Ready when you are. The best way to connect with Joao:<br><br>📧 <strong>jvrossil@gmail.com</strong><br>📞 <strong>+1 (786) 609-3110</strong><br><br>He monitors both closely and responds same day.` },
 ];
 
-function getRedirectMsgs(){
-  const tone = localStorage.getItem('vr_fifa_bot_tone') || 'friendly';
-  const contact = localStorage.getItem('vr_fifa_contact_email') || 'jvrossil@gmail.com';
-  const phone = '+1 (786) 609-3110';
-  if(tone === 'executive') return [
-    `That falls outside the scope of this briefing. For a substantive conversation, I'd recommend reaching out directly — ${contact}.`,
-    `This warrants a direct dialogue rather than an automated response. Joao is available at ${contact}.`,
-    `I'm not positioned to address that here. The appropriate next step is a direct conversation — ${contact} or ${phone}.`
-  ];
-  if(tone === 'professional') return [
-    `That's outside what I can address here. Joao can answer directly — ${contact} or ${phone}.`,
-    `Good question, but it's better answered in conversation. Reach Joao at ${contact}.`,
-    `I'd rather connect you with Joao directly on this one — ${contact}.`
-  ];
-  // friendly (default)
-  return [
-    `That one's above my pay grade — but not Joao's. Reach him at ${contact} or ${phone}.`,
-    `Excellent question. I'm set up for the application essentials, but this one deserves a real conversation. Joao would welcome it — ${contact}.`,
-    `I'll be honest: I don't have a script for that one. Joao answers his own questions better than I do. Worth a direct line: ${phone}.`,
-    `That's a genuinely good question and it deserves more than a pre-programmed answer. Joao's available — ${contact}.`,
-    `Outside my knowledge base on that one. But Joao's not — and he's far more charming in conversation than I am in text. ${contact}`
-  ];
-}
+const REDIRECT_MSGS = [
+  "That one's above my pay grade — but not Joao's. He'd be the right person to answer this directly. You can reach him at jvrossil@gmail.com or +1 (786) 609-3110.",
+  "Excellent question. I'm set up for the application essentials, but this one deserves a real conversation. Joao would welcome it — jvrossil@gmail.com.",
+  "I'll be honest: I don't have a script for that one. What I do know is that Joao answers his own questions better than I answer them for him. Worth a direct line: +1 (786) 609-3110.",
+  "That's a genuinely good question and it deserves more than a pre-programmed answer. Joao's available — jvrossil@gmail.com — and the conversation tends to be worth it.",
+  "Outside my knowledge base on that one. But Joao's not — and he's far more charming in conversation than I am in text. jvrossil@gmail.com or +1 (786) 609-3110."
+];
 let redirectIdx = 0;
 
 async function sendChat(){
@@ -1436,7 +1339,7 @@ KEY FACTS:
 - Education: BBA, PUC Campinas
 - Contact: jvrossil@gmail.com · +1 (786) 609-3110
 
-Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=warm & light humor. Professional=concise & direct. Executive=formal & precise. Answer only about this application. If outside scope, redirect warmly to direct contact. Max 3 sentences unless a list is needed.`},
+Answer concisely and professionally. If the question is outside this application context, warmly redirect to direct contact. Max 3 sentences unless a list is needed.`},
             {role:'user',content:q}
           ]
         })
@@ -1444,7 +1347,7 @@ Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=w
       removeTyping();
       const data = await res.json();
       if(data.choices?.[0]?.message?.content) addBot(data.choices[0].message.content);
-      else{ const msgs=getRedirectMsgs(); addBot(msgs[redirectIdx++ % msgs.length], true); }
+      else addBot(REDIRECT_MSGS[redirectIdx++ % REDIRECT_MSGS.length], true);
     } catch(e){
       removeTyping();
       addBot(REDIRECT_MSGS[redirectIdx++ % REDIRECT_MSGS.length], true);
@@ -1458,7 +1361,7 @@ Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=w
         if(e.keys.some(k=>ql.includes(k))){ matched=e; break; }
       }
       if(matched) addBot(matched.ans, matched.ans.includes('<'));
-      else{ const msgs=getRedirectMsgs(); addBot(msgs[redirectIdx++ % msgs.length], true); }
+      else addBot(REDIRECT_MSGS[redirectIdx++ % REDIRECT_MSGS.length], true);
     }, 600 + Math.random()*400);
   }
 }
@@ -1472,31 +1375,19 @@ function showTyping(){
 function removeTyping(){ const t=document.getElementById('cb-typing'); if(t) t.remove(); }
 
 /* ── CONTACT CONFIGURATOR ── */
-// Runtime contact state — populated by applyConfig() from GitHub, or localStorage fallback
-const CONTACT = {
-  type: 'email',
-  email: 'jvrossil@gmail.com',
-  calendly: '',
-  whatsapp: '',
-  custom: ''
-};
-function syncContactRuntime(){
-  CONTACT.type     = localStorage.getItem('vr_fifa_contact_type')     || 'email';
-  CONTACT.email    = localStorage.getItem('vr_fifa_contact_email')    || 'jvrossil@gmail.com';
-  CONTACT.calendly = localStorage.getItem('vr_fifa_contact_calendly') || '';
-  CONTACT.whatsapp = localStorage.getItem('vr_fifa_contact_whatsapp') || '';
-  CONTACT.custom   = localStorage.getItem('vr_fifa_contact_custom')   || '';
-}
 function buildContactUrl(){
-  syncContactRuntime();
-  if(CONTACT.type === 'calendly' && CONTACT.calendly) return CONTACT.calendly;
-  if(CONTACT.type === 'whatsapp' && CONTACT.whatsapp){
-    const num = CONTACT.whatsapp.replace(/\D/g,'');
-    return `https://wa.me/${num}?text=Hi%2C%20I%20saw%20this%20application%20portal.`;
+  const type = localStorage.getItem('vr_fifa_contact_type') || 'email';
+  if(type === 'email'){
+    const addr = localStorage.getItem('vr_fifa_contact_email') || 'jvrossil@gmail.com';
+    return `mailto:${addr}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
   }
-  if(CONTACT.type === 'custom' && CONTACT.custom) return CONTACT.custom;
-  // Default: email
-  return `mailto:${CONTACT.email}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
+  if(type === 'calendly') return localStorage.getItem('vr_fifa_contact_calendly') || '';
+  if(type === 'whatsapp'){
+    const num = (localStorage.getItem('vr_fifa_contact_whatsapp') || '17866093110').replace(/\D/g,'');
+    return `https://wa.me/${num}?text=Hi%20Joao%2C%20I%20saw%20your%20FIFA%202026%20application%20portal.`;
+  }
+  if(type === 'custom') return localStorage.getItem('vr_fifa_contact_custom') || '';
+  return 'mailto:jvrossil@gmail.com';
 }
 function contactAction(){
   const url = buildContactUrl();
@@ -1776,7 +1667,7 @@ function applyExclusivityBanner(){
   const candidate = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
   const company = localStorage.getItem('vr_fifa_excl_company') || 'FIFA World Cup 2026 · Guest Relations Coordinator';
   const el = document.getElementById('excl-banner-txt');
-  if(el) el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
+  if(el) el.textContent = `Prepared exclusively for ${candidate} · ${company} · Not for redistribution`;
 }
 function saveExclusivity(){
   const c = document.getElementById('ep-excl-candidate');
@@ -1936,9 +1827,6 @@ function openEditPanel(){
   buildHighlightPreview();
   loadGhCreds();
   checkGhConnection();
-  // Load tone selector
-  const toneEl = document.getElementById('ep-bot-tone');
-  if(toneEl) toneEl.value = localStorage.getItem('vr_fifa_bot_tone') || 'friendly';
   // Load password fields
   const vpEl=document.getElementById('ep-pwd-visitor'); if(vpEl) vpEl.value=localStorage.getItem('vr_fifa_pwd_visitor')||'FIFA2026';
   const apEl=document.getElementById('ep-pwd-admin'); if(apEl) apEl.value=localStorage.getItem('vr_fifa_pwd_admin')||'JVRADMIN2026';
@@ -1959,7 +1847,7 @@ function ghCreds(){
   return {
     token: localStorage.getItem('vr_gh_token')||'',
     repo:  localStorage.getItem('vr_gh_repo')||'',
-    path:  localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json'
+    path:  localStorage.getItem('vr_gh_path')||'config.json'
   };
 }
 function buildConfig(){
@@ -1976,12 +1864,8 @@ function buildConfig(){
   cfg['palette']=localStorage.getItem('vr_fifa_palette')||'A';
   cfg['name_fmt']=localStorage.getItem('vr_fifa_name_fmt')||'two';
   cfg['highlights']=localStorage.getItem('vr_fifa_highlights')||'[]';
-  cfg['bot_tone']=localStorage.getItem('vr_fifa_bot_tone')||'friendly';
   cfg['pwd_visitor']=localStorage.getItem('vr_fifa_pwd_visitor')||'';
   cfg['pwd_admin']=localStorage.getItem('vr_fifa_pwd_admin')||'';
-  cfg['gh_token_enc']=localStorage.getItem('vr_gh_token_enc')||'';
-  cfg['gh_repo']=localStorage.getItem('vr_gh_repo')||'';
-  cfg['gh_path']=localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json';
   cfg['excl_candidate']=localStorage.getItem('vr_fifa_excl_candidate')||'';
   cfg['excl_company']=localStorage.getItem('vr_fifa_excl_company')||'';
   cfg['archived']=localStorage.getItem('vr_fifa_archived')||'';
@@ -1991,15 +1875,14 @@ function applyConfig(cfg){
   if(!cfg) return;
   Object.keys(DEFAULTS).forEach(key=>{ if(cfg[key]!==undefined){ localStorage.setItem('vr_fifa_'+key,cfg[key]); applyField(key,cfg[key]); } });
   ['type','email','calendly','whatsapp','custom'].forEach(k=>{ if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]); });
-  syncContactRuntime();
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
   if(cfg['groq_key']) localStorage.setItem('vr_fifa_groq_key',cfg['groq_key']);
   ['es','pt','fr'].forEach(l=>{
-    const val = cfg['tab_'+l];
-    const show = (val===true||val==='1'||val===1);
-    localStorage.setItem('vr_fifa_tab_'+l, show?'1':'0');
-    const tab=document.querySelector(`.lt[data-lang="${l}"]`);
-    if(tab) tab.style.display=show?'':'none';
+    if(cfg['tab_'+l]!==undefined){
+      localStorage.setItem('vr_fifa_tab_'+l,cfg['tab_'+l]?'1':'0');
+      const tab=document.querySelector(`.lt[data-lang="${l}"]`);
+      if(tab) tab.style.display=cfg['tab_'+l]?'':'none';
+    }
   });
   if(cfg['primary_lang']) localStorage.setItem('vr_fifa_primary_lang',cfg['primary_lang']);
   if(cfg['apply_lang_portal']!==undefined) localStorage.setItem('vr_fifa_apply_lang_portal',cfg['apply_lang_portal']?'1':'0');
@@ -2011,11 +1894,6 @@ function applyConfig(cfg){
   if(cfg['apply_lang_portal']&&cfg['primary_lang']) setLang(cfg['primary_lang']);
   if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
   if(cfg['pwd_visitor']){ localStorage.setItem('vr_fifa_pwd_visitor',cfg['pwd_visitor']); VISITOR_PWD_RUNTIME=cfg['pwd_visitor']; }
-  if(cfg['bot_tone']) localStorage.setItem('vr_fifa_bot_tone',cfg['bot_tone']);
-  // Store encrypted token + repo info for cross-device access
-  if(cfg['gh_token_enc']) localStorage.setItem('vr_gh_token_enc', cfg['gh_token_enc']);
-  if(cfg['gh_repo']) localStorage.setItem('vr_gh_repo', cfg['gh_repo']);
-  if(cfg['gh_path']) localStorage.setItem('vr_gh_path', cfg['gh_path']);
   if(cfg['pwd_admin']){ localStorage.setItem('vr_fifa_pwd_admin',cfg['pwd_admin']); ADMIN_PWD_RUNTIME=cfg['pwd_admin']; }
   if(cfg['excl_candidate']) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
   if(cfg['excl_company']) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
@@ -2023,24 +1901,9 @@ function applyConfig(cfg){
 }
 async function loadFromGitHub(){
   const {token,repo,path}=ghCreds();
-  
-  // Strategy 1: Try public raw URL first (works for all visitors, no token needed)
-  // This is the primary source of truth — fast, no auth, no CORS issues
-  if(repo && path){
-    try{
-      const rawUrl = `https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`;
-      const res = await fetch(rawUrl, {cache:'no-store'});
-      if(res.ok){
-        const cfg = await res.json();
-        return cfg;
-      }
-    }catch(e){}
-  }
-  
-  // Strategy 2: GitHub API with token (fallback for admin — gets latest even before CDN refresh)
   if(!token||!repo) return null;
   try{
-    const res=await fetch(`https://api.github.com/repos/${repo}/contents/${path}?t=${Date.now()}`,{headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json','Cache-Control':'no-cache'}});
+    const res=await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json'}});
     if(!res.ok) return null;
     const d=await res.json();
     return JSON.parse(atob(d.content.replace(/\n/g,'')));
@@ -2073,32 +1936,17 @@ function showGhToast(){
   const t=document.getElementById('gh-save-toast'); if(!t) return;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
 }
-async function saveGhCreds(){
-  const t=document.getElementById('ep-gh-token');
-  const r=document.getElementById('ep-gh-repo');
-  const p=document.getElementById('ep-gh-path');
-  if(t && t.value.trim()){
-    const raw = t.value.trim();
-    localStorage.setItem('vr_gh_token', raw);
-    DECRYPTED_TOKEN = raw;
-    // Encrypt with admin password for cross-device storage in config.json
-    const enc = await encryptToken(raw, ADMIN_PWD_RUNTIME);
-    localStorage.setItem('vr_gh_token_enc', enc);
-  }
-  if(r && r.value.trim()) localStorage.setItem('vr_gh_repo', r.value.trim());
-  if(p && p.value.trim()) localStorage.setItem('vr_gh_path', p.value.trim());
-  else if(!localStorage.getItem('vr_gh_path')) localStorage.setItem('vr_gh_path','docs/fifa2026/config.json');
+function saveGhCreds(){
+  const t=document.getElementById('ep-gh-token'); const r=document.getElementById('ep-gh-repo'); const p=document.getElementById('ep-gh-path');
+  if(t) localStorage.setItem('vr_gh_token',t.value.trim());
+  if(r) localStorage.setItem('vr_gh_repo',r.value.trim());
+  if(p&&p.value.trim()) localStorage.setItem('vr_gh_path',p.value.trim());
 }
 function loadGhCreds(){
-  const token = localStorage.getItem('vr_gh_token') || '';
-  const repo  = localStorage.getItem('vr_gh_repo')  || '';
-  const path  = localStorage.getItem('vr_gh_path')  || 'docs/fifa2026/config.json';
-  const enc   = localStorage.getItem('vr_gh_token_enc') || '';
+  const {token,repo,path}=ghCreds();
   const t=document.getElementById('ep-gh-token'); if(t) t.value=token;
-  const r=document.getElementById('ep-gh-repo');  if(r) r.value=repo;
-  const p=document.getElementById('ep-gh-path');  if(p) p.value=path;
-  const s=document.getElementById('ep-gh-token-status');
-  if(s) s.textContent = enc ? '🔒 Encrypted copy stored in config.json' : (token ? '⚠ Not yet encrypted — save to encrypt' : '');
+  const r=document.getElementById('ep-gh-repo'); if(r) r.value=repo;
+  const p=document.getElementById('ep-gh-path'); if(p) p.value=path;
 }
 function commitLocalEdits(){
   Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
@@ -2160,9 +2008,7 @@ async function applySavedEdits(){
     loadNameFormat();
     ['es','pt','fr'].forEach(lang=>{
       const saved=localStorage.getItem('vr_fifa_tab_'+lang);
-      // Default: hidden unless explicitly set to '1'
-      const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
-      if(tab) tab.style.display=(saved==='1')?'':'none';
+      if(saved==='0'){const tab=document.querySelector(`.lt[data-lang="${lang}"]`);if(tab)tab.style.display='none';}
     });
     const savedPrimary=localStorage.getItem('vr_fifa_primary_lang')||'en';
     currentLang=savedPrimary;
@@ -2248,12 +2094,50 @@ function renderLangAdminSection(){
       </div>`;
   }).join('');
 
+  const applyChecked = state.applyToPortal ? 'checked' : '';
+  const singleLangOptions = ['en','es','pt','fr'].map(l =>
+    `<option value="${l}" ${state.singleLang===l?'selected':''}>${LANG_CONFIG[l].label}</option>`
+  ).join('');
 
   container.innerHTML = `
-    <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.72;margin-bottom:.75rem">
-      Show/hide languages. The ★ Primary language loads by default for all visitors.
+    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.875rem">
+      Configure language tabs. Set a primary language that acts as the default when visitors access the portal.
     </div>
-    <div style="display:flex;flex-direction:column;gap:.5rem">${tabHtml}</div>
+
+    <div style="background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:6px;padding:.75rem;margin-bottom:.875rem">
+      <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,168,75,.55);margin-bottom:.625rem">Show / hide individual languages</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">${tabHtml}</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:6px;padding:.75rem;margin-bottom:.875rem">
+      <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,168,75,.55);margin-bottom:.5rem">Single-language mode</div>
+      <div style="font-size:10.5px;color:rgba(255,255,255,.35);line-height:1.7;margin-bottom:.625rem">Show only one language — hides all other tabs. Useful when sending the portal to a single audience.</div>
+      <label class="ep-lang-row" style="margin-bottom:.5rem">
+        <input type="checkbox" id="ep-single-mode" ${singleModeChecked}
+          onchange="onSingleModeChange(this.checked)"
+          style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
+        <span style="font-size:12px;color:rgba(255,255,255,.68)">Enable single-language mode</span>
+      </label>
+      <div id="ep-single-lang-picker" style="display:${state.singleMode?'flex':'none'};gap:.5rem;align-items:center;margin-top:.375rem">
+        <span style="font-size:10px;color:rgba(255,255,255,.38)">Language:</span>
+        <select id="ep-single-lang-sel"
+          onchange="onSingleLangChange(this.value)"
+          style="background:rgba(255,255,255,.06);border:.5px solid rgba(200,168,75,.18);border-radius:4px;padding:5px 10px;font-size:12px;color:rgba(255,255,255,.8);font-family:'DM Sans',sans-serif;outline:none;cursor:pointer">
+          ${singleLangOptions}
+        </select>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:6px;padding:.75rem">
+      <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,168,75,.55);margin-bottom:.5rem">Apply to portal now</div>
+      <label class="ep-lang-row">
+        <input type="checkbox" id="ep-apply-lang-portal" ${applyChecked}
+          onchange="onApplyLangPortalChange(this.checked)"
+          style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
+        <span style="font-size:12px;color:rgba(255,255,255,.68)">Apply preferred language to the portal immediately on load</span>
+      </label>
+      <div style="font-size:10px;color:rgba(255,255,255,.28);margin-top:.375rem;line-height:1.6">When enabled, visitors will see the primary language as soon as they enter. They can still switch via the language bar.</div>
+    </div>
   `;
 }
 
@@ -2269,12 +2153,16 @@ function onLangVisChange(lang, show){
 }
 
 function setPrimaryLang(lang){
+  // Only allow setting primary to a visible language
   const tabEl = document.querySelector(`.lt[data-lang="${lang}"]`);
   const isVisible = !tabEl || tabEl.style.display !== 'none';
-  if(!isVisible && lang !== 'en'){ showEpFeedback('Enable the language tab first','#c8a84b'); return; }
+  if(!isVisible && lang !== 'en'){
+    showEpFeedback('Enable the language tab first','#c8a84b');
+    return;
+  }
   localStorage.setItem('vr_fifa_primary_lang', lang);
-  localStorage.setItem('vr_fifa_apply_lang_portal', '1'); // always auto-apply
-  setLang(lang); // apply immediately
+  // If apply-to-portal is on, switch now
+  if(localStorage.getItem('vr_fifa_apply_lang_portal')==='1') setLang(lang);
   renderLangAdminSection();
   showEpFeedback(`★ Primary set to ${LANG_CONFIG[lang].label}`, '#c8a84b');
 }
