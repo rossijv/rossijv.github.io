@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.4">
+<meta name="vr-version" content="9.5">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -695,6 +695,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <label>Candidate name</label>
       <textarea id="ep-excl-candidate" rows="1" placeholder="Joao V. Rossi"></textarea>
     </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.6;margin-bottom:.625rem">Choose how the name appears in the hero section:</div>
+    <div style="display:flex;flex-direction:column;gap:.375rem;margin-bottom:.875rem;background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:5px;padding:.625rem .75rem">
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="two" onchange="setNameFormat('two')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">Two lines — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao V. / Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="one" onchange="setNameFormat('one')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">One line — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao V. Rossi</em></span></label>
+      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="first" onchange="setNameFormat('first')" style="accent-color:var(--ac);cursor:pointer"><span style="font-size:11px;color:rgba(255,255,255,.7)">First name only — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.45)">Joao</em></span></label>
+    </div>
+
     <div class="ep-field" style="margin-bottom:.25rem">
       <label>Target role &amp; company</label>
       <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026 · Guest Relations Coordinator"></textarea>
@@ -758,13 +765,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       </div>
     </div>
 
-    <div class="ep-section">Name display</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Choose how the candidate name appears in the hero section.</div>
-    <div style="display:flex;flex-direction:column;gap:.5rem">
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="two" checked onchange="setNameFormat('two')" style="accent-color:var(--ac);cursor:pointer"><span>Two lines — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. / Rossi</em></span></label>
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="one" onchange="setNameFormat('one')" style="accent-color:var(--ac);cursor:pointer"><span>One line — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao V. Rossi</em></span></label>
-      <label class="ep-lang-row"><input type="radio" name="ep-name-fmt" value="first" onchange="setNameFormat('first')" style="accent-color:var(--ac);cursor:pointer"><span>First name only — <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.5)">Joao</em></span></label>
-    </div>
+
     <div class="ep-section">Hero</div>
     <div class="ep-field"><label>Role eyebrow</label><textarea id="ep-h-eye" rows="2"></textarea></div>
     <div class="ep-field"><label>Tagline</label><textarea id="ep-h-tag" rows="4"></textarea></div>
@@ -892,7 +893,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <button class="ep-revert" onclick="revertEdits()">↩ Revert</button>
       <button class="ep-save" onclick="saveEdits()" style="flex:2;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.55);color:#e8c86a;font-weight:500">⬆ Save &amp; Sync</button>
     </div>
-    <div style="text-align:right;margin-top:.25rem"><button onclick="toggleVrMaster()" style="font-size:9px;color:rgba(255,255,255,.18);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em">VR ···</button></div>
+    <div style="text-align:center;margin-top:.5rem;padding-top:.375rem;border-top:.5px solid rgba(255,255,255,.05)">
+      <button onclick="toggleVrMaster()" style="font-size:8px;color:rgba(255,255,255,.2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px">· · · VR · · ·</button>
+    </div>
   </div>
 </div>
 
