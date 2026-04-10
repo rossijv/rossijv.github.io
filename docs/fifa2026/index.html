@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.6">
+<meta name="vr-version" content="9.7">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -729,7 +729,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
 
 
-    <div class="ep-section">Colour palette</div>
+    <!-- ── LANGUAGE SECTION ── -->
+    <div class="ep-section">Language settings</div>
+    <div id="ep-lang-advanced"></div>
+
+        <div class="ep-section">Colour palette</div>
     <div style="font-size:11px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.75rem">Based on the target company's visual identity, industry standard, and modern positioning. Select the palette that best matches your strategic intent.</div>
     <div id="ep-palettes" style="display:flex;flex-direction:column;gap:.75rem">
       <!-- Palette A -->
@@ -783,10 +787,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <div class="ep-field"><label>Quote</label><textarea id="ep-quote" rows="4"></textarea></div>
     <div class="ep-field"><label>Attribution</label><textarea id="ep-attr" rows="2"></textarea></div>
     <div class="ep-field"><label>Verification line</label><textarea id="ep-verify" rows="2"></textarea></div>
-
-    <!-- ── LANGUAGE SECTION ── -->
-    <div class="ep-section">Language settings</div>
-    <div id="ep-lang-advanced"></div>
 
     <!-- ── TEXT HIGHLIGHT EDITOR ── -->
     <div class="ep-section">Text highlights</div>
@@ -1416,19 +1416,31 @@ function showTyping(){
 function removeTyping(){ const t=document.getElementById('cb-typing'); if(t) t.remove(); }
 
 /* ── CONTACT CONFIGURATOR ── */
+// Runtime contact state — populated by applyConfig() from GitHub, or localStorage fallback
+const CONTACT = {
+  type: 'email',
+  email: 'jvrossil@gmail.com',
+  calendly: '',
+  whatsapp: '',
+  custom: ''
+};
+function syncContactRuntime(){
+  CONTACT.type     = localStorage.getItem('vr_fifa_contact_type')     || 'email';
+  CONTACT.email    = localStorage.getItem('vr_fifa_contact_email')    || 'jvrossil@gmail.com';
+  CONTACT.calendly = localStorage.getItem('vr_fifa_contact_calendly') || '';
+  CONTACT.whatsapp = localStorage.getItem('vr_fifa_contact_whatsapp') || '';
+  CONTACT.custom   = localStorage.getItem('vr_fifa_contact_custom')   || '';
+}
 function buildContactUrl(){
-  const type = localStorage.getItem('vr_fifa_contact_type') || 'email';
-  if(type === 'email'){
-    const addr = localStorage.getItem('vr_fifa_contact_email') || 'jvrossil@gmail.com';
-    return `mailto:${addr}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
+  syncContactRuntime();
+  if(CONTACT.type === 'calendly' && CONTACT.calendly) return CONTACT.calendly;
+  if(CONTACT.type === 'whatsapp' && CONTACT.whatsapp){
+    const num = CONTACT.whatsapp.replace(/\D/g,'');
+    return `https://wa.me/${num}?text=Hi%2C%20I%20saw%20this%20application%20portal.`;
   }
-  if(type === 'calendly') return localStorage.getItem('vr_fifa_contact_calendly') || '';
-  if(type === 'whatsapp'){
-    const num = (localStorage.getItem('vr_fifa_contact_whatsapp') || '17866093110').replace(/\D/g,'');
-    return `https://wa.me/${num}?text=Hi%20Joao%2C%20I%20saw%20your%20FIFA%202026%20application%20portal.`;
-  }
-  if(type === 'custom') return localStorage.getItem('vr_fifa_contact_custom') || '';
-  return 'mailto:jvrossil@gmail.com';
+  if(CONTACT.type === 'custom' && CONTACT.custom) return CONTACT.custom;
+  // Default: email
+  return `mailto:${CONTACT.email}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
 }
 function contactAction(){
   const url = buildContactUrl();
@@ -1920,6 +1932,7 @@ function applyConfig(cfg){
   if(!cfg) return;
   Object.keys(DEFAULTS).forEach(key=>{ if(cfg[key]!==undefined){ localStorage.setItem('vr_fifa_'+key,cfg[key]); applyField(key,cfg[key]); } });
   ['type','email','calendly','whatsapp','custom'].forEach(k=>{ if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]); });
+  syncContactRuntime();
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
   if(cfg['groq_key']) localStorage.setItem('vr_fifa_groq_key',cfg['groq_key']);
   ['es','pt','fr'].forEach(l=>{
