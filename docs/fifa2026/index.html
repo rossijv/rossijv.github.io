@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.7">
+<meta name="vr-version" content="9.8">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -709,27 +709,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">These appear in the footer as a locked, non-editable line — proof this briefing was created for this specific application.</div>
 
     <!-- GitHub Persistence — VR managed -->
-    <div class="ep-section">💾 Sync — Save for all visitors</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.625rem">Click <strong style="color:var(--ac2)">Save &amp; Sync</strong> to push your changes to all devices and browsers instantly.</div>
-    <div class="ep-gh-section" id="ep-gh-section">
-      <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
-        Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
-      </div>
-      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
-      <div class="ep-gh-status" id="ep-gh-status"></div>
-      <!-- VR master config — hidden from normal view, shown only with master key -->
-      <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
-        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.45);margin-bottom:.5rem">VR Admin — GitHub Config</div>
-        <div class="ep-field" style="margin-bottom:.375rem"><label>Token</label><textarea id="ep-gh-token" rows="1" placeholder="ghp_..."></textarea></div>
-        <div class="ep-field" style="margin-bottom:.375rem"><label>Repository</label><textarea id="ep-gh-repo" rows="1" placeholder="ventureready/joao-rossi-fifa2026"></textarea></div>
-        <div class="ep-field" style="margin-bottom:.375rem"><label>Config path</label><textarea id="ep-gh-path" rows="1" placeholder="config.json"></textarea></div>
-        <button onclick="saveGhCreds();showEpFeedback('✓ VR config saved','#4caf80')" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 12px;color:rgba(255,255,255,.45);cursor:pointer;font-family:'DM Sans',sans-serif">Save VR config</button>
-      </div>
 
-    </div>
-
-
-    <!-- ── LANGUAGE SECTION ── -->
     <div class="ep-section">Language settings</div>
     <div id="ep-lang-advanced"></div>
 
@@ -886,6 +866,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 
 
     <div class="ep-note">Changes save locally. Use Save &amp; Sync above to push to all devices.</div>
+
+    <div class="ep-section">💾 Sync — Save for all visitors</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.625rem">Click <strong style="color:var(--ac2)">Save &amp; Sync</strong> to push your changes to all devices and browsers instantly.</div>
+    <div class="ep-gh-section" id="ep-gh-section">
+      <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
+        Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
+      </div>
+      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
+      <div class="ep-gh-status" id="ep-gh-status"></div>
+      <!-- VR master config — hidden from normal view, shown only with master key -->
+      <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
+        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.45);margin-bottom:.5rem">VR Admin — GitHub Config</div>
+        <div class="ep-field" style="margin-bottom:.375rem">
+          <label>Token (stored encrypted)</label>
+          <textarea id="ep-gh-token" rows="1" placeholder="ghp_... or github_pat_..."></textarea>
+          <div id="ep-gh-token-status" style="font-size:9px;color:rgba(200,168,75,.6);margin-top:3px"></div>
+        </div>
+        <div class="ep-field" style="margin-bottom:.375rem"><label>Repository</label><textarea id="ep-gh-repo" rows="1" placeholder="ventureready/joao-rossi-fifa2026"></textarea></div>
+        <div class="ep-field" style="margin-bottom:.375rem"><label>Config path</label><textarea id="ep-gh-path" rows="1" placeholder="config.json"></textarea></div>
+        <button onclick="saveGhCreds();showEpFeedback('✓ VR config saved','#4caf80')" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:4px;padding:5px 12px;color:rgba(255,255,255,.45);cursor:pointer;font-family:'DM Sans',sans-serif">Save VR config</button>
+      </div>
+
+    </div>
+
+
+    <!-- ── LANGUAGE SECTION ── -->
   </div>
   <div class="ep-footer">
     <div class="ep-feedback" id="ep-feedback"></div>
@@ -910,6 +916,53 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 const VISITOR_PWD = 'FIFA2026';
 const ADMIN_PWD   = 'JVRADMIN2026';
 let VISITOR_PWD_RUNTIME = localStorage.getItem('vr_fifa_pwd_visitor') || VISITOR_PWD;
+
+/* ══════════════════════════════════════
+   SECURITY — Token encryption
+   Token is encrypted with AES-GCM using
+   the admin password as key. Stored in
+   config.json — safe to be in public repo.
+   Only the admin password can decrypt.
+══════════════════════════════════════ */
+async function deriveKey(password){
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:enc.encode('vr-salt-2026'), iterations:100000, hash:'SHA-256'},
+    keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']
+  );
+}
+async function encryptToken(token, password){
+  const key = await deriveKey(password);
+  const enc = new TextEncoder();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(token));
+  const combined = new Uint8Array(iv.byteLength + encrypted.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(encrypted), iv.byteLength);
+  return btoa(String.fromCharCode(...combined));
+}
+async function decryptToken(encryptedB64, password){
+  try{
+    const key = await deriveKey(password);
+    const combined = Uint8Array.from(atob(encryptedB64), c=>c.charCodeAt(0));
+    const iv = combined.slice(0,12);
+    const data = combined.slice(12);
+    const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, data);
+    return new TextDecoder().decode(decrypted);
+  }catch(e){ return ''; }
+}
+// Runtime decrypted token — populated after admin unlocks
+let DECRYPTED_TOKEN = '';
+async function initToken(adminPassword){
+  const encrypted = localStorage.getItem('vr_gh_token_enc') || '';
+  if(encrypted){
+    DECRYPTED_TOKEN = await decryptToken(encrypted, adminPassword);
+    if(DECRYPTED_TOKEN) localStorage.setItem('vr_gh_token', DECRYPTED_TOKEN);
+  } else {
+    DECRYPTED_TOKEN = localStorage.getItem('vr_gh_token') || '';
+  }
+}
 
 /* ── VERSION CHECK — forces Safari/iOS to reload when new HTML is deployed ──
    The meta vr-version tag is bumped on every deploy by the VR agent.
@@ -941,7 +994,10 @@ function unlock(){
     isAdmin = (v === ADMIN_PWD_RUNTIME);
     document.getElementById('gate').classList.add('gone');
     document.getElementById('portal').classList.add('show');
-    if(isAdmin) document.getElementById('admin-btns').style.display = 'flex';
+    if(isAdmin){
+      document.getElementById('admin-btns').style.display = 'flex';
+      initToken(v); // decrypt token using admin password as key
+    }
     setTimeout(initPortal, 600);
   } else {
     attempts++;
@@ -1923,6 +1979,9 @@ function buildConfig(){
   cfg['bot_tone']=localStorage.getItem('vr_fifa_bot_tone')||'friendly';
   cfg['pwd_visitor']=localStorage.getItem('vr_fifa_pwd_visitor')||'';
   cfg['pwd_admin']=localStorage.getItem('vr_fifa_pwd_admin')||'';
+  cfg['gh_token_enc']=localStorage.getItem('vr_gh_token_enc')||'';
+  cfg['gh_repo']=localStorage.getItem('vr_gh_repo')||'';
+  cfg['gh_path']=localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json';
   cfg['excl_candidate']=localStorage.getItem('vr_fifa_excl_candidate')||'';
   cfg['excl_company']=localStorage.getItem('vr_fifa_excl_company')||'';
   cfg['archived']=localStorage.getItem('vr_fifa_archived')||'';
@@ -1953,6 +2012,10 @@ function applyConfig(cfg){
   if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
   if(cfg['pwd_visitor']){ localStorage.setItem('vr_fifa_pwd_visitor',cfg['pwd_visitor']); VISITOR_PWD_RUNTIME=cfg['pwd_visitor']; }
   if(cfg['bot_tone']) localStorage.setItem('vr_fifa_bot_tone',cfg['bot_tone']);
+  // Store encrypted token + repo info for cross-device access
+  if(cfg['gh_token_enc']) localStorage.setItem('vr_gh_token_enc', cfg['gh_token_enc']);
+  if(cfg['gh_repo']) localStorage.setItem('vr_gh_repo', cfg['gh_repo']);
+  if(cfg['gh_path']) localStorage.setItem('vr_gh_path', cfg['gh_path']);
   if(cfg['pwd_admin']){ localStorage.setItem('vr_fifa_pwd_admin',cfg['pwd_admin']); ADMIN_PWD_RUNTIME=cfg['pwd_admin']; }
   if(cfg['excl_candidate']) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
   if(cfg['excl_company']) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
@@ -1995,23 +2058,32 @@ function showGhToast(){
   const t=document.getElementById('gh-save-toast'); if(!t) return;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
 }
-function saveGhCreds(){
+async function saveGhCreds(){
   const t=document.getElementById('ep-gh-token');
   const r=document.getElementById('ep-gh-repo');
   const p=document.getElementById('ep-gh-path');
-  if(t && t.value.trim()) localStorage.setItem('vr_gh_token', t.value.trim());
-  if(r && r.value.trim()) localStorage.setItem('vr_gh_repo',  r.value.trim());
-  if(p && p.value.trim()) localStorage.setItem('vr_gh_path',  p.value.trim());
-  else localStorage.setItem('vr_gh_path', 'docs/fifa2026/config.json');
+  if(t && t.value.trim()){
+    const raw = t.value.trim();
+    localStorage.setItem('vr_gh_token', raw);
+    DECRYPTED_TOKEN = raw;
+    // Encrypt with admin password for cross-device storage in config.json
+    const enc = await encryptToken(raw, ADMIN_PWD_RUNTIME);
+    localStorage.setItem('vr_gh_token_enc', enc);
+  }
+  if(r && r.value.trim()) localStorage.setItem('vr_gh_repo', r.value.trim());
+  if(p && p.value.trim()) localStorage.setItem('vr_gh_path', p.value.trim());
+  else if(!localStorage.getItem('vr_gh_path')) localStorage.setItem('vr_gh_path','docs/fifa2026/config.json');
 }
 function loadGhCreds(){
-  // Always read fresh from localStorage
   const token = localStorage.getItem('vr_gh_token') || '';
   const repo  = localStorage.getItem('vr_gh_repo')  || '';
   const path  = localStorage.getItem('vr_gh_path')  || 'docs/fifa2026/config.json';
+  const enc   = localStorage.getItem('vr_gh_token_enc') || '';
   const t=document.getElementById('ep-gh-token'); if(t) t.value=token;
   const r=document.getElementById('ep-gh-repo');  if(r) r.value=repo;
   const p=document.getElementById('ep-gh-path');  if(p) p.value=path;
+  const s=document.getElementById('ep-gh-token-status');
+  if(s) s.textContent = enc ? '🔒 Encrypted copy stored in config.json' : (token ? '⚠ Not yet encrypted — save to encrypt' : '');
 }
 function commitLocalEdits(){
   Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
