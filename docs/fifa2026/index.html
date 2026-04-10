@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.5">
+<meta name="vr-version" content="9.6">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -375,9 +375,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   <!-- LANG TABS -->
   <div class="lang-bar">
     <div class="lt on" data-lang="en" onclick="setLang('en')">English</div>
-    <div class="lt" data-lang="es" onclick="setLang('es')">Español</div>
-    <div class="lt" data-lang="pt" onclick="setLang('pt')">Português</div>
-    <div class="lt" data-lang="fr" onclick="setLang('fr')">Français</div>
+    <div class="lt" data-lang="es" onclick="setLang('es')" style="display:none">Español</div>
+    <div class="lt" data-lang="pt" onclick="setLang('pt')" style="display:none">Português</div>
+    <div class="lt" data-lang="fr" onclick="setLang('fr')" style="display:none">Français</div>
   </div>
 
   <!-- NAV -->
@@ -1923,11 +1923,11 @@ function applyConfig(cfg){
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
   if(cfg['groq_key']) localStorage.setItem('vr_fifa_groq_key',cfg['groq_key']);
   ['es','pt','fr'].forEach(l=>{
-    if(cfg['tab_'+l]!==undefined){
-      localStorage.setItem('vr_fifa_tab_'+l,cfg['tab_'+l]?'1':'0');
-      const tab=document.querySelector(`.lt[data-lang="${l}"]`);
-      if(tab) tab.style.display=cfg['tab_'+l]?'':'none';
-    }
+    const val = cfg['tab_'+l];
+    const show = (val===true||val==='1'||val===1);
+    localStorage.setItem('vr_fifa_tab_'+l, show?'1':'0');
+    const tab=document.querySelector(`.lt[data-lang="${l}"]`);
+    if(tab) tab.style.display=show?'':'none';
   });
   if(cfg['primary_lang']) localStorage.setItem('vr_fifa_primary_lang',cfg['primary_lang']);
   if(cfg['apply_lang_portal']!==undefined) localStorage.setItem('vr_fifa_apply_lang_portal',cfg['apply_lang_portal']?'1':'0');
@@ -2060,7 +2060,9 @@ async function applySavedEdits(){
     loadNameFormat();
     ['es','pt','fr'].forEach(lang=>{
       const saved=localStorage.getItem('vr_fifa_tab_'+lang);
-      if(saved==='0'){const tab=document.querySelector(`.lt[data-lang="${lang}"]`);if(tab)tab.style.display='none';}
+      // Default: hidden unless explicitly set to '1'
+      const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
+      if(tab) tab.style.display=(saved==='1')?'':'none';
     });
     const savedPrimary=localStorage.getItem('vr_fifa_primary_lang')||'en';
     currentLang=savedPrimary;
