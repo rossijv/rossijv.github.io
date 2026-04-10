@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.10">
+<meta name="vr-version" content="9.11">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -2020,6 +2020,13 @@ function applyConfig(cfg){
   if(cfg['excl_candidate']) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
   if(cfg['excl_company']) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
   if(cfg['archived']) localStorage.setItem('vr_fifa_archived',cfg['archived']);
+  // Sync runtime objects after applying config
+  syncContactRuntime();
+  // Apply language
+  const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
+  currentLang=primary;
+  if(cfg['apply_lang_portal']) setLang(primary);
+  if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
 }
 async function loadFromGitHub(){
   const {token,repo,path}=ghCreds();
@@ -2159,45 +2166,42 @@ function showEpFeedback(msg,color){
   setTimeout(()=>fb.style.opacity='0',2200);
 }
 async function applySavedEdits(){
-  // ALWAYS restore localStorage first (immediate, no network delay)
-  const savedPal=localStorage.getItem('vr_fifa_palette');
-  if(savedPal){applyPalette(savedPal);activePalette=savedPal;}
-  loadNameFormat();
-  Object.keys(DEFAULTS).forEach(key=>{
-    const saved=localStorage.getItem('vr_fifa_'+key);
-    if(saved!==null) applyField(key,saved);
-  });
-  syncContactRuntime();
-  applyChatbotVisibility(localStorage.getItem('vr_fifa_chatbot_enabled')!=='0');
+  /* ── SOURCE OF TRUTH PRIORITY ──
+     1. GitHub config.json (all browsers, all devices — if configured and valid)
+     2. localStorage (this browser only — fallback)
+     HTML defaults are last resort — never override saved data */
 
-  // THEN try GitHub — overlays on top if available and valid
   const ghCfg = await loadFromGitHub();
+
   if(ghCfg){
+    // GitHub config is authoritative — write to localStorage then apply
     applyConfig(ghCfg);
   } else {
-    // Fall back to localStorage
-    const savedPal=localStorage.getItem('vr_fifa_palette');
-    if(savedPal){applyPalette(savedPal);activePalette=savedPal;selectPalette(savedPal);}
+    // localStorage only — apply what this browser has saved
+    const pal=localStorage.getItem('vr_fifa_palette');
+    if(pal){applyPalette(pal);activePalette=pal;}
     loadNameFormat();
-    ['es','pt','fr'].forEach(lang=>{
-      const saved=localStorage.getItem('vr_fifa_tab_'+lang);
-      // Default: hidden unless explicitly set to '1'
-      const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
-      if(tab) tab.style.display=(saved==='1')?'':'none';
+    Object.keys(DEFAULTS).forEach(key=>{
+      const v=localStorage.getItem('vr_fifa_'+key);
+      if(v!==null) applyField(key,v);
     });
-    const savedPrimary=localStorage.getItem('vr_fifa_primary_lang')||'en';
-    currentLang=savedPrimary;
-    if(localStorage.getItem('vr_fifa_apply_lang_portal')==='1') setLang(savedPrimary);
-    Object.keys(DEFAULTS).forEach(key=>{const saved=localStorage.getItem('vr_fifa_'+key);if(saved!==null)applyField(key,saved);});
-    if(localStorage.getItem('vr_fifa_single_lang_mode')==='1') applyLangSingleMode(localStorage.getItem('vr_fifa_single_lang')||'en');
+    ['es','pt','fr'].forEach(lang=>{
+      const v=localStorage.getItem('vr_fifa_tab_'+lang);
+      const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
+      if(tab) tab.style.display=(v==='1')?'':'none';
+    });
+    const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
+    currentLang=primary;
+    if(localStorage.getItem('vr_fifa_apply_lang_portal')==='1') setLang(primary);
+    syncContactRuntime();
     applyChatbotVisibility(localStorage.getItem('vr_fifa_chatbot_enabled')!=='0');
   }
+
+  // Always run these after either path
   initHighlights();
   selectPalette(activePalette);
   applyExclusivityBanner();
-  // Check archived state
-  const archived = localStorage.getItem('vr_fifa_archived');
-  if(archived) showArchivedPortal();
+  if(localStorage.getItem('vr_fifa_archived')) showArchivedPortal();
 }
 
 /* ── LANGUAGE ADMIN FEATURES ── */
