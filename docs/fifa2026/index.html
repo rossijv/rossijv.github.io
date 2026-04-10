@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.11">
+<meta name="vr-version" content="9.12">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1055,6 +1056,7 @@ function initPortal(){
 
   // Apply saved edits
   applySavedEdits();
+  initEmailJS();
 
   // Nav scroll shadow + progress
   window.addEventListener('scroll', ()=>{
@@ -1332,7 +1334,13 @@ function startChat(withEmail){
   document.getElementById('cb-badge').classList.add('show');
   document.getElementById('cb-msgs').classList.add('show');
   document.getElementById('cb-ir').classList.add('show');
-  if(withEmail){ const e=document.getElementById('cb-ei').value.trim(); if(e) console.log('Visitor email:',e); }
+  if(withEmail){
+    const e=document.getElementById('cb-ei').value.trim();
+    if(e){
+      console.log('Visitor email:',e);
+      notifyVisitorEmail(e); // send notification to candidate
+    }
+  }
   addBot("Good to have you here. I can answer questions about Joao's background, languages, experience, and this application. What would you like to know?");
 }
 function addBot(txt, isHtml){
@@ -1470,6 +1478,30 @@ function showTyping(){
   m.appendChild(d); m.scrollTop=m.scrollHeight;
 }
 function removeTyping(){ const t=document.getElementById('cb-typing'); if(t) t.remove(); }
+
+/* ── EMAILJS VISITOR NOTIFICATION ── */
+function initEmailJS(){
+  const key = localStorage.getItem('vr_emailjs_key') || '';
+  if(key) emailjs.init(key);
+}
+async function notifyVisitorEmail(visitorEmail){
+  const service  = localStorage.getItem('vr_emailjs_service')  || '';
+  const template = localStorage.getItem('vr_emailjs_template') || '';
+  const key      = localStorage.getItem('vr_emailjs_key')      || '';
+  const notify   = localStorage.getItem('vr_emailjs_notify')   || '';
+  if(!service || !template || !key || !notify) return; // not configured — silent
+  try{
+    emailjs.init(key);
+    await emailjs.send(service, template, {
+      to_email:    notify,
+      from_email:  visitorEmail,
+      portal_name: 'Joao V. Rossi — FIFA 2026 Portal',
+      visit_time:  new Date().toLocaleString('en-US',{timeZone:'America/New_York'}),
+      portal_url:  window.location.href
+    });
+    console.log('Visitor notification sent');
+  }catch(e){ console.log('EmailJS error:', e); }
+}
 
 /* ── CONTACT CONFIGURATOR ── */
 // Runtime contact state — populated by applyConfig() from GitHub, or localStorage fallback
@@ -1785,6 +1817,18 @@ function saveExclusivity(){
   if(co) localStorage.setItem('vr_fifa_excl_company', co.value.trim());
   applyExclusivityBanner();
 }
+function saveEmailJSConfig(){
+  const fields = {
+    'vr_emailjs_notify':   'ep-emailjs-notify',
+    'vr_emailjs_key':      'ep-emailjs-key',
+    'vr_emailjs_service':  'ep-emailjs-service',
+    'vr_emailjs_template': 'ep-emailjs-template'
+  };
+  Object.entries(fields).forEach(([key, id])=>{
+    const el = document.getElementById(id);
+    if(el && el.value.trim()) localStorage.setItem(key, el.value.trim());
+  });
+}
 /* ── VR MASTER TOGGLE (hidden config) ── */
 let vrMasterVisible = false;
 function toggleVrMaster(){
@@ -1944,6 +1988,9 @@ function openEditPanel(){
   const apEl=document.getElementById('ep-pwd-admin'); if(apEl) apEl.value=localStorage.getItem('vr_fifa_pwd_admin')||'JVRADMIN2026';
   // Load exclusivity fields
   const ecEl=document.getElementById('ep-excl-candidate'); if(ecEl) ecEl.value=localStorage.getItem('vr_fifa_excl_candidate')||'Joao V. Rossi';
+  // Load EmailJS fields
+  const ejsFields = {'ep-emailjs-notify':'vr_emailjs_notify','ep-emailjs-key':'vr_emailjs_key','ep-emailjs-service':'vr_emailjs_service','ep-emailjs-template':'vr_emailjs_template'};
+  Object.entries(ejsFields).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.value=localStorage.getItem(key)||''; });
   const ecoEl=document.getElementById('ep-excl-company'); if(ecoEl) ecoEl.value=localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
   document.getElementById('edit-panel').classList.add('open');
   document.getElementById('edit-overlay').classList.add('show');
@@ -1985,6 +2032,10 @@ function buildConfig(){
   cfg['excl_candidate']=localStorage.getItem('vr_fifa_excl_candidate')||'';
   cfg['excl_company']=localStorage.getItem('vr_fifa_excl_company')||'';
   cfg['archived']=localStorage.getItem('vr_fifa_archived')||'';
+  cfg['emailjs_service']=localStorage.getItem('vr_emailjs_service')||'';
+  cfg['emailjs_template']=localStorage.getItem('vr_emailjs_template')||'';
+  cfg['emailjs_key']=localStorage.getItem('vr_emailjs_key')||'';
+  cfg['emailjs_notify']=localStorage.getItem('vr_emailjs_notify')||'';
   return cfg;
 }
 function applyConfig(cfg){
@@ -2020,6 +2071,10 @@ function applyConfig(cfg){
   if(cfg['excl_candidate']) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
   if(cfg['excl_company']) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
   if(cfg['archived']) localStorage.setItem('vr_fifa_archived',cfg['archived']);
+  if(cfg['emailjs_service']) localStorage.setItem('vr_emailjs_service',cfg['emailjs_service']);
+  if(cfg['emailjs_template']) localStorage.setItem('vr_emailjs_template',cfg['emailjs_template']);
+  if(cfg['emailjs_key']) localStorage.setItem('vr_emailjs_key',cfg['emailjs_key']);
+  if(cfg['emailjs_notify']) localStorage.setItem('vr_emailjs_notify',cfg['emailjs_notify']);
   // Sync runtime objects after applying config
   syncContactRuntime();
   // Apply language
@@ -2119,7 +2174,7 @@ function loadGhCreds(){
 }
 function commitLocalEdits(){
   Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
-  saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity();
+  saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity(); saveEmailJSConfig();
 }
 function saveEdits(){
   commitLocalEdits();
