@@ -577,17 +577,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
   </section>
 
-  <footer class="portal-footer">
-    <div class="pf-left" id="pf-left">Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026</div>
-    <div class="pf-right">rossijv.github.io/fifa2026</div>
+  <footer class="portal-footer" style="flex-direction:column;align-items:flex-start;gap:.5rem;padding:2rem 3rem">
+    <div style="display:flex;justify-content:space-between;width:100%;align-items:baseline;flex-wrap:wrap;gap:.5rem">
+      <div class="pf-left" id="pf-left">Joao V. Rossi &middot; Guest Relations Coordinator &middot; FIFA World Cup 2026</div>
+      <div class="pf-right" style="font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.08em;text-transform:uppercase">Candidate Briefing Portal</div>
+    </div>
+    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,168,75,.45);pointer-events:none;user-select:none;-webkit-user-select:none">Prepared exclusively for this application &middot; Not for redistribution</div>
   </footer>
 
-  <!-- EXCLUSIVITY BANNER — non-editable by visitor, set by admin -->
-  <div id="excl-banner" style="background:#0a1628;border-top:1px solid rgba(200,168,75,.15);padding:.875rem 3rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
-    <div style="width:16px;height:.5px;background:rgba(200,168,75,.35);flex-shrink:0"></div>
-    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,168,75,.55);text-align:center" id="excl-banner-txt">Prepared exclusively for this application · Not for redistribution</div>
-    <div style="width:16px;height:.5px;background:rgba(200,168,75,.35);flex-shrink:0"></div>
-  </div>
 </div>
 
 <!-- GITHUB SAVE TOAST -->
@@ -1667,7 +1664,7 @@ function applyExclusivityBanner(){
   const candidate = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
   const company = localStorage.getItem('vr_fifa_excl_company') || 'FIFA World Cup 2026 · Guest Relations Coordinator';
   const el = document.getElementById('excl-banner-txt');
-  if(el) el.textContent = `Prepared exclusively for ${candidate} · ${company} · Not for redistribution`;
+  if(el) el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
 }
 function saveExclusivity(){
   const c = document.getElementById('ep-excl-candidate');
@@ -1903,7 +1900,7 @@ async function loadFromGitHub(){
   const {token,repo,path}=ghCreds();
   if(!token||!repo) return null;
   try{
-    const res=await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json'}});
+    const res=await fetch(`https://api.github.com/repos/${repo}/contents/${path}?t=${Date.now()}`,{headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json','Cache-Control':'no-cache'}});
     if(!res.ok) return null;
     const d=await res.json();
     return JSON.parse(atob(d.content.replace(/\n/g,'')));
