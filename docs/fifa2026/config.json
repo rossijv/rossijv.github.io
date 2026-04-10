@@ -35,6 +35,9 @@
   "bot_tone": "friendly",
   "pwd_visitor": "FIFA2026",
   "pwd_admin": "JVRADMIN2026",
+  "gh_token_enc": "w3f4CfLxvRc53TF/kze4sevAqnAj9hD4EARqz33Fl2PPMV+uwbnsiU+2OoXL0IMfKQEBNfLcQ3PrNpkmb0mnZuF8PEUhbGRwPElNjFpZoZLErQ643oXgtY4MqYE4EPM1QWhP+H+H2lXyFkOTIRKd/mG9nc070n+QJg==",
+  "gh_repo": "rossijv/rossijv.github.io",
+  "gh_path": "docs/fifa2026/config.json",
   "excl_candidate": "Joao V. Rossi",
   "excl_company": "FIFA World Cup 2026 · Guest Relations Coordinator",
   "archived": ""
