@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-cfasync="false">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.13">
+<meta name="vr-version" content="9.15">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -580,7 +580,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </section>
 
   <footer class="portal-footer" style="justify-content:center;padding:1.25rem 3rem">
-    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center">Prepared exclusively for this application &middot; Not for redistribution</div>
+    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center"><span id="pf-left">Prepared exclusively for this application &middot; Not for redistribution</span></div>
   </footer>
 
 </div>
@@ -708,6 +708,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026 · Guest Relations Coordinator"></textarea>
     </div>
     <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">These appear in the footer as a locked, non-editable line — proof this briefing was created for this specific application.</div>
+    <div class="ep-field" style="margin-top:.5rem"><label>Browser tab title</label><textarea id="ep-page-title" rows="1" placeholder="Joao V. Rossi · Candidate Briefing Portal"></textarea><div style="font-size:10px;color:rgba(255,255,255,.32);margin-top:4px">Name shown in the browser tab.</div></div>
 
     <!-- GitHub Persistence — VR managed -->
 
@@ -874,7 +875,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
         Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
       </div>
-      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
       <div class="ep-gh-status" id="ep-gh-status"></div>
       <!-- VR master config — hidden from normal view, shown only with master key -->
       <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
@@ -906,7 +906,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── email obfuscation helper (replaces Cloudflare's cdn-cgi/email-decode) ── */
 /* ═══════════════════════════════════════
    PASSWORDS
@@ -993,13 +993,16 @@ function unlock(){
   ADMIN_PWD_RUNTIME   = localStorage.getItem('vr_fifa_pwd_admin')   || ADMIN_PWD;
   if(v === VISITOR_PWD_RUNTIME || v === ADMIN_PWD_RUNTIME){
     isAdmin = (v === ADMIN_PWD_RUNTIME);
-    document.getElementById('gate').classList.add('gone');
-    document.getElementById('portal').classList.add('show');
     if(isAdmin){
       document.getElementById('admin-btns').style.display = 'flex';
-      initToken(v); // decrypt token using admin password as key
+      initToken(v);
     }
-    setTimeout(initPortal, 600);
+    // Load config from GitHub FIRST, then show portal with correct data
+    applySavedEdits().then(()=>{
+      document.getElementById('gate').classList.add('gone');
+      document.getElementById('portal').classList.add('show');
+      setTimeout(initPortal, 200);
+    });
   } else {
     attempts++;
     if(attempts >= 5){
@@ -1054,8 +1057,7 @@ function initPortal(){
     fadeObs.observe(el);
   });
 
-  // Apply saved edits
-  applySavedEdits();
+  // Config already applied before portal opened (in unlock)
   initEmailJS();
 
   // Nav scroll shadow + progress
@@ -1285,7 +1287,7 @@ const L = {
 };
 
 // IDs that must use textContent (have child elements or event listeners we must preserve)
-const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
+const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm','pf-left']);
 
 let currentLang = 'en';
 function setLang(lang){
@@ -1298,6 +1300,19 @@ function setLang(lang){
     if(TEXT_ONLY.has(id)) el.textContent = t[id];
     else el.innerHTML = t[id];
   });
+  // Reorder lang bar so primary language tab appears first
+  reorderLangBar(lang);
+}
+
+function reorderLangBar(primaryLang){
+  const bar = document.querySelector('.lang-bar');
+  if(!bar) return;
+  const tabs = Array.from(bar.querySelectorAll('.lt'));
+  // Move primary tab to first position
+  const primaryTab = tabs.find(t=>t.dataset.lang===primaryLang);
+  if(primaryTab && bar.firstChild !== primaryTab){
+    bar.insertBefore(primaryTab, bar.firstChild);
+  }
 }
 
 function goTo(sel){ const el=document.querySelector(sel); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -1809,6 +1824,15 @@ function applyExclusivityBanner(){
   const company = localStorage.getItem('vr_fifa_excl_company') || 'FIFA World Cup 2026 · Guest Relations Coordinator';
   const el = document.getElementById('excl-banner-txt');
   if(el) el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
+  // Update nav name and hero name with candidate name
+  const navNameEl = document.getElementById('nav-name');
+  if(navNameEl && candidate) {
+    const fmt = localStorage.getItem('vr_fifa_name_fmt') || 'two';
+    setNameFormat(fmt);
+  }
+  // Update page title
+  const pageTitle = localStorage.getItem('vr_fifa_ep-page-title') || candidate + ' · Candidate Briefing Portal';
+  document.title = pageTitle;
 }
 function saveExclusivity(){
   const c = document.getElementById('ep-excl-candidate');
@@ -1921,7 +1945,14 @@ function toggleLangTab(lang, show){
   if(!tab) return;
   tab.style.display = show ? '' : 'none';
   localStorage.setItem('vr_fifa_tab_'+lang, show ? '1' : '0');
-  if(!show && tab.classList.contains('on')) setLang('en');
+  if(!show && tab.classList.contains('on')){
+    // Find first visible tab to switch to
+    const firstVisible = ['en','pt','es','fr'].find(l=>{
+      const t=document.querySelector(`.lt[data-lang="${l}"]`);
+      return t && t.style.display !== 'none' && l !== lang;
+    });
+    if(firstVisible) setLang(firstVisible);
+  }
 }
 
 /* ── EDIT PANEL ── */
@@ -1938,7 +1969,8 @@ const DEFAULTS = {
   'ep-sb-sub':"If what you've read adds context to this application, a conversation is one click away.",
   'ep-contact':'jvrossil@gmail.com · +1 (786) 609-3110',
   'ep-calendly':'mailto:jvrossil@gmail.com?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
-  'ep-bot-name':'Ask Joao'
+  'ep-bot-name':'Ask Joao',
+  'ep-page-title':'Joao V. Rossi · Candidate Briefing Portal'
 };
 
 const FIELD_MAP = {
@@ -1998,6 +2030,7 @@ function openEditPanel(){
   const apEl=document.getElementById('ep-pwd-admin'); if(apEl) apEl.value=localStorage.getItem('vr_fifa_pwd_admin')||'JVRADMIN2026';
   // Load exclusivity fields
   const ecEl=document.getElementById('ep-excl-candidate'); if(ecEl) ecEl.value=localStorage.getItem('vr_fifa_excl_candidate')||'Joao V. Rossi';
+  const ptEl=document.getElementById('ep-page-title'); if(ptEl) ptEl.value=localStorage.getItem('vr_fifa_ep-page-title')||'Joao V. Rossi · Candidate Briefing Portal';
   // Load EmailJS fields
   const ejsFields = {'ep-emailjs-notify':'vr_emailjs_notify','ep-emailjs-key':'vr_emailjs_key','ep-emailjs-service':'vr_emailjs_service','ep-emailjs-template':'vr_emailjs_template'};
   Object.entries(ejsFields).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.value=localStorage.getItem(key)||''; });
@@ -2050,7 +2083,18 @@ function buildConfig(){
 }
 function applyConfig(cfg){
   if(!cfg) return;
-  Object.keys(DEFAULTS).forEach(key=>{ if(cfg[key]!==undefined){ localStorage.setItem('vr_fifa_'+key,cfg[key]); applyField(key,cfg[key]); } });
+  // Apply language FIRST so translations load before any field overrides
+  const primary = cfg['primary_lang'] || localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  currentLang = primary;
+  setLang(primary);
+  // Only apply fields that admin explicitly changed (differ from defaults)
+  // Prevents English config values from overwriting translations
+  Object.keys(DEFAULTS).forEach(key=>{
+    if(cfg[key]!==undefined){
+      localStorage.setItem('vr_fifa_'+key,cfg[key]);
+      if(cfg[key] !== DEFAULTS[key]) applyField(key,cfg[key]);
+    }
+  });
   ['type','email','calendly','whatsapp','custom'].forEach(k=>{ if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]); });
   syncContactRuntime();
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
@@ -2087,10 +2131,7 @@ function applyConfig(cfg){
   if(cfg['emailjs_notify']) localStorage.setItem('vr_emailjs_notify',cfg['emailjs_notify']);
   // Sync runtime objects after applying config
   syncContactRuntime();
-  // Apply language — always apply primary when config is loaded from GitHub
-  const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
-  currentLang=primary;
-  if(primary !== 'en' || cfg['apply_lang_portal']) setLang(primary);
+  // Language already applied at start of function — just handle single mode
   if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
 }
 async function loadFromGitHub(){
@@ -2183,7 +2224,7 @@ function loadGhCreds(){
   if(s) s.textContent = enc ? '🔒 Encrypted copy stored in config.json' : (token ? '⚠ Not yet encrypted — save to encrypt' : '');
 }
 function commitLocalEdits(){
-  Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
+  Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim(); localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
   saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity(); saveEmailJSConfig();
 }
 function saveEdits(){
@@ -2224,6 +2265,10 @@ function applyField(key, val){
   if(map.isBtn){ el.onclick=()=>{ window.location.href=val; }; }
   else if(map.prop==='innerHTML') el.innerHTML=val;
   else el.textContent=val;
+}
+function applyFieldSafe(key, val){
+  // Only apply if val is non-empty — prevents blanking translated content
+  if(val && val.trim()) applyField(key, val);
 }
 function showEpFeedback(msg,color){
   const fb=document.getElementById('ep-feedback');
@@ -2282,7 +2327,7 @@ function getLangAdminState(){
   return {
     // which tabs are visible
     tabs: {
-      en: true, // always on
+      en: localStorage.getItem('vr_fifa_tab_en') !== '0'
       es: localStorage.getItem('vr_fifa_tab_es') !== '0',
       pt: localStorage.getItem('vr_fifa_tab_pt') !== '0',
       fr: localStorage.getItem('vr_fifa_tab_fr') !== '0'
@@ -2316,8 +2361,8 @@ function renderLangAdminSection(){
     const isEn = lang === 'en';
     const checked = state.tabs[lang] ? 'checked' : '';
     const isPrimary = state.primary === lang;
-    const disabledAttr = isEn ? 'disabled' : '';
-    const disabledStyle = isEn ? 'opacity:.45;cursor:not-allowed' : '';
+    const disabledAttr = ''; // EN can now be disabled
+    const disabledStyle = '';
     return `
       <div class="ep-lang-adv-row" id="ep-lang-row-${lang}" style="${disabledStyle}">
         <label class="ep-lang-row" style="flex:1;min-width:0">
@@ -2348,7 +2393,7 @@ function renderLangAdminSection(){
 }
 
 function onLangVisChange(lang, show){
-  if(lang==='en') return; // always visible
+  // EN can now be hidden if client only wants other language
   toggleLangTab(lang, show);
   // If hiding the current primary, reset primary to en
   const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
@@ -2391,4 +2436,18 @@ function onSingleLangChange(lang){
   localStorage.setItem('vr_fifa_single_lang', lang);
   localStorage.setItem('vr_fifa_primary_lang', lang);
   applyLangSingleMode(lang);
-  renderLan
+  renderLangAdminSection();
+}
+
+function onApplyLangPortalChange(enabled){
+  localStorage.setItem('vr_fifa_apply_lang_portal', enabled ? '1' : '0')
+  if(enabled){
+    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+    setLang(primary);
+    showEpFeedback('Portal switched to ' + LANG_CONFIG[primary].label, '#4caf80');
+  }
+}
+
+</script>
+</body>
+</html>
