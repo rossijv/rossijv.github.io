@@ -906,7 +906,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── email obfuscation helper (replaces Cloudflare's cdn-cgi/email-decode) ── */
 /* ═══════════════════════════════════════
    PASSWORDS
@@ -2391,4 +2391,18 @@ function onSingleLangChange(lang){
   localStorage.setItem('vr_fifa_single_lang', lang);
   localStorage.setItem('vr_fifa_primary_lang', lang);
   applyLangSingleMode(lang);
-  renderLan
+  renderLangAdminSection();
+}
+
+function onApplyLangPortalChange(enabled){
+  localStorage.setItem('vr_fifa_apply_lang_portal', enabled ? '1' : '0')
+  if(enabled){
+    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+    setLang(primary);
+    showEpFeedback('Portal switched to ' + LANG_CONFIG[primary].label, '#4caf80');
+  }
+}
+
+</script>
+</body>
+</html>
