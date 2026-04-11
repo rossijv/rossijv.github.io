@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.13">
+<meta name="vr-version" content="9.14">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -580,7 +580,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </section>
 
   <footer class="portal-footer" style="justify-content:center;padding:1.25rem 3rem">
-    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center">Prepared exclusively for this application &middot; Not for redistribution</div>
+    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center"><span id="pf-left">Prepared exclusively for this application &middot; Not for redistribution</span></div>
   </footer>
 
 </div>
@@ -874,7 +874,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
         Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
       </div>
-      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
       <div class="ep-gh-status" id="ep-gh-status"></div>
       <!-- VR master config — hidden from normal view, shown only with master key -->
       <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
@@ -1285,7 +1284,7 @@ const L = {
 };
 
 // IDs that must use textContent (have child elements or event listeners we must preserve)
-const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
+const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm','pf-left']);
 
 let currentLang = 'en';
 function setLang(lang){
@@ -2050,7 +2049,18 @@ function buildConfig(){
 }
 function applyConfig(cfg){
   if(!cfg) return;
-  Object.keys(DEFAULTS).forEach(key=>{ if(cfg[key]!==undefined){ localStorage.setItem('vr_fifa_'+key,cfg[key]); applyField(key,cfg[key]); } });
+  // Apply language FIRST so translations load before any field overrides
+  const primary = cfg['primary_lang'] || localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  currentLang = primary;
+  setLang(primary);
+  // Only apply fields that admin explicitly changed (differ from defaults)
+  // Prevents English config values from overwriting translations
+  Object.keys(DEFAULTS).forEach(key=>{
+    if(cfg[key]!==undefined){
+      localStorage.setItem('vr_fifa_'+key,cfg[key]);
+      if(cfg[key] !== DEFAULTS[key]) applyField(key,cfg[key]);
+    }
+  });
   ['type','email','calendly','whatsapp','custom'].forEach(k=>{ if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]); });
   syncContactRuntime();
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
@@ -2087,10 +2097,7 @@ function applyConfig(cfg){
   if(cfg['emailjs_notify']) localStorage.setItem('vr_emailjs_notify',cfg['emailjs_notify']);
   // Sync runtime objects after applying config
   syncContactRuntime();
-  // Apply language — always apply primary when config is loaded from GitHub
-  const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
-  currentLang=primary;
-  if(primary !== 'en' || cfg['apply_lang_portal']) setLang(primary);
+  // Language already applied at start of function — just handle single mode
   if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
 }
 async function loadFromGitHub(){
