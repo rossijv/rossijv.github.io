@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.12">
+<meta name="vr-version" content="9.13">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 #gate.gone{opacity:0;visibility:hidden;pointer-events:none}
 .gi{text-align:center;padding:2rem;max-width:380px}
 .g-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ac2);letter-spacing:.08em;margin-bottom:.4rem}
-.g-logo span{display:block;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,168,75,.38);font-family:'DM Sans',sans-serif;margin-top:.3rem}
+.g-logo span{display:block;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,168,75,.72);font-family:'DM Sans',sans-serif;margin-top:.3rem}
 .g-divider{width:28px;height:.5px;background:rgba(200,168,75,.18);margin:1.5rem auto}
 .g-title{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:.875rem}
 .g-sub{font-size:13px;color:rgba(255,255,255,.62);margin-bottom:2.25rem;font-weight:300;line-height:1.9}
@@ -385,7 +385,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   <nav class="nav" id="main-nav">
     <div class="nav-id">
       <span class="nav-eye" id="nav-eye">Application briefing · Guest Relations Coordinator</span>
-      <span class="nav-name">Joao V. Rossi</span>
+      <span class="nav-name" id="nav-name">Joao V. Rossi</span>
     </div>
     <div class="nav-links">
       <span class="nav-link" id="nl-exp" onclick="goTo('.exp-sec')">Experience</span>
@@ -564,7 +564,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       </div>
       <div class="qb-quote" id="qb-quote">"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."</div>
       <div class="qb-attr" id="qb-attr"><strong>Fernando Augusto Moreira Costa</strong> · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026</div>
-      <div class="qb-verify" id="qb-verify">Verifiable · administ.miami@itamaraty.gov.br · +1 (305) 285-6230</div>
+      <div class="qb-verify" id="qb-verify">Verifiable · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a4a1a8acabacb6b1eba8aca4a8ac85acb1a4a8a4b7a4b1bceba2aab3eba7b7">[email&#160;protected]</a> · +1 (305) 285-6230</div>
     </div>
   </div>
 
@@ -575,7 +575,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div class="sb-title" id="sb-title">Ready to <em>connect?</em></div>
       <div class="sb-sub" id="sb-sub">If what you've read adds context to this application, a conversation is one click away.</div>
       <button class="sb-btn" id="sb-btn" onclick="contactAction()">Get in touch ✦</button>
-      <div class="sb-note" id="sb-note">jvrossil@gmail.com · +1 (786) 609-3110</div>
+      <div class="sb-note" id="sb-note"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80eaf6f2eff3f3e9ecc0e7ede1e9ecaee3efed">[email&#160;protected]</a> · +1 (786) 609-3110</div>
     </div>
   </section>
 
@@ -906,7 +906,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── email obfuscation helper (replaces Cloudflare's cdn-cgi/email-decode) ── */
 /* ═══════════════════════════════════════
    PASSWORDS
@@ -1893,11 +1893,21 @@ function applyPalette(key){
 /* ── NAME FORMAT ── */
 function setNameFormat(fmt){
   const nameEl = document.querySelector('.h-name');
+  const navNameEl = document.getElementById('nav-name');
   if(!nameEl) return;
   localStorage.setItem('vr_fifa_name_fmt', fmt);
-  if(fmt === 'two')   nameEl.innerHTML = 'Joao V.<br><em>Rossi</em>';
-  if(fmt === 'one')   nameEl.innerHTML = 'Joao V. Rossi';
-  if(fmt === 'first') nameEl.innerHTML = 'Joao';
+  if(fmt === 'two'){
+    nameEl.innerHTML = 'Joao V.<br><em>Rossi</em>';
+    if(navNameEl) navNameEl.textContent = 'Joao V. Rossi';
+  }
+  if(fmt === 'one'){
+    nameEl.innerHTML = 'Joao V. Rossi';
+    if(navNameEl) navNameEl.textContent = 'Joao V. Rossi';
+  }
+  if(fmt === 'first'){
+    nameEl.innerHTML = 'Joao';
+    if(navNameEl) navNameEl.textContent = 'Joao';
+  }
 }
 function loadNameFormat(){
   const fmt = localStorage.getItem('vr_fifa_name_fmt') || 'two';
@@ -2005,7 +2015,7 @@ function closeEditPanel(){
 function ghCreds(){
   return {
     token: localStorage.getItem('vr_gh_token')||'',
-    repo:  localStorage.getItem('vr_gh_repo')||'',
+    repo:  localStorage.getItem('vr_gh_repo')||'rossijv/rossijv.github.io',
     path:  localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json'
   };
 }
@@ -2027,7 +2037,7 @@ function buildConfig(){
   cfg['pwd_visitor']=localStorage.getItem('vr_fifa_pwd_visitor')||'';
   cfg['pwd_admin']=localStorage.getItem('vr_fifa_pwd_admin')||'';
   cfg['gh_token_enc']=localStorage.getItem('vr_gh_token_enc')||'';
-  cfg['gh_repo']=localStorage.getItem('vr_gh_repo')||'';
+  cfg['gh_repo']=localStorage.getItem('vr_gh_repo')||'rossijv/rossijv.github.io';
   cfg['gh_path']=localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json';
   cfg['excl_candidate']=localStorage.getItem('vr_fifa_excl_candidate')||'';
   cfg['excl_company']=localStorage.getItem('vr_fifa_excl_company')||'';
@@ -2077,10 +2087,10 @@ function applyConfig(cfg){
   if(cfg['emailjs_notify']) localStorage.setItem('vr_emailjs_notify',cfg['emailjs_notify']);
   // Sync runtime objects after applying config
   syncContactRuntime();
-  // Apply language
+  // Apply language — always apply primary when config is loaded from GitHub
   const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
   currentLang=primary;
-  if(cfg['apply_lang_portal']) setLang(primary);
+  if(primary !== 'en' || cfg['apply_lang_portal']) setLang(primary);
   if(cfg['single_lang_mode']&&cfg['single_lang']) applyLangSingleMode(cfg['single_lang']);
 }
 async function loadFromGitHub(){
@@ -2381,18 +2391,4 @@ function onSingleLangChange(lang){
   localStorage.setItem('vr_fifa_single_lang', lang);
   localStorage.setItem('vr_fifa_primary_lang', lang);
   applyLangSingleMode(lang);
-  renderLangAdminSection();
-}
-
-function onApplyLangPortalChange(enabled){
-  localStorage.setItem('vr_fifa_apply_lang_portal', enabled ? '1' : '0')
-  if(enabled){
-    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
-    setLang(primary);
-    showEpFeedback(`Portal switched to ${LANG_CONFIG[primary].label}`, '#4caf80');
-  }
-}
-
-</script>
-</body>
-</html>
+  renderLan
