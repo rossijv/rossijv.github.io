@@ -1,25 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-cfasync="false">
-<head><script>
-/* email runtime loader */
-(function(){
-  var _a = '@';
-  window._VR_EMAILS = {
-    joao:   'jvrossil' + _a + 'gmail.com',
-    consul: 'administ.miami' + _a + 'itamaraty.gov.br'
-  };
-  function restoreEmails(){
-    document.body.innerHTML = document.body.innerHTML
-      .split('EMAIL_JOAO').join(window._VR_EMAILS.joao)
-      .split('EMAIL_CONSUL').join(window._VR_EMAILS.consul);
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', restoreEmails);
-  } else {
-    restoreEmails();
-  }
-})();
-</script>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
@@ -583,7 +564,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       </div>
       <div class="qb-quote" id="qb-quote">"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."</div>
       <div class="qb-attr" id="qb-attr"><strong>Fernando Augusto Moreira Costa</strong> · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026</div>
-      <div class="qb-verify" id="qb-verify">Verifiable · EMAIL_CONSUL · +1 (305) 285-6230</div>
+      <div class="qb-verify" id="qb-verify">Verifiable · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230</div>
     </div>
   </div>
 
@@ -594,7 +575,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div class="sb-title" id="sb-title">Ready to <em>connect?</em></div>
       <div class="sb-sub" id="sb-sub">If what you've read adds context to this application, a conversation is one click away.</div>
       <button class="sb-btn" id="sb-btn" onclick="contactAction()">Get in touch ✦</button>
-      <div class="sb-note" id="sb-note">EMAIL_JOAO · +1 (786) 609-3110</div>
+      <div class="sb-note" id="sb-note">jvrossil&#64;gmail.com · +1 (786) 609-3110</div>
     </div>
   </section>
 
@@ -621,7 +602,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <div class="cb-email-z" id="cb-email-z">
       <div class="cb-email-lbl" id="cb-email-lbl">To notify Joao of your visit, share your email? <em>(optional)</em></div>
       <div class="cb-email-row">
-        <input class="cb-ei" id="cb-ei" placeholder="your-email-here" type="email">
+        <input class="cb-ei" id="cb-ei" placeholder="your&#64;email.com" type="email">
         <button class="cb-eg" onclick="startChat(true)" id="cb-start-btn">Start</button>
       </div>
       <span class="cb-skip" onclick="startChat(false)" id="cb-skip-lnk">Continue as guest →</span>
@@ -812,7 +793,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 
     <div id="ep-contact-email-field" class="ep-field" style="display:none">
       <label>Your email address</label>
-      <textarea id="ep-contact-email" rows="1" placeholder="yourname-here"></textarea>
+      <textarea id="ep-contact-email" rows="1" placeholder="yourname&#64;email.com"></textarea>
       <div style="font-size:10px;color:rgba(255,255,255,.42);margin-top:5px;line-height:1.65;background:rgba(255,255,255,.03);border-radius:4px;padding:.5rem .625rem;border:.5px solid rgba(255,255,255,.07)">ℹ️ When a visitor clicks the button, their email app opens with your address and a pre-filled subject line. Works on any device with a mail app configured (Gmail, Outlook, Apple Mail). <strong style="color:rgba(255,255,255,.6)">If the visitor has no mail app, nothing appears to happen.</strong> Use Calendly instead for reliable in-browser booking.</div>
     </div>
 
@@ -1135,8 +1116,8 @@ const L = {
     /* rec */   'ap-rec-label':'Design logic','ap-rec-text':'Signed letter on official government letterhead from a named Deputy Consul General — with verifiable institutional contact. A third-party endorsement at this level, from a named signatory with a direct line, is rare at any career stage.',
                 'qb-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
                 'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026',
-                'qb-verify':'Verifiable · EMAIL_CONSUL · +1 (305) 285-6230',
-    /* sched */ 'sb-eye':'Next step','sb-title':'Ready to <em>connect?</em>','sb-sub':"If what you've read adds context to this application, a conversation is one click away.",'sb-note':'EMAIL_JOAO · +1 (786) 609-3110',
+                'qb-verify':'Verifiable · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230',
+    /* sched */ 'sb-eye':'Next step','sb-title':'Ready to <em>connect?</em>','sb-sub':"If what you've read adds context to this application, a conversation is one click away.",'sb-note':'jvrossil&#64;gmail.com · +1 (786) 609-3110',
     /* footer */'pf-left':'Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026',
     /* chat */  'cb-head-name':'Ask Joao','cb-email-lbl':'To notify Joao of your visit, share your email? <em>(optional)</em>','cb-start-btn':'Start','cb-skip-lnk':'Continue as guest →','cb-btn-label':'Ask Joao','cb-status-txt':'Available now',
     /* deact */ 'dm-title':'Deactivate this portal?','dm-text':'The briefing will go offline immediately. Your data is retained for 90 days, then permanently deleted on request.','dm-cancel':'Keep active','dm-confirm':'Deactivate now',
@@ -1188,8 +1169,8 @@ const L = {
     'ap-rec-label':'Lógica de diseño','ap-rec-text':'Carta firmada en papel timbrado oficial de un Cónsul General Adjunto nombrado — con contacto institucional verificable. Un respaldo de terceros a este nivel, de un signatario nombrado con línea directa, es poco común en cualquier etapa de carrera.',
     'qb-quote':'"Su perfil refleja confiabilidad institucional, integridad profesional y la capacidad de contribuir con propósito y efectividad en entornos exigentes. Recomiendo al Sr. João Victor Rossi sin reservas."',
     'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Cónsul General Adjunto · Consulado General de Brasil en Miami · 24 de marzo de 2026',
-    'qb-verify':'Verificable · EMAIL_CONSUL · +1 (305) 285-6230',
-    'sb-eye':'Próximo paso','sb-title':'¿Listo para <em>conectar?</em>','sb-sub':'Si lo que has leído añade contexto a esta candidatura, una conversación está a un clic de distancia.','sb-note':'EMAIL_JOAO · +1 (786) 609-3110',
+    'qb-verify':'Verificable · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Próximo paso','sb-title':'¿Listo para <em>conectar?</em>','sb-sub':'Si lo que has leído añade contexto a esta candidatura, una conversación está a un clic de distancia.','sb-note':'jvrossil&#64;gmail.com · +1 (786) 609-3110',
     'pf-left':'Expediente del candidato · Joao V. Rossi · Candidatura a Coordinador de Relaciones con Invitados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
     'cb-head-name':'Preguntar a Joao','cb-email-lbl':'Para notificar a Joao de su visita, ¿comparte su email? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como invitado →','cb-btn-label':'Preguntar a Joao','cb-status-txt':'Disponible ahora',
     'dm-title':'¿Desactivar este portal?','dm-text':'El expediente quedará offline de inmediato. Sus datos se conservan 90 días y luego se eliminan permanentemente a solicitud.','dm-cancel':'Mantener activo','dm-confirm':'Desactivar ahora',
@@ -1241,8 +1222,8 @@ const L = {
     'ap-rec-label':'Lógica de design','ap-rec-text':'Carta assinada em papel timbrado oficial de um Cônsul-Geral Adjunto nomeado — com contato institucional verificável. Um respaldo de terceiros nesse nível, de um signatário nomeado com linha direta, é raro em qualquer estágio de carreira.',
     'qb-quote':'"Seu perfil reflete confiabilidade institucional, integridade profissional e a capacidade de contribuir com propósito e efetividade em ambientes exigentes. Recomendo o Sr. João Victor Rossi sem reservas."',
     'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Cônsul-Geral Adjunto · Consulado Geral do Brasil em Miami · 24 de março de 2026',
-    'qb-verify':'Verificável · EMAIL_CONSUL · +1 (305) 285-6230',
-    'sb-eye':'Próximo passo','sb-title':'Pronto para <em>conectar?</em>','sb-sub':'Se o que você leu adiciona contexto a esta candidatura, uma conversa está a um clique de distância.','sb-note':'EMAIL_JOAO · +1 (786) 609-3110',
+    'qb-verify':'Verificável · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Próximo passo','sb-title':'Pronto para <em>conectar?</em>','sb-sub':'Se o que você leu adiciona contexto a esta candidatura, uma conversa está a um clique de distância.','sb-note':'jvrossil&#64;gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossiê do candidato · Joao V. Rossi · Candidatura a Coordenador de Relações com Convidados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
     'cb-head-name':'Perguntar ao Joao','cb-email-lbl':'Para notificar o Joao da sua visita, compartilha seu e-mail? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como visitante →','cb-btn-label':'Perguntar ao Joao','cb-status-txt':'Disponível agora',
     'dm-title':'Desativar este portal?','dm-text':'O dossiê ficará offline imediatamente. Seus dados são retidos por 90 dias e excluídos permanentemente mediante solicitação.','dm-cancel':'Manter ativo','dm-confirm':'Desativar agora',
@@ -1294,8 +1275,8 @@ const L = {
     'ap-rec-label':'Logique de design','ap-rec-text':"Lettre signée sur papier à en-tête officiel d'un Consul Général Adjoint nommé — avec coordonnées institutionnelles vérifiables. Un soutien tiers à ce niveau, d'un signataire nommé avec une ligne directe, est rare à tout stade de carrière.",
     'qb-quote':"&ldquo;Son profil reflète la fiabilité institutionnelle, l'intégrité professionnelle et la capacité de contribuer avec purpose et efficacité dans des environnements exigeants. Je recommande M. João Victor Rossi sans réserve.&rdquo;",
     'qb-attr':'<strong>Fernando Augusto Moreira Costa</strong> · Consul Général Adjoint · Consulat Général du Brésil à Miami · 24 mars 2026',
-    'qb-verify':'Vérifiable · EMAIL_CONSUL · +1 (305) 285-6230',
-    'sb-eye':'Prochaine étape','sb-title':'Prêt à <em>échanger?</em>','sb-sub':"Si ce que vous avez lu apporte du contexte à cette candidature, une conversation est à un clic.",'sb-note':'EMAIL_JOAO · +1 (786) 609-3110',
+    'qb-verify':'Vérifiable · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230',
+    'sb-eye':'Prochaine étape','sb-title':'Prêt à <em>échanger?</em>','sb-sub':"Si ce que vous avez lu apporte du contexte à cette candidature, une conversation est à un clic.",'sb-note':'jvrossil&#64;gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossier du candidat · Joao V. Rossi · Candidature au poste de Coordinateur des Relations Invités<br>Préparé exclusivement pour cette candidature · Avril 2026',
     'cb-head-name':'Demander à Joao','cb-email-lbl':'Pour notifier Joao de votre visite, partagez votre email ? <em>(optionnel)</em>','cb-start-btn':'Démarrer','cb-skip-lnk':"Continuer en tant qu'invité →",'cb-btn-label':'Demander à Joao','cb-status-txt':'Disponible maintenant',
     'dm-title':'Désactiver ce portail ?','dm-text':"Le dossier sera mis hors ligne immédiatement. Vos données sont conservées 90 jours puis supprimées définitivement sur demande.",'dm-cancel':'Maintenir actif','dm-confirm':'Désactiver maintenant',
@@ -1398,13 +1379,13 @@ const KB = [
   { keys:['ifes','data','guest list','database','system','profile','record','accuracy','management'],
     ans:"His consular work is the closest structural analogue to IFES. High-volume applicant intake — tracking status, maintaining data accuracy, resolving discrepancies across in-person and mail channels simultaneously. The workflow logic is identical: intake, validate, track, update, resolve. Same discipline, different institution." },
   { keys:['consul','brazil','consulate','diplomatic','itamaraty','visa'],
-    ans:"Joao was at the Consulate General of Brazil in Miami from June 2025 to March 2026. He worked first in the Cultural and Education Department — event coordination and institutional scheduling — then moved to the Consular Section managing high-volume public-facing intake. The recommendation in this portal is signed by Deputy Consul General Fernando Augusto Moreira Costa, verifiable at EMAIL_CONSUL." },
+    ans:"Joao was at the Consulate General of Brazil in Miami from June 2025 to March 2026. He worked first in the Cultural and Education Department — event coordination and institutional scheduling — then moved to the Consular Section managing high-volume public-facing intake. The recommendation in this portal is signed by Deputy Consul General Fernando Augusto Moreira Costa, verifiable at administ.miami&#64;itamaraty.gov.br." },
   { keys:['event','coordinate','logistic','invitation','scheduling','coordination'],
     ans:"Event coordination runs through three of his roles: consular outreach and public events in Miami, multi-party logistics for international investors at VR Capital, and the guest operations foundation at Disneyland Paris. Managing stakeholders, timelines, and delivery standards under institutional visibility — that's the through-line." },
   { keys:['excel','office','word','powerpoint','software','tools','tech'],
     ans:"Proficient across the full MS Office suite — Excel, Word, PowerPoint — documented across all roles. Used for process documentation, operational tracking, reporting, and workflow development. The consular tutorial he co-developed was built in these tools." },
   { keys:['recommendation','reference','letter','endorse','deputy','fernando','moreira'],
-    ans:"The recommendation is from Fernando Augusto Moreira Costa, Deputy Consul General of Brazil in Miami, signed March 24, 2026 — on official government letterhead. It includes a direct institutional contact line: EMAIL_CONSUL and +1 (305) 285-6230. That level of third-party endorsement, from a named signatory with a verifiable direct line, is rare at any career stage." },
+    ans:"The recommendation is from Fernando Augusto Moreira Costa, Deputy Consul General of Brazil in Miami, signed March 24, 2026 — on official government letterhead. It includes a direct institutional contact line: administ.miami&#64;itamaraty.gov.br and +1 (305) 285-6230. That level of third-party endorsement, from a named signatory with a verifiable direct line, is rare at any career stage." },
   { keys:['available','start','when','location','miami','relocat','where'],
     ans:"Joao is based in Miami, FL. The role is in Miami. No relocation, no logistics — he walks in day one." },
   { keys:['cruise','ship','latin america','latam','carnival','norwegian'],
@@ -1414,18 +1395,18 @@ const KB = [
   { keys:['education','degree','university','study','college','puc','campinas'],
     ans:"Bachelor of Business Administration from PUC Campinas — a U.S. 4-year equivalent. The academic grounding supports the operational and analytical work across all his roles." },
   { keys:['salary','pay','compensation','rate','cost'],
-    ans:"That's a conversation best had directly with Joao — he'll be far more eloquent about it than I will. You can reach him at EMAIL_JOAO or +1 (786) 609-3110. Worth the call." },
+    ans:"That's a conversation best had directly with Joao — he'll be far more eloquent about it than I will. You can reach him at jvrossil&#64;gmail.com or +1 (786) 609-3110. Worth the call." },
   { keys:['weakness','gap','concern','lack','miss','never done'],
     ans:"Honest question — I respect that. The honest answer is that Joao hasn't held the exact title before. But the operational components — guest data management, multilingual service, event coordination, stakeholder delivery under visibility — are all evidenced across institutional environments. The question is whether you're hiring a title or a capability. The profile makes the case for the latter. Joao would be glad to address this directly if you want to have that conversation." },
   { keys:['why','motivation','interested','apply','why joao','why him'],
     ans:"Guest Relations Coordinator at FIFA 2026 in Miami is the intersection of everything in his profile: multilingual guest operations, data management at scale, institutional service standards, and Miami as home. It's not a stretch — it's a fit. He built the case in detail in this portal, but if you'd like to hear it from him directly, he's one click away." },
   { keys:['contact','email','phone','reach','talk','call','schedule','meeting','interview'],
-    ans:`Ready when you are. The best way to connect with Joao:<br><br>📧 <strong>EMAIL_JOAO</strong><br>📞 <strong>+1 (786) 609-3110</strong><br><br>He monitors both closely and responds same day.` },
+    ans:`Ready when you are. The best way to connect with Joao:<br><br>📧 <strong>jvrossil&#64;gmail.com</strong><br>📞 <strong>+1 (786) 609-3110</strong><br><br>He monitors both closely and responds same day.` },
 ];
 
 function getRedirectMsgs(){
   const tone = localStorage.getItem('vr_fifa_bot_tone') || 'friendly';
-  const contact = localStorage.getItem('vr_fifa_contact_email') || 'EMAIL_JOAO';
+  const contact = localStorage.getItem('vr_fifa_contact_email') || 'jvrossil&#64;gmail.com';
   const phone = '+1 (786) 609-3110';
   if(tone === 'executive') return [
     `That falls outside the scope of this briefing. For a substantive conversation, I'd recommend reaching out directly — ${contact}.`,
@@ -1478,7 +1459,7 @@ KEY FACTS:
 - VR Capital LLC, Miami (5 years): international investor client coordination
 - Recommendation from Deputy Consul General Fernando Augusto Moreira Costa (March 2026)
 - Education: BBA, PUC Campinas
-- Contact: EMAIL_JOAO · +1 (786) 609-3110
+- Contact: jvrossil&#64;gmail.com · +1 (786) 609-3110
 
 Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=warm & light humor. Professional=concise & direct. Executive=formal & precise. Answer only about this application. If outside scope, redirect warmly to direct contact. Max 3 sentences unless a list is needed.`},
             {role:'user',content:q}
@@ -1543,14 +1524,14 @@ async function notifyVisitorEmail(visitorEmail){
 // Runtime contact state — populated by applyConfig() from GitHub, or localStorage fallback
 const CONTACT = {
   type: 'email',
-  email: 'EMAIL_JOAO',
+  email: 'jvrossil&#64;gmail.com',
   calendly: '',
   whatsapp: '',
   custom: ''
 };
 function syncContactRuntime(){
   CONTACT.type     = localStorage.getItem('vr_fifa_contact_type')     || 'email';
-  CONTACT.email    = localStorage.getItem('vr_fifa_contact_email')    || 'EMAIL_JOAO';
+  CONTACT.email    = localStorage.getItem('vr_fifa_contact_email')    || 'jvrossil&#64;gmail.com';
   CONTACT.calendly = localStorage.getItem('vr_fifa_contact_calendly') || '';
   CONTACT.whatsapp = localStorage.getItem('vr_fifa_contact_whatsapp') || '';
   CONTACT.custom   = localStorage.getItem('vr_fifa_contact_custom')   || '';
@@ -1586,7 +1567,7 @@ function updateContactPreview(type){
   const prev = document.getElementById('ep-contact-preview');
   if(!prev) return;
   const labels = {
-    email: `📧 Opens visitor's email app — to: ${document.getElementById('ep-contact-email')?.value || 'EMAIL_JOAO'}`,
+    email: `📧 Opens visitor's email app — to: ${document.getElementById('ep-contact-email')?.value || 'jvrossil&#64;gmail.com'}`,
     calendly: `📅 Opens Calendly booking page`,
     whatsapp: `💬 Opens WhatsApp chat — to: ${document.getElementById('ep-contact-whatsapp')?.value || '+1...'}`,
     custom: `🔗 Opens: ${document.getElementById('ep-contact-custom')?.value || '(URL not set)'}`
@@ -1598,7 +1579,7 @@ function loadContactConfig(){
   const radios = document.querySelectorAll('input[name="ep-contact-type"]');
   radios.forEach(r=>{ r.checked = r.value===type; });
   const fields = {
-    email: localStorage.getItem('vr_fifa_contact_email') || 'EMAIL_JOAO',
+    email: localStorage.getItem('vr_fifa_contact_email') || 'jvrossil&#64;gmail.com',
     calendly: localStorage.getItem('vr_fifa_contact_calendly') || '',
     whatsapp: localStorage.getItem('vr_fifa_contact_whatsapp') || '',
     custom: localStorage.getItem('vr_fifa_contact_custom') || ''
@@ -1798,7 +1779,7 @@ function showArchivedPortal(){
     overlay = document.createElement('div');
     overlay.id = 'archive-overlay';
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,22,40,.92);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;padding:2rem';
-    overlay.innerHTML = `<div style="font-size:32px">📦</div><div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#fff">This portal is temporarily offline.</div><div style="font-size:13px;color:rgba(255,255,255,.52);max-width:360px;line-height:1.8">This briefing has been paused by the candidate. For inquiries, contact EMAIL_JOAO</div>${isAdmin?`<button onclick="reactivatePortal()" style="margin-top:1rem;padding:10px 28px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:30px;color:#e8c86a;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif">✓ Reactivate portal</button><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:.5rem">Auto-deletes in ${daysLeft} days</div>`:''}`;
+    overlay.innerHTML = `<div style="font-size:32px">📦</div><div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#fff">This portal is temporarily offline.</div><div style="font-size:13px;color:rgba(255,255,255,.52);max-width:360px;line-height:1.8">This briefing has been paused by the candidate. For inquiries, contact jvrossil&#64;gmail.com</div>${isAdmin?`<button onclick="reactivatePortal()" style="margin-top:1rem;padding:10px 28px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:30px;color:#e8c86a;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif">✓ Reactivate portal</button><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:.5rem">Auto-deletes in ${daysLeft} days</div>`:''}`;
     document.body.appendChild(overlay);
   }
 }
@@ -1994,10 +1975,10 @@ const DEFAULTS = {
   'ep-rp3t':'Cross-stakeholder service delivery under visibility','ep-rp3d':'Event coordination and invitation management in a diplomatic environment where every touchpoint is observed and quality is non-negotiable.',
   'ep-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
   'ep-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 24, 2026',
-  'ep-verify':'Verifiable · EMAIL_CONSUL · +1 (305) 285-6230',
+  'ep-verify':'Verifiable · administ.miami&#64;itamaraty.gov.br · +1 (305) 285-6230',
   'ep-sb-sub':"If what you've read adds context to this application, a conversation is one click away.",
-  'ep-contact':'EMAIL_JOAO · +1 (786) 609-3110',
-  'ep-calendly':'mailto:EMAIL_JOAO?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
+  'ep-contact':'jvrossil&#64;gmail.com · +1 (786) 609-3110',
+  'ep-calendly':'mailto:jvrossil&#64;gmail.com?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
   'ep-bot-name':'Ask Joao'
 };
 
