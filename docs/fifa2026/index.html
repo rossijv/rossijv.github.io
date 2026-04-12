@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.13">
+<meta name="vr-version" content="9.14">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1499,7 +1498,12 @@ function removeTyping(){ const t=document.getElementById('cb-typing'); if(t) t.r
 /* ── EMAILJS VISITOR NOTIFICATION ── */
 function initEmailJS(){
   const key = localStorage.getItem('vr_emailjs_key') || '';
-  if(key) emailjs.init(key);
+  if(!key) return;
+  // Load EmailJS dynamically only when a key is configured
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net' + '/npm/' + '@emailjs' + '/browser@4/dist/email.min.js';
+  script.onload = () => { emailjs.init(key); };
+  document.head.appendChild(script);
 }
 async function notifyVisitorEmail(visitorEmail){
   const service  = localStorage.getItem('vr_emailjs_service')  || '';
