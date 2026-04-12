@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.18">
+<meta name="vr-version" content="9.19">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -561,7 +561,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
         </span>
       </div>
       <div class="qb-quote" id="qb-quote">"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."</div>
-      <div class="qb-attr" id="qb-attr">[Name] · [Role] · [Organization]</div>
+      <div class="qb-attr" id="qb-attr"></div>
     </div>
   </div>
 
@@ -675,7 +675,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   <div class="ep-header">
     <div>
       <div class="ep-eyebrow">Admin · Edit content</div>
-      <div class="ep-title">Joao V. Rossi · Portal</div>
+      <div class="ep-title" id="ep-panel-title">Joao V. Rossi · Portal</div>
     </div>
     <button class="ep-close" onclick="closeEditPanel()">✕</button>
   </div>
@@ -870,7 +870,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
       <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
         Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
       </div>
-      <button onclick="saveToGitHub()" id="ep-gh-push-btn" style="width:100%;padding:10px;background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.5);border-radius:5px;color:#e8c86a;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.375rem">⬆ Save &amp; Sync to all devices</button>
+
       <div class="ep-gh-status" id="ep-gh-status"></div>
       <!-- VR master config — hidden from normal view, shown only with master key -->
       <div id="ep-gh-master" style="display:none;margin-top:.75rem;border-top:.5px solid rgba(200,168,75,.12);padding-top:.75rem">
@@ -1111,7 +1111,7 @@ const L = {
                 'rb6-req':'Progress reports & continuous improvement','rb6-match':'Workflow documentation and tutorial development at the Consulate — improving operational consistency and reducing friction. <em>Improvement mindset is demonstrated, not claimed.</em>',
     /* rec */   'ap-rec-label':'Design logic','ap-rec-text':'Signed letter on official government letterhead from a named Deputy Consul General — with verifiable institutional contact. A third-party endorsement at this level, from a named signatory with a direct line, is rare at any career stage.',
                 'qb-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
-                'qb-attr':'[Name] · [Role] · [Organization]',
+                'qb-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 2026',
                     /* sched */ 'sb-eye':'Next step','sb-title':'Ready to <em>connect?</em>','sb-sub':"If what you've read adds context to this application, a conversation is one click away.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     /* footer */'pf-left':'Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026',
     /* chat */  'cb-head-name':'Ask Joao','cb-email-lbl':'To notify Joao of your visit, share your email? <em>(optional)</em>','cb-start-btn':'Start','cb-skip-lnk':'Continue as guest →','cb-btn-label':'Ask Joao','cb-status-txt':'Available now',
@@ -1163,7 +1163,7 @@ const L = {
     'rb6-req':'Informes de progreso y mejora continua','rb6-match':'Documentación de flujos de trabajo y desarrollo de tutoriales en el Consulado — mejorando la consistencia operativa y reduciendo fricciones. <em>La mentalidad de mejora está demostrada, no reclamada.</em>',
     'ap-rec-label':'Lógica de diseño','ap-rec-text':'Carta firmada en papel timbrado oficial de un Cónsul General Adjunto nombrado — con contacto institucional verificable. Un respaldo de terceros a este nivel, de un signatario nombrado con línea directa, es poco común en cualquier etapa de carrera.',
     'qb-quote':'"Su perfil refleja confiabilidad institucional, integridad profesional y la capacidad de contribuir con propósito y efectividad en entornos exigentes. Recomiendo al Sr. João Victor Rossi sin reservas."',
-    'qb-attr':'[Nombre] · [Cargo] · [Organización]',
+    'qb-attr':'Fernando Augusto Moreira Costa · Cónsul General Adjunto · Consulado General de Brasil en Miami · Marzo 2026',
         'sb-eye':'Próximo paso','sb-title':'¿Listo para <em>conectar?</em>','sb-sub':'Si lo que has leído añade contexto a esta candidatura, una conversación está a un clic de distancia.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Expediente del candidato · Joao V. Rossi · Candidatura a Coordinador de Relaciones con Invitados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
     'cb-head-name':'Preguntar a Joao','cb-email-lbl':'Para notificar a Joao de su visita, ¿comparte su email? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como invitado →','cb-btn-label':'Preguntar a Joao','cb-status-txt':'Disponible ahora',
@@ -1215,7 +1215,7 @@ const L = {
     'rb6-req':'Relatórios de progresso e melhoria contínua','rb6-match':'Documentação de fluxos de trabalho e desenvolvimento de tutoriais no Consulado — melhorando a consistência operacional e reduzindo fricções. <em>A mentalidade de melhoria está demonstrada, não apenas afirmada.</em>',
     'ap-rec-label':'Lógica de design','ap-rec-text':'Carta assinada em papel timbrado oficial de um Cônsul-Geral Adjunto nomeado — com contato institucional verificável. Um respaldo de terceiros nesse nível, de um signatário nomeado com linha direta, é raro em qualquer estágio de carreira.',
     'qb-quote':'"Seu perfil reflete confiabilidade institucional, integridade profissional e a capacidade de contribuir com propósito e efetividade em ambientes exigentes. Recomendo o Sr. João Victor Rossi sem reservas."',
-    'qb-attr':'[Nome] · [Cargo] · [Organização]',
+    'qb-attr':'Fernando Augusto Moreira Costa · Cônsul-Geral Adjunto · Consulado Geral do Brasil em Miami · Março 2026',
         'sb-eye':'Próximo passo','sb-title':'Pronto para <em>conectar?</em>','sb-sub':'Se o que você leu adiciona contexto a esta candidatura, uma conversa está a um clique de distância.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossiê do candidato · Joao V. Rossi · Candidatura a Coordenador de Relações com Convidados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
     'cb-head-name':'Perguntar ao Joao','cb-email-lbl':'Para notificar o Joao da sua visita, compartilha seu e-mail? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como visitante →','cb-btn-label':'Perguntar ao Joao','cb-status-txt':'Disponível agora',
@@ -1267,7 +1267,7 @@ const L = {
     'rb6-req':"Rapports d'avancement et amélioration continue",'rb6-match':"Documentation des flux de travail et développement de tutoriels au Consulat. <em>L'état d'esprit d'amélioration est démontré, pas seulement affirmé.</em>",
     'ap-rec-label':'Logique de design','ap-rec-text':"Lettre signée sur papier à en-tête officiel d'un Consul Général Adjoint nommé — avec coordonnées institutionnelles vérifiables. Un soutien tiers à ce niveau, d'un signataire nommé avec une ligne directe, est rare à tout stade de carrière.",
     'qb-quote':"&ldquo;Son profil reflète la fiabilité institutionnelle, l'intégrité professionnelle et la capacité de contribuer avec purpose et efficacité dans des environnements exigeants. Je recommande M. João Victor Rossi sans réserve.&rdquo;",
-    'qb-attr':'[Nom] · [Poste] · [Organisation]',
+    'qb-attr':'Fernando Augusto Moreira Costa · Consul Général Adjoint · Consulat Général du Brésil à Miami · Mars 2026',
         'sb-eye':'Prochaine étape','sb-title':'Prêt à <em>échanger?</em>','sb-sub':"Si ce que vous avez lu apporte du contexte à cette candidature, une conversation est à un clic.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossier du candidat · Joao V. Rossi · Candidature au poste de Coordinateur des Relations Invités<br>Préparé exclusivement pour cette candidature · Avril 2026',
     'cb-head-name':'Demander à Joao','cb-email-lbl':'Pour notifier Joao de votre visite, partagez votre email ? <em>(optionnel)</em>','cb-start-btn':'Démarrer','cb-skip-lnk':"Continuer en tant qu'invité →",'cb-btn-label':'Demander à Joao','cb-status-txt':'Disponible maintenant',
@@ -1538,9 +1538,10 @@ function buildContactUrl(){
   return `mailto:${CONTACT.email}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
 }
 function contactAction(){
+  syncContactRuntime();
   const url = buildContactUrl();
   if(url) window.open(url, '_blank');
-  else alert('Contact not configured yet — please check the Edit panel.');
+  else alert('Contact not yet configured — please set up in the Edit panel.');
 }
 function onContactTypeChange(type){
   localStorage.setItem('vr_fifa_contact_type', type);
@@ -1929,7 +1930,11 @@ function toggleLangTab(lang, show){
   if(!tab) return;
   tab.style.display = show ? '' : 'none';
   localStorage.setItem('vr_fifa_tab_'+lang, show ? '1' : '0');
-  if(!show && tab.classList.contains('on')) setLang('en');
+  if(!show && tab.classList.contains('on')){
+    // Find next visible tab to switch to
+    const next = ['en','pt','es','fr'].find(l => l!==lang && localStorage.getItem('vr_fifa_tab_'+l)!=='0');
+    if(next) setLang(next); 
+  }
 }
 
 /* ── EDIT PANEL ── */
@@ -1941,7 +1946,7 @@ const DEFAULTS = {
   'ep-rp2t':'Guest data and records management at scale','ep-rp2d':'High-volume management at consular level — status tracking, discrepancy resolution, data accuracy across parallel channels. Directly analogous to IFES guest profile workflows.',
   'ep-rp3t':'Cross-stakeholder service delivery under visibility','ep-rp3d':'Event coordination and invitation management in a diplomatic environment where every touchpoint is observed and quality is non-negotiable.',
   'ep-quote':'"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I recommend Mr. João Victor Rossi without reservation."',
-  'ep-attr':'[Name] · [Role] · [Organization]',
+  'ep-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 2026',
   'ep-sb-sub':"If what you've read adds context to this application, a conversation is one click away.",
   'ep-contact':'jvrossil@gmail.com · +1 (786) 609-3110',
   'ep-calendly':'mailto:jvrossil@gmail.com?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
@@ -2062,8 +2067,10 @@ function buildConfig(){
 function applyConfig(cfg){
   if(!cfg) return;
   Object.keys(DEFAULTS).forEach(key=>{ if(cfg[key]!==undefined){ localStorage.setItem('vr_fifa_'+key,cfg[key]); applyField(key,cfg[key]); } });
-  ['type','email','calendly','whatsapp','custom'].forEach(k=>{ if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]); });
-  syncContactRuntime();
+  ['type','email','calendly','whatsapp','custom'].forEach(k=>{
+    if(cfg['contact_'+k]!==undefined) localStorage.setItem('vr_fifa_contact_'+k,cfg['contact_'+k]);
+  });
+  syncContactRuntime(); // Refresh CONTACT object after loading config
   if(cfg['chatbot_enabled']!==undefined){ localStorage.setItem('vr_fifa_chatbot_enabled',cfg['chatbot_enabled']?'1':'0'); applyChatbotVisibility(cfg['chatbot_enabled']); }
   if(cfg['groq_key']) localStorage.setItem('vr_fifa_groq_key',cfg['groq_key']);
   ['es','pt','fr'].forEach(l=>{
@@ -2291,7 +2298,7 @@ function getLangAdminState(){
   return {
     // which tabs are visible
     tabs: {
-      en: true, // always on
+      en: localStorage.getItem('vr_fifa_tab_en') !== '0',
       es: localStorage.getItem('vr_fifa_tab_es') !== '0',
       pt: localStorage.getItem('vr_fifa_tab_pt') !== '0',
       fr: localStorage.getItem('vr_fifa_tab_fr') !== '0'
@@ -2319,12 +2326,9 @@ function renderLangAdminSection(){
 
   const tabRows = ['en','es','pt','fr'].map(lang => {
     const cfg = LANG_CONFIG[lang];
-    const isEn = lang === 'en';
     const checked = state.tabs[lang] ? 'checked' : '';
     const isPrimary = state.primary === lang;
     const tabVisible = state.tabs[lang];
-    const disabledAttr = isEn ? 'disabled' : '';
-    const rowStyle = isEn ? 'opacity:.45;cursor:not-allowed' : '';
     const btnStyle = isPrimary
       ? 'background:rgba(200,168,75,.22);border:.5px solid rgba(200,168,75,.6);color:#e8c86a;cursor:pointer;'
       : tabVisible
@@ -2332,11 +2336,11 @@ function renderLangAdminSection(){
         : 'background:rgba(255,255,255,.02);border:.5px solid rgba(255,255,255,.05);color:rgba(255,255,255,.15);cursor:not-allowed;opacity:.35;';
     const btnClick = tabVisible ? `setPrimaryLang('${lang}')` : '';
     return `
-      <div class="ep-lang-adv-row" id="ep-lang-row-${lang}" style="display:flex;align-items:center;gap:.625rem;${rowStyle}">
+      <div class="ep-lang-adv-row" id="ep-lang-row-${lang}" style="display:flex;align-items:center;gap:.625rem;">
         <label class="ep-lang-row" style="flex:1;min-width:0;display:flex;align-items:center;gap:.625rem">
-          <input type="checkbox" id="ep-lang-vis-${lang}" ${checked} ${disabledAttr}
+          <input type="checkbox" id="ep-lang-vis-${lang}" ${checked}
             onchange="onLangVisChange('${lang}',this.checked)"
-            style="accent-color:var(--ac);width:14px;height:14px;cursor:${isEn?'not-allowed':'pointer'}">
+            style="accent-color:var(--ac);width:14px;height:14px;cursor:pointer">
           <span style="font-size:12px;color:rgba(255,255,255,.68)">${cfg.label}</span>
         </label>
         <button onclick="${btnClick}"
@@ -2355,7 +2359,6 @@ function renderLangAdminSection(){
   `;
 }
 function onLangVisChange(lang, show){
-  if(lang==='en') return; // always visible
   toggleLangTab(lang, show);
   // If hiding the current primary, reset primary to en
   const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
