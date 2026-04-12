@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.16">
+<meta name="vr-version" content="9.17">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -864,11 +864,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
 
 
-
-    <div class="ep-note">Changes save locally. Use Save &amp; Sync above to push to all devices.</div>
-
-    <div class="ep-section">💾 Sync — Save for all visitors</div>
-    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.625rem">Click <strong style="color:var(--ac2)">Save &amp; Sync</strong> to push your changes to all devices and browsers instantly.</div>
+    <div class="ep-section">&#x1F4BE; GitHub Sync</div>
     <div class="ep-gh-section" id="ep-gh-section">
       <div id="ep-gh-status-box" style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:.5rem">
         Status: <span id="ep-gh-status-txt" style="color:rgba(200,168,75,.7)">Checking connection…</span>
@@ -1286,6 +1282,15 @@ const L = {
 // IDs that must use textContent (have child elements or event listeners we must preserve)
 const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
 
+/* ── LANG BAR REORDER v4.5 — primary tab moves to position 0 ── */
+function reorderLangBar(lang){
+  const bar = document.querySelector('.lang-bar');
+  if(!bar) return;
+  const tab = bar.querySelector('.lt[data-lang="'+lang+'"]');
+  if(!tab || tab.style.display==='none') return;
+  bar.insertBefore(tab, bar.firstChild);
+}
+
 let currentLang = 'en';
 function setLang(lang){
   currentLang = lang;
@@ -1297,6 +1302,8 @@ function setLang(lang){
     if(TEXT_ONLY.has(id)) el.textContent = t[id];
     else el.innerHTML = t[id];
   });
+  reorderLangBar(lang);
+  applyExclusivityBanner();
 }
 
 function goTo(sel){ const el=document.querySelector(sel); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -1819,6 +1826,7 @@ function saveExclusivity(){
   if(c) localStorage.setItem('vr_fifa_excl_candidate', c.value.trim());
   if(co) localStorage.setItem('vr_fifa_excl_company', co.value.trim());
   applyExclusivityBanner();
+  setNameFormat(localStorage.getItem('vr_fifa_name_fmt')||'two');
 }
 function saveEmailJSConfig(){
   const fields = {
@@ -1893,14 +1901,24 @@ function applyPalette(key){
   r.setProperty('--rule', p.rule);
 }
 
-/* ── NAME FORMAT ── */
+/* ── NAME FORMAT v4.5 — hero + nav + title ── */
 function setNameFormat(fmt){
-  const nameEl = document.querySelector('.h-name');
+  const nameEl    = document.querySelector('.h-name');
+  const navNameEl = document.getElementById('nav-name');
   if(!nameEl) return;
   localStorage.setItem('vr_fifa_name_fmt', fmt);
-  if(fmt === 'two')   nameEl.innerHTML = 'Joao V.<br><em>Rossi</em>';
-  if(fmt === 'one')   nameEl.innerHTML = 'Joao V. Rossi';
-  if(fmt === 'first') nameEl.innerHTML = 'Joao';
+  const full  = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+  const parts = full.trim().split(/\s+/);
+  const first = parts[0] || 'Joao';
+  const last  = parts[parts.length-1] || 'Rossi';
+  const fp    = parts.length > 1 ? parts.slice(0,-1).join(' ') : first;
+  let h, n;
+  if(fmt==='two'){      h=fp+'<br><em>'+last+'</em>'; n=full; }
+  else if(fmt==='one'){ h=full; n=full; }
+  else {                h=first; n=first; }
+  nameEl.innerHTML = h;
+  if(navNameEl) navNameEl.textContent = n;
+  document.title = n + ' · Candidate Briefing Portal';
 }
 function loadNameFormat(){
   const fmt = localStorage.getItem('vr_fifa_name_fmt') || 'two';
@@ -2005,11 +2023,13 @@ function closeEditPanel(){
 /* ══════════════════════════════════════
    GITHUB PERSISTENCE ENGINE
 ══════════════════════════════════════ */
+const VR_GH_REPO='rossijv/rossijv.github.io';
+const VR_GH_PATH='docs/fifa2026/config.json';
 function ghCreds(){
   return {
     token: localStorage.getItem('vr_gh_token')||'',
-    repo:  localStorage.getItem('vr_gh_repo')||'',
-    path:  localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json'
+    repo:  localStorage.getItem('vr_gh_repo')||VR_GH_REPO,
+    path:  localStorage.getItem('vr_gh_path')||VR_GH_PATH
   };
 }
 function buildConfig(){
@@ -2319,9 +2339,10 @@ function renderLangAdminSection(){
             style="accent-color:var(--ac);width:14px;height:14px;cursor:${isEn?'not-allowed':'pointer'}">
           <span style="font-size:12px;color:rgba(255,255,255,.68)">${cfg.label}</span>
         </label>
-        <button onclick="setPrimaryLang('${lang}')"
+        <button onclick="if(state.tabs['${lang}']) setPrimaryLang('${lang}')"
           id="ep-primary-btn-${lang}"
           style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+            opacity:${state.tabs[lang]?'1':'0.35'};
             ${isPrimary
               ? 'background:rgba(200,168,75,.22);border:.5px solid rgba(200,168,75,.6);color:#e8c86a;'
               : 'background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.32);'
