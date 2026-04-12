@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-cfasync="false">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 #gate.gone{opacity:0;visibility:hidden;pointer-events:none}
 .gi{text-align:center;padding:2rem;max-width:380px}
 .g-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ac2);letter-spacing:.08em;margin-bottom:.4rem}
-.g-logo span{display:block;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,168,75,.38);font-family:'DM Sans',sans-serif;margin-top:.3rem}
+.g-logo span{display:block;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,168,75,.72);font-family:'DM Sans',sans-serif;margin-top:.3rem}
 .g-divider{width:28px;height:.5px;background:rgba(200,168,75,.18);margin:1.5rem auto}
 .g-title{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:.875rem}
 .g-sub{font-size:13px;color:rgba(255,255,255,.62);margin-bottom:2.25rem;font-weight:300;line-height:1.9}
@@ -385,7 +385,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   <nav class="nav" id="main-nav">
     <div class="nav-id">
       <span class="nav-eye" id="nav-eye">Application briefing · Guest Relations Coordinator</span>
-      <span class="nav-name">Joao V. Rossi</span>
+      <span class="nav-name" id="nav-name">Joao V. Rossi</span>
     </div>
     <div class="nav-links">
       <span class="nav-link" id="nl-exp" onclick="goTo('.exp-sec')">Experience</span>
@@ -580,7 +580,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
   </section>
 
   <footer class="portal-footer" style="justify-content:center;padding:1.25rem 3rem">
-    <div id="excl-banner-txt" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center">Prepared exclusively for this application &middot; Not for redistribution</div>
+    <div id="pf-left" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.42);pointer-events:none;user-select:none;-webkit-user-select:none;text-align:center">Prepared exclusively for this application &middot; Not for redistribution</div>
   </footer>
 
 </div>
@@ -1288,6 +1288,21 @@ const L = {
 const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','qb-verify','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
 
 let currentLang = 'en';
+
+/* ── LANG BAR REORDER — v4.5 ──
+   Moves the primary language tab to position 0 (leftmost).
+   Called inside setLang() whenever language changes. */
+function reorderLangBar(lang){
+  const bar = document.querySelector('.lang-bar');
+  if(!bar) return;
+  const tab = bar.querySelector(`.lt[data-lang="${lang}"]`);
+  if(!tab) return;
+  // Only move if it's not already first visible tab
+  const firstTab = bar.querySelector('.lt:not([style*="display: none"]):not([style*="display:none"])');
+  if(tab === firstTab) return;
+  bar.insertBefore(tab, bar.firstChild);
+}
+
 function setLang(lang){
   currentLang = lang;
   document.querySelectorAll('.lt').forEach(el=>el.classList.toggle('on', el.dataset.lang===lang));
@@ -1298,6 +1313,8 @@ function setLang(lang){
     if(TEXT_ONLY.has(id)) el.textContent = t[id];
     else el.innerHTML = t[id];
   });
+  reorderLangBar(lang);
+  applyExclusivityBanner();
 }
 
 function goTo(sel){ const el=document.querySelector(sel); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
@@ -1805,10 +1822,18 @@ function savePasswords(){
 }
 /* ── EXCLUSIVITY BANNER ── */
 function applyExclusivityBanner(){
-  const candidate = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
-  const company = localStorage.getItem('vr_fifa_excl_company') || 'FIFA World Cup 2026 · Guest Relations Coordinator';
-  const el = document.getElementById('excl-banner-txt');
-  if(el) el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
+  const el = document.getElementById('pf-left');
+  if(!el) return;
+  // Use translated string from L object if available for current language
+  const langStr = L[currentLang] && L[currentLang]['pf-left'];
+  if(langStr){
+    el.innerHTML = langStr;
+  } else {
+    // Fallback: build from stored candidate/company
+    const candidate = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+    const company   = localStorage.getItem('vr_fifa_excl_company')   || 'FIFA World Cup 2026 · Guest Relations Coordinator';
+    el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
+  }
 }
 function saveExclusivity(){
   const c = document.getElementById('ep-excl-candidate');
@@ -1891,17 +1916,43 @@ function applyPalette(key){
 }
 
 /* ── NAME FORMAT ── */
+/* v4.5: updates THREE elements simultaneously — hero, nav, document.title */
 function setNameFormat(fmt){
-  const nameEl = document.querySelector('.h-name');
+  const nameEl   = document.querySelector('.h-name');
+  const navNameEl = document.getElementById('nav-name');
   if(!nameEl) return;
   localStorage.setItem('vr_fifa_name_fmt', fmt);
-  if(fmt === 'two')   nameEl.innerHTML = 'Joao V.<br><em>Rossi</em>';
-  if(fmt === 'one')   nameEl.innerHTML = 'Joao V. Rossi';
-  if(fmt === 'first') nameEl.innerHTML = 'Joao';
+
+  const candidateFull = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+  // Derive first name and last name from stored full name
+  const parts = candidateFull.trim().split(/\s+/);
+  const firstName = parts[0] || 'Joao';
+  const lastName  = parts[parts.length - 1] || 'Rossi';
+  const initMid   = parts.length > 2 ? parts.slice(0, -1).join(' ') : candidateFull.replace(/\s+\S+$/, '').trim() || firstName;
+
+  let heroHtml = '', navText = '', titleName = '';
+  if(fmt === 'two'){
+    heroHtml  = `${initMid}<br><em>${lastName}</em>`;
+    navText   = candidateFull;
+    titleName = candidateFull;
+  } else if(fmt === 'one'){
+    heroHtml  = candidateFull;
+    navText   = candidateFull;
+    titleName = candidateFull;
+  } else if(fmt === 'first'){
+    heroHtml  = firstName;
+    navText   = firstName;
+    titleName = firstName;
+  }
+
+  nameEl.innerHTML = heroHtml;
+  if(navNameEl) navNameEl.textContent = navText;
+  document.title = `${titleName} · Candidate Briefing Portal`;
 }
 function loadNameFormat(){
   const fmt = localStorage.getItem('vr_fifa_name_fmt') || 'two';
-  document.querySelector(`input[name="ep-name-fmt"][value="${fmt}"]`).checked = true;
+  const radio = document.querySelector(`input[name="ep-name-fmt"][value="${fmt}"]`);
+  if(radio) radio.checked = true;
   setNameFormat(fmt);
 }
 
@@ -2381,18 +2432,4 @@ function onSingleLangChange(lang){
   localStorage.setItem('vr_fifa_single_lang', lang);
   localStorage.setItem('vr_fifa_primary_lang', lang);
   applyLangSingleMode(lang);
-  renderLangAdminSection();
-}
-
-function onApplyLangPortalChange(enabled){
-  localStorage.setItem('vr_fifa_apply_lang_portal', enabled ? '1' : '0')
-  if(enabled){
-    const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
-    setLang(primary);
-    showEpFeedback(`Portal switched to ${LANG_CONFIG[primary].label}`, '#4caf80');
-  }
-}
-
-</script>
-</body>
-</html>
+  renderLa
