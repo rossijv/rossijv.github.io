@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.15">
+<meta name="vr-version" content="9.16">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -2188,7 +2188,15 @@ function saveEdits(){
   else{ showEpFeedback('✓ Saved locally — connect GitHub to sync across devices','#c8a84b'); setTimeout(closeEditPanel,900); }
 }
 function revertEdits(){
-  if(!confirm('Revert all fields -lang="${lang}"]`);
+  if(!confirm('Revert all fields to original content?')) return;
+  Object.keys(DEFAULTS).forEach(key=>{
+    localStorage.removeItem('vr_fifa_'+key);
+    const el=document.getElementById(key); if(el) el.value=DEFAULTS[key];
+    applyField(key, DEFAULTS[key]);
+  });
+  ['es','pt','fr'].forEach(lang=>{
+    localStorage.removeItem('vr_fifa_tab_'+lang);
+    const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
     if(tab) tab.style.display='';
     const cb=document.getElementById('ep-lang-'+lang); if(cb) cb.checked=true;
   });
