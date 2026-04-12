@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta name="vr-version" content="9.19">
+<meta name="vr-version" content="9.20">
 <title>Joao V. Rossi · Candidate Briefing Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -970,12 +970,26 @@ async function initToken(adminPassword){
   const currentV = metaEl.content;
   const storedV  = sessionStorage.getItem('vr_html_version');
   if(storedV && storedV !== currentV){
-    // New version detected — clear session flag and hard reload
     sessionStorage.removeItem('vr_html_version');
     window.location.reload(true);
     return;
   }
   sessionStorage.setItem('vr_html_version', currentV);
+})();
+/* ── EARLY INIT — runs before password entry ── */
+/* Apply saved candidate name and primary language to gate immediately */
+(function earlyInit(){
+  const cand = localStorage.getItem('vr_fifa_excl_candidate');
+  if(cand){
+    const gn = document.getElementById('gate-candidate-name');
+    if(gn) gn.textContent = cand;
+  }
+  // Apply primary language to gate strings immediately
+  const primary = localStorage.getItem('vr_fifa_primary_lang') || 'en';
+  const tabKey = localStorage.getItem('vr_fifa_tab_'+primary);
+  // We can't call setLang() yet (L object not defined), 
+  // so we apply gate strings directly from stored values
+  // setLang will be called properly in applySavedEdits
 })();
 let ADMIN_PWD_RUNTIME   = localStorage.getItem('vr_fifa_pwd_admin')   || ADMIN_PWD;
 let isAdmin = false;
@@ -1534,8 +1548,10 @@ function buildContactUrl(){
     return `https://wa.me/${num}?text=Hi%2C%20I%20saw%20this%20application%20portal.`;
   }
   if(CONTACT.type === 'custom' && CONTACT.custom) return CONTACT.custom;
-  // Default: email
-  return `mailto:${CONTACT.email}?subject=FIFA%202026%20%E2%80%94%20Guest%20Relations%20Coordinator`;
+  // Email fallback — read directly from localStorage to ensure freshness
+  const email = localStorage.getItem('vr_fifa_contact_email') || CONTACT.email || '';
+  if(!email) return null;
+  return 'mailto:' + email + '?subject=Application%20Briefing%20%E2%80%94%20Candidate%20Introduction';
 }
 function contactAction(){
   syncContactRuntime();
@@ -1811,12 +1827,28 @@ function savePasswords(){
     localStorage.setItem('vr_fifa_pwd_admin', ADMIN_PWD_RUNTIME);
   }
 }
-/* ── EXCLUSIVITY BANNER ── */
+/* ── EXCLUSIVITY BANNER — updates ALL name elements simultaneously ── */
 function applyExclusivityBanner(){
-  const candidate = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
-  const company = localStorage.getItem('vr_fifa_excl_company') || 'FIFA World Cup 2026 · Guest Relations Coordinator';
-  const el = document.getElementById('excl-banner-txt');
-  if(el) el.innerHTML = `Prepared exclusively for ${candidate} &middot; ${company} &middot; Not for redistribution`;
+  const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+  const comp = localStorage.getItem('vr_fifa_excl_company')   || 'FIFA World Cup 2026 · Guest Relations Coordinator';
+  // 1. Footer bar (pf-left)
+  const footer = document.getElementById('pf-left');
+  if(footer){
+    const langStr = L[currentLang] && L[currentLang]['pf-left'];
+    footer.innerHTML = langStr || ('Prepared exclusively for ' + cand + ' &middot; ' + comp + ' &middot; Not for redistribution');
+  }
+  // 2. Gate password screen name
+  const gateName = document.getElementById('gate-candidate-name');
+  if(gateName) gateName.textContent = cand;
+  // 3. Edit panel header
+  const panelTitle = document.getElementById('ep-panel-title');
+  if(panelTitle) panelTitle.textContent = cand + ' · Portal';
+  // 4. LinkedIn CTA
+  const linkedinVal = localStorage.getItem('vr_fifa_ep-linkedin') || '';
+  const linkedinCta = document.getElementById('linkedin-cta');
+  const linkedinLink = document.getElementById('linkedin-link');
+  if(linkedinCta) linkedinCta.style.display = linkedinVal ? '' : 'none';
+  if(linkedinLink && linkedinVal) linkedinLink.href = linkedinVal;
 }
 function saveExclusivity(){
   const c = document.getElementById('ep-excl-candidate');
@@ -1967,7 +1999,6 @@ const FIELD_MAP = {
   'ep-quote':   {id:'qb-quote', prop:'textContent'},
   'ep-attr':    {id:'qb-attr',  prop:'textContent'},
   'ep-sb-sub':  {id:'sb-sub',   prop:'textContent'},
-  'ep-contact': {id:'sb-note',  prop:'textContent'},
   'ep-calendly':{id:'sb-btn',   prop:'',isBtn:true},
   'ep-bot-name':{id:'cb-head-name',prop:'textContent'},
   'ep-linkedin':{id:'linkedin-link',prop:'',isLinkedin:true}
@@ -2266,14 +2297,14 @@ async function applySavedEdits(){
       const v=localStorage.getItem('vr_fifa_'+key);
       if(v!==null) applyField(key,v);
     });
-    ['es','pt','fr'].forEach(lang=>{
+    ['en','es','pt','fr'].forEach(lang=>{
       const v=localStorage.getItem('vr_fifa_tab_'+lang);
-      const tab=document.querySelector(`.lt[data-lang="${lang}"]`);
-      if(tab) tab.style.display=(v==='1')?'':'none';
+      const tab=document.querySelector('.lt[data-lang="'+lang+'"]');
+      if(tab && v!==null) tab.style.display=(v==='0')?'none':'';
     });
     const primary=localStorage.getItem('vr_fifa_primary_lang')||'en';
     currentLang=primary;
-    if(localStorage.getItem('vr_fifa_apply_lang_portal')==='1') setLang(primary);
+    setLang(primary);
     syncContactRuntime();
     applyChatbotVisibility(localStorage.getItem('vr_fifa_chatbot_enabled')!=='0');
   }
