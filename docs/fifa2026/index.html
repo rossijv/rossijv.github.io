@@ -1310,8 +1310,12 @@ function setLang(lang){
   Object.keys(t).forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
-    if(TEXT_ONLY.has(id)) el.textContent = t[id];
-    else el.innerHTML = t[id];
+    // Respect admin custom overrides over L translations (FIELD_MAP_REVERSE built after FIELD_MAP def)
+    const epKey = (typeof FIELD_MAP_REVERSE !== 'undefined') ? FIELD_MAP_REVERSE[id] : null;
+    const stored = epKey ? localStorage.getItem('vr_fifa_'+epKey) : null;
+    const val = stored !== null ? stored : t[id];
+    if(TEXT_ONLY.has(id)) el.textContent = val;
+    else el.innerHTML = val;
   });
   reorderLangBar(lang);
   applyExclusivityBanner();
@@ -1379,13 +1383,13 @@ const KB = [
   { keys:['ifes','data','guest list','database','system','profile','record','accuracy','management'],
     ans:"His consular work is the closest structural analogue to IFES. High-volume applicant intake — tracking status, maintaining data accuracy, resolving discrepancies across in-person and mail channels simultaneously. The workflow logic is identical: intake, validate, track, update, resolve. Same discipline, different institution." },
   { keys:['consul','brazil','consulate','diplomatic','itamaraty','visa'],
-    ans:"Joao was at the Consulate General of Brazil in Miami from June 2025 to March 2026. He worked first in the Cultural and Education Department — event coordination and institutional scheduling — then moved to the Consular Section managing high-volume public-facing intake. The recommendation in this portal is signed by Deputy Consul General Fernando Augusto Moreira Costa, verifiable via institutional channels." },
+    ans:()=>{ const attr=localStorage.getItem('vr_fifa_ep-attr')||DEFAULTS['ep-attr']; const signer=attr.split('·')[0].trim(); return `Joao was at the Consulate General of Brazil in Miami from June 2025 to March 2026. He worked first in the Cultural and Education Department — event coordination and institutional scheduling — then moved to the Consular Section managing high-volume public-facing intake. The recommendation in this portal is signed by ${signer}, verifiable via institutional channels.`; } },
   { keys:['event','coordinate','logistic','invitation','scheduling','coordination'],
     ans:"Event coordination runs through three of his roles: consular outreach and public events in Miami, multi-party logistics for international investors at VR Capital, and the guest operations foundation at Disneyland Paris. Managing stakeholders, timelines, and delivery standards under institutional visibility — that's the through-line." },
   { keys:['excel','office','word','powerpoint','software','tools','tech'],
     ans:"Proficient across the full MS Office suite — Excel, Word, PowerPoint — documented across all roles. Used for process documentation, operational tracking, reporting, and workflow development. The consular tutorial he co-developed was built in these tools." },
   { keys:['recommendation','reference','letter','endorse','deputy','fernando','moreira'],
-    ans:"The recommendation is from Fernando Augusto Moreira Costa, Deputy Consul General of Brazil in Miami, signed March 24, 2026 — on official government letterhead. It includes direct institutional contact information. That level of third-party endorsement, from a named signatory with a verifiable direct line, is rare at any career stage." },
+    ans:()=>{ const attr=localStorage.getItem('vr_fifa_ep-attr')||DEFAULTS['ep-attr']; return `The recommendation is from ${attr} — on official government letterhead, signed March 2026. It includes direct institutional contact information. That level of third-party endorsement, from a named signatory with a verifiable direct line, is rare at any career stage.`; } },
   { keys:['available','start','when','location','miami','relocat','where'],
     ans:"Joao is based in Miami, FL. The role is in Miami. No relocation, no logistics — he walks in day one." },
   { keys:['cruise','ship','latin america','latam','carnival','norwegian'],
@@ -1482,7 +1486,7 @@ Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=w
       for(const e of KB){
         if(e.keys.some(k=>ql.includes(k))){ matched=e; break; }
       }
-      if(matched) addBot(matched.ans, matched.ans.includes('<'));
+      if(matched){ const _ans=typeof matched.ans==='function'?matched.ans():matched.ans; addBot(_ans,_ans.includes('<')); }
       else{ const msgs=getRedirectMsgs(); addBot(msgs[redirectIdx++ % msgs.length], true); }
     }, 600 + Math.random()*400);
   }
@@ -2003,6 +2007,12 @@ const FIELD_MAP = {
   'ep-bot-name':{id:'cb-head-name',prop:'textContent'},
   'ep-linkedin':{id:'linkedin-link',prop:'',isLinkedin:true}
 };
+// Reverse map: DOM element id → edit-panel localStorage key — used by setLang() to respect admin overrides
+const FIELD_MAP_REVERSE = Object.fromEntries(
+  Object.entries(FIELD_MAP)
+    .filter(([,m])=>!m.isBtn&&!m.isLinkedin)
+    .map(([k,m])=>[m.id,k])
+);
 
 function openEditPanel(){
   // Lang checkboxes (legacy toggles)
@@ -2047,6 +2057,25 @@ function openEditPanel(){
   Object.entries(ejsFields).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.value=localStorage.getItem(key)||''; });
   const ecoEl=document.getElementById('ep-excl-company'); if(ecoEl) ecoEl.value=localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
   document.getElementById('edit-panel').classList.add('open');
+  // Live preview — attach input listeners once so admin sees changes immediately
+  if(!openEditPanel._attached){
+    openEditPanel._attached=true;
+    Object.keys(FIELD_MAP).forEach(key=>{
+      const el=document.getElementById(key); if(!el) return;
+      el.addEventListener('input',()=>{ applyField(key,el.value.trim()); });
+    });
+    const nameEl=document.getElementById('ep-excl-candidate');
+    if(nameEl) nameEl.addEventListener('input',()=>{
+      const cand=nameEl.value.trim()||'Joao V. Rossi';
+      const gn=document.getElementById('gate-candidate-name'); if(gn) gn.textContent=cand;
+      const pt=document.getElementById('ep-panel-title'); if(pt) pt.textContent=cand+' · Portal';
+      const fmt=localStorage.getItem('vr_fifa_name_fmt')||'two';
+      const parts=cand.trim().split(/\s+/);
+      const last=parts[parts.length-1]; const fp=parts.length>1?parts.slice(0,-1).join(' '):parts[0];
+      const hn=document.querySelector('.h-name'); if(hn) hn.innerHTML=fmt==='two'?fp+'<br><em>'+last+'</em>':cand;
+      const nn=document.getElementById('nav-name'); if(nn) nn.textContent=cand;
+    });
+  }
   document.getElementById('edit-overlay').classList.add('show');
 }
 function closeEditPanel(){
@@ -2067,7 +2096,7 @@ function ghCreds(){
 }
 function buildConfig(){
   const cfg={};
-  Object.keys(DEFAULTS).forEach(key=>{ cfg[key]=localStorage.getItem('vr_fifa_'+key)||DEFAULTS[key]; });
+  Object.keys(DEFAULTS).forEach(key=>{ const _s=localStorage.getItem('vr_fifa_'+key); cfg[key]=_s!==null?_s:DEFAULTS[key]; });
   ['type','email','calendly','whatsapp','custom'].forEach(k=>{ cfg['contact_'+k]=localStorage.getItem('vr_fifa_contact_'+k)||''; });
   cfg['chatbot_enabled']=localStorage.getItem('vr_fifa_chatbot_enabled')!=='0';
   cfg['groq_key']=localStorage.getItem('vr_fifa_groq_key')||'';
@@ -2129,8 +2158,8 @@ function applyConfig(cfg){
   if(cfg['gh_repo']) localStorage.setItem('vr_gh_repo', cfg['gh_repo']);
   if(cfg['gh_path']) localStorage.setItem('vr_gh_path', cfg['gh_path']);
   if(cfg['pwd_admin']){ localStorage.setItem('vr_fifa_pwd_admin',cfg['pwd_admin']); ADMIN_PWD_RUNTIME=cfg['pwd_admin']; }
-  if(cfg['excl_candidate']) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
-  if(cfg['excl_company']) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
+  if(cfg['excl_candidate']!==undefined) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
+  if(cfg['excl_company']!==undefined) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
   if(cfg['archived']) localStorage.setItem('vr_fifa_archived',cfg['archived']);
   if(cfg['emailjs_service']) localStorage.setItem('vr_emailjs_service',cfg['emailjs_service']);
   if(cfg['emailjs_template']) localStorage.setItem('vr_emailjs_template',cfg['emailjs_template']);
@@ -2229,7 +2258,7 @@ function loadGhCreds(){
   if(s) s.textContent = enc ? '🔒 Encrypted copy stored in config.json' : (token ? '⚠ Not yet encrypted — save to encrypt' : '');
 }
 function commitLocalEdits(){
-  Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim()||DEFAULTS[key]; localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
+  Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim(); localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
   saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity(); saveEmailJSConfig();
 }
 function saveEdits(){
@@ -2443,6 +2472,43 @@ function onApplyLangPortalChange(enabled){
     showEpFeedback(`Portal switched to ${LANG_CONFIG[primary].label}`, '#4caf80');
   }
 }
+
+/* ── GATE PRELOAD — aplica config (idioma + senhas) antes da entrada de senha ──
+   Faz fetch do config.json no GitHub ao carregar a página para que o gate mostre
+   o idioma correto e aceite a senha correta mesmo em um browser completamente novo. */
+(async function gatePreload(){
+  try{
+    const repo=(localStorage.getItem('vr_gh_repo')||'rossijv/rossijv.github.io').trim();
+    const path=(localStorage.getItem('vr_gh_path')||'docs/fifa2026/config.json').trim();
+    const res=await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`,{cache:'no-store'});
+    if(!res.ok) return;
+    const cfg=JSON.parse(await res.text());
+    if(!cfg||(!(cfg['ep-h-eye']||cfg['contact_type']||cfg['palette']))) return;
+    // Atualiza senhas para que unlock() use os valores do config mesmo em browser novo
+    if(cfg['pwd_visitor']){ VISITOR_PWD_RUNTIME=cfg['pwd_visitor']; localStorage.setItem('vr_fifa_pwd_visitor',cfg['pwd_visitor']); }
+    if(cfg['pwd_admin']){   ADMIN_PWD_RUNTIME=cfg['pwd_admin'];     localStorage.setItem('vr_fifa_pwd_admin',cfg['pwd_admin']); }
+    // Pula atualização do gate se já estiver fechado (sessão admin ativa)
+    const gateEl=document.getElementById('gate');
+    if(!gateEl||gateEl.classList.contains('gone')) return;
+    // Atualiza nome do candidato no gate
+    if(cfg['excl_candidate']!==undefined){
+      const cand=cfg['excl_candidate']||'Joao V. Rossi';
+      const gn=document.getElementById('gate-candidate-name'); if(gn) gn.textContent=cand;
+    }
+    // Aplica idioma primário nas strings do gate
+    const primary=cfg['primary_lang']||'en';
+    if(primary!=='en'&&L[primary]){
+      const t=L[primary];
+      ['g-title','g-lbl','g-sub'].forEach(id=>{
+        const el=document.getElementById(id); if(!el||!t[id]) return;
+        if(TEXT_ONLY.has(id)) el.textContent=t[id]; else el.innerHTML=t[id];
+      });
+      const btnTxt={es:'Entrar',pt:'Entrar',fr:'Accéder'};
+      const btnEl=document.getElementById('g-btn');
+      if(btnEl&&btnTxt[primary]) btnEl.textContent=btnTxt[primary];
+    }
+  }catch(e){}
+})();
 
 </script>
 </body>
