@@ -1560,8 +1560,13 @@ function buildContactUrl(){
 function contactAction(){
   syncContactRuntime();
   const url = buildContactUrl();
-  if(url) window.open(url, '_blank');
-  else alert('Contact not yet configured — please set up in the Edit panel.');
+  if(!url){ alert('Contact not yet configured — please set up in the Edit panel.'); return; }
+  // mailto: and tel: must use location.href — window.open is blocked on iOS/Safari
+  if(url.startsWith('mailto:') || url.startsWith('tel:')){
+    window.location.href = url;
+  } else {
+    window.open(url, '_blank');
+  }
 }
 function onContactTypeChange(type){
   localStorage.setItem('vr_fifa_contact_type', type);
@@ -2297,7 +2302,7 @@ function applyField(key, val){
   const map=FIELD_MAP[key]; if(!map) return;
   const el=document.getElementById(map.id); if(!el) return;
   if(map.isLinkedin){ const cta=document.getElementById('linkedin-cta'); if(cta) cta.style.display=val?'':'none'; if(val) el.href=val; return; }
-  if(map.isBtn){ el.onclick=()=>{ window.location.href=val; }; }
+  if(map.isBtn){ if(val) el.onclick=()=>{ window.location.href=val; }; else el.onclick=contactAction; return; }
   else if(map.prop==='innerHTML') el.innerHTML=val;
   else el.textContent=val;
 }
