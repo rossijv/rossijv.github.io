@@ -394,6 +394,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <!-- Admin buttons — hidden by default, shown only in admin mode -->
     <div class="nav-admin-btns" id="admin-btns" style="display:none">
       <button class="nav-edit-btn" onclick="openEditPanel()">✎ Edit</button>
+      <button class="nav-edit-btn" id="nav-chat-toggle" onclick="adminToggleChat()" style="font-size:9px;letter-spacing:.1em">✦ Chat ON</button>
       <button class="nav-deact" id="nav-deact" onclick="showDeact()">Deactivate</button>
     </div>
   </nav>
@@ -598,6 +599,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
     <div class="cb-email-z" id="cb-email-z">
       <div class="cb-email-lbl" id="cb-email-lbl">To notify Joao of your visit, share your email? <em>(optional)</em></div>
+      <div class="cb-email-row" style="margin-bottom:.5rem">
+        <input class="cb-ei" id="cb-name-i" placeholder="Your name (optional)" type="text" style="flex:1">
+      </div>
       <div class="cb-email-row">
         <input class="cb-ei" id="cb-ei" placeholder="your@email.com" type="email">
         <button class="cb-eg" onclick="startChat(true)" id="cb-start-btn">Start</button>
@@ -609,6 +613,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <div class="cb-ir" id="cb-ir">
       <input class="cb-in" id="cb-in" placeholder="Ask anything about this application..." onkeydown="if(event.key==='Enter')sendChat()">
       <button class="cb-send" onclick="sendChat()" id="cb-send-btn">Send</button>
+    </div>
+    <div class="cb-end-bar" id="cb-end-bar" style="display:none;padding:.5rem 1rem;border-top:.5px solid rgba(200,168,75,.07);text-align:right">
+      <span onclick="endChat()" style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.38);cursor:pointer;transition:color .2s" onmouseover="this.style.color='rgba(200,100,100,.7)'" onmouseout="this.style.color='rgba(255,255,255,.38)'" id="cb-end-lnk">End conversation →</span>
     </div>
   </div>
   <div class="cb-btn" onclick="toggleChat()">
@@ -1007,6 +1014,7 @@ function unlock(){
     document.getElementById('portal').classList.add('show');
     if(isAdmin){
       document.getElementById('admin-btns').style.display = 'flex';
+      updateNavChatToggle(localStorage.getItem('vr_fifa_chatbot_enabled') !== '0');
       initToken(v); // decrypt token using admin password as key
     }
     setTimeout(initPortal, 600);
@@ -1308,6 +1316,7 @@ function setLang(lang){
   document.querySelectorAll('.lt').forEach(el=>el.classList.toggle('on', el.dataset.lang===lang));
   const t = L[lang];
   Object.keys(t).forEach(id=>{
+    if(id === 'pf-left') return; // always managed by applyExclusivityBanner
     const el = document.getElementById(id);
     if(!el) return;
     // Respect admin custom overrides over L translations (FIELD_MAP_REVERSE built after FIELD_MAP def)
@@ -1344,33 +1353,171 @@ document.addEventListener('click',()=>{
 
 /* ── CHATBOT ── */
 let chatOpen = false;
+let visitorName = '';
+let visitorEmail = '';
+let chatTranscript = []; // {who, txt} for end-of-chat email
+
+// Multilingual bot UI strings
+const CB_I18N = {
+  en: {
+    welcome: n => `Good to have you here${n?' '+n:''}. I can answer questions about Joao's background, languages, experience, and this application. What would you like to know?`,
+    emailLbl: "To notify Joao of your visit, share your email? <em>(optional)</em>",
+    namePh: "Your name (optional)",
+    emailPh: "your@email.com",
+    startBtn: "Start",
+    skip: "Continue as guest →",
+    sendBtn: "Send",
+    inputPh: "Ask anything about this application...",
+    endLnk: "End conversation →",
+    endMsg: cand => `Thanks for visiting. I'll let ${cand} know about this conversation.`,
+    statusTxt: "Available now"
+  },
+  es: {
+    welcome: n => `Bienvenido${n?' '+n:''}. Puedo responder preguntas sobre el perfil de Joao, idiomas, experiencia y esta candidatura. ¿Qué deseas saber?`,
+    emailLbl: "Para notificar a Joao de tu visita, ¿compartes tu email? <em>(opcional)</em>",
+    namePh: "Tu nombre (opcional)",
+    emailPh: "tu@email.com",
+    startBtn: "Iniciar",
+    skip: "Continuar como invitado →",
+    sendBtn: "Enviar",
+    inputPh: "Pregunta lo que quieras sobre esta candidatura...",
+    endLnk: "Terminar conversación →",
+    endMsg: cand => `Gracias por tu visita. Le haré saber a ${cand} sobre esta conversación.`,
+    statusTxt: "Disponible ahora"
+  },
+  pt: {
+    welcome: n => `Bem-vindo${n?' '+n:''}. Posso responder perguntas sobre o perfil de Joao, idiomas, experiência e esta candidatura. O que você gostaria de saber?`,
+    emailLbl: "Para notificar Joao da sua visita, compartilhe seu email? <em>(opcional)</em>",
+    namePh: "Seu nome (opcional)",
+    emailPh: "voce@email.com",
+    startBtn: "Começar",
+    skip: "Continuar como convidado →",
+    sendBtn: "Enviar",
+    inputPh: "Pergunte qualquer coisa sobre esta candidatura...",
+    endLnk: "Encerrar conversa →",
+    endMsg: cand => `Obrigado pela visita. Vou avisar ${cand} sobre esta conversa.`,
+    statusTxt: "Disponível agora"
+  },
+  fr: {
+    welcome: n => `Bienvenue${n?' '+n:''}. Je peux répondre aux questions sur le profil de Joao, ses langues, son expérience et cette candidature. Que souhaitez-vous savoir ?`,
+    emailLbl: "Pour notifier Joao de votre visite, partagez votre email ? <em>(optionnel)</em>",
+    namePh: "Votre nom (optionnel)",
+    emailPh: "vous@email.com",
+    startBtn: "Démarrer",
+    skip: "Continuer en tant qu'invité →",
+    sendBtn: "Envoyer",
+    inputPh: "Posez n'importe quelle question sur cette candidature...",
+    endLnk: "Terminer la conversation →",
+    endMsg: cand => `Merci de votre visite. Je ferai savoir à ${cand} que vous êtes passé.`,
+    statusTxt: "Disponible maintenant"
+  }
+};
+function getCbI18n(){ return CB_I18N[currentLang] || CB_I18N.en; }
+
 function toggleChat(){
   const enabled = localStorage.getItem('vr_fifa_chatbot_enabled') !== '0';
   if(!enabled) return;
   chatOpen=!chatOpen;
   document.getElementById('cb-win').classList.toggle('show',chatOpen);
+  if(chatOpen){
+    // Apply current language to chat UI elements
+    const i18n = getCbI18n();
+    const lbl=document.getElementById('cb-email-lbl'); if(lbl) lbl.innerHTML=i18n.emailLbl;
+    const ni=document.getElementById('cb-name-i'); if(ni) ni.placeholder=i18n.namePh;
+    const ei=document.getElementById('cb-ei'); if(ei) ei.placeholder=i18n.emailPh;
+    const sb=document.getElementById('cb-start-btn'); if(sb) sb.textContent=i18n.startBtn;
+    const sk=document.getElementById('cb-skip-lnk'); if(sk) sk.textContent=i18n.skip;
+    const snd=document.getElementById('cb-send-btn'); if(snd) snd.textContent=i18n.sendBtn;
+    const inp=document.getElementById('cb-in'); if(inp) inp.placeholder=i18n.inputPh;
+    const end=document.getElementById('cb-end-lnk'); if(end) end.textContent=i18n.endLnk;
+    const st=document.getElementById('cb-status-txt'); if(st) st.textContent=i18n.statusTxt;
+  }
 }
+let _chatInactivityTimer = null;
+let _transcriptAlreadySent = false;
+const CHAT_INACTIVITY_MS = 3 * 60 * 1000; // 3 min without visitor message → auto-send
+
+function _resetInactivityTimer(){
+  clearTimeout(_chatInactivityTimer);
+  if(_transcriptAlreadySent || chatTranscript.filter(m=>m.who==='visitor').length === 0) return;
+  _chatInactivityTimer = setTimeout(()=>{
+    if(!_transcriptAlreadySent && chatTranscript.filter(m=>m.who==='visitor').length > 0){
+      const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+      sendTranscriptEmail(cand, 'inactivity');
+    }
+  }, CHAT_INACTIVITY_MS);
+}
+
 function startChat(withEmail){
+  visitorName = (document.getElementById('cb-name-i')?.value||'').trim();
+  visitorEmail = (document.getElementById('cb-ei')?.value||'').trim();
+  chatTranscript = [];
+  _transcriptAlreadySent = false;
+  clearTimeout(_chatInactivityTimer);
   document.getElementById('cb-email-z').style.display='none';
   document.getElementById('cb-badge').classList.add('show');
   document.getElementById('cb-msgs').classList.add('show');
   document.getElementById('cb-ir').classList.add('show');
-  if(withEmail){
-    const e=document.getElementById('cb-ei').value.trim();
-    if(e){
-      console.log('Visitor email:',e);
-      notifyVisitorEmail(e); // send notification to candidate
-    }
+  const endBar=document.getElementById('cb-end-bar'); if(endBar) endBar.style.display='';
+  if(withEmail && visitorEmail){
+    notifyVisitorEmail(visitorEmail);
   }
-  addBot("Good to have you here. I can answer questions about Joao's background, languages, experience, and this application. What would you like to know?");
+  const i18n = getCbI18n();
+  const welcomeMsg = i18n.welcome(visitorName);
+  addBot(welcomeMsg);
+  chatTranscript.push({who:'bot', txt: welcomeMsg});
 }
-function addBot(txt, isHtml){
+function endChat(){
+  if(_transcriptAlreadySent) return; // already sent via inactivity
+  clearTimeout(_chatInactivityTimer);
+  const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+  const i18n = getCbI18n();
+  const endMsg = i18n.endMsg(cand);
+  addBot(endMsg);
+  chatTranscript.push({who:'bot', txt: endMsg});
+  // Disable input
+  const inp=document.getElementById('cb-in'); if(inp){ inp.disabled=true; inp.placeholder=''; }
+  const snd=document.getElementById('cb-send-btn'); if(snd) snd.disabled=true;
+  const endBar=document.getElementById('cb-end-bar'); if(endBar) endBar.style.display='none';
+  sendTranscriptEmail(cand, 'manual');
+}
+function sendTranscriptEmail(cand, trigger){
+  if(_transcriptAlreadySent) return;
+  _transcriptAlreadySent = true;
+  const service  = localStorage.getItem('vr_emailjs_service')  || '';
+  const template = localStorage.getItem('vr_emailjs_template') || '';
+  const key      = localStorage.getItem('vr_emailjs_key')      || '';
+  const notify   = localStorage.getItem('vr_emailjs_notify')   || '';
+  if(!service || !template || !key || !notify) return;
+  const isGuest = !visitorName && !visitorEmail;
+  const visitorLabel = isGuest ? 'Guest (anonymous — no name or email provided)' : ((visitorName||'Unknown')+' · '+(visitorEmail||'no email'));
+  const visitTime = new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour12:true,weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  const triggerNote = trigger==='inactivity' ? '\n⚠ Sent automatically after 3 min of inactivity (visitor did not click End).' : '\n✓ Visitor clicked End conversation.';
+  const header = `Portal: ${cand} — FIFA 2026\nVisitor: ${visitorLabel}\nDate/Time: ${visitTime} (ET)${triggerNote}\n${'─'.repeat(40)}`;
+  const lines = chatTranscript.map(m=>(m.who==='bot'?cand:(visitorName||'Visitor'))+':\n'+m.txt).join('\n\n');
+  const subject = (trigger==='inactivity'?'[Auto] ':'')+'Chat transcript — '+(isGuest?'Guest':visitorName||'Visitor')+' · '+cand+' portal';
+  try{
+    emailjs.init(key);
+    emailjs.send(service, template, {
+      to_email:    notify,
+      from_email:  visitorEmail || 'no-reply@portal',
+      visitor_name: isGuest ? 'Guest (anonymous)' : (visitorName||'Unknown'),
+      portal_name: cand + ' — FIFA 2026 Portal',
+      visit_time:  visitTime,
+      portal_url:  window.location.href,
+      transcript:  header + '\n\n' + lines,
+      subject:     subject
+    });
+  }catch(e){ console.log('Transcript send error:',e); }
+}
+function addBot(txt, isHtml, skipTranscript){
   const m=document.getElementById('cb-msgs');
   const d=document.createElement('div'); d.className='cbm';
   const botName = localStorage.getItem('vr_fifa_ep-bot-name') || 'Ask Joao';
   if(isHtml) d.innerHTML=`<div class="cbm-who">${botName}</div><div class="cbm-txt bot">${txt}</div>`;
   else d.innerHTML=`<div class="cbm-who">${botName}</div><div class="cbm-txt bot">${escHtml(txt)}</div>`;
   m.appendChild(d); m.scrollTop=m.scrollHeight;
+  if(!skipTranscript) chatTranscript.push({who:'bot', txt: txt.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()});
 }
 function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -1412,6 +1559,69 @@ function getRedirectMsgs(){
   const tone = localStorage.getItem('vr_fifa_bot_tone') || 'friendly';
   const contact = localStorage.getItem('vr_fifa_contact_email') || 'jvrossil@gmail.com';
   const phone = '+1 (786) 609-3110';
+  const lang = currentLang;
+
+  if(lang === 'pt'){
+    if(tone==='executive') return [
+      `Isso está fora do escopo deste dossiê. Para uma conversa direta, recomendo entrar em contato: ${contact}.`,
+      `Esta questão merece um diálogo direto. Joao está disponível em ${contact}.`,
+      `Não estou posicionado para responder isso aqui. O próximo passo é uma conversa direta — ${contact} ou ${phone}.`
+    ];
+    if(tone==='professional') return [
+      `Isso está além do que posso responder aqui. Joao pode responder diretamente — ${contact} ou ${phone}.`,
+      `Boa pergunta, mas é melhor respondida em conversa. Fale com Joao em ${contact}.`,
+      `Prefiro conectar você diretamente com Joao nesse ponto — ${contact}.`
+    ];
+    return [
+      `Essa está acima do meu nível — mas não do Joao. Fale com ele em ${contact} ou ${phone}.`,
+      `Ótima pergunta. Estou configurado para o essencial da candidatura, mas essa merece uma conversa real. Joao ficará feliz — ${contact}.`,
+      `Sendo honesto: não tenho um script para isso. Joao responde suas próprias perguntas melhor do que eu. Vale ligar: ${phone}.`,
+      `Pergunta genuinamente boa — e merece mais do que uma resposta automática. Joao está disponível — ${contact}.`,
+      `Fora da minha base de conhecimento. Mas não da do Joao — ele é muito mais charmoso em conversa do que eu em texto. ${contact}`
+    ];
+  }
+
+  if(lang === 'es'){
+    if(tone==='executive') return [
+      `Esto queda fuera del alcance de este expediente. Para una conversación directa, recomiendo contactar: ${contact}.`,
+      `Esto merece un diálogo directo. Joao está disponible en ${contact}.`,
+      `No estoy en posición de responder esto aquí. El siguiente paso es una conversación directa — ${contact} o ${phone}.`
+    ];
+    if(tone==='professional') return [
+      `Eso está fuera de lo que puedo responder aquí. Joao puede responder directamente — ${contact} o ${phone}.`,
+      `Buena pregunta, pero se responde mejor en conversación. Contacta a Joao en ${contact}.`,
+      `Prefiero conectarte directamente con Joao en este punto — ${contact}.`
+    ];
+    return [
+      `Esa está fuera de mi alcance — pero no del de Joao. Contáctalo en ${contact} o ${phone}.`,
+      `Excelente pregunta. Estoy configurado para lo esencial de la candidatura, pero esta merece una conversación real. Joao la recibirá bien — ${contact}.`,
+      `Siendo honesto: no tengo un guión para eso. Joao responde sus propias preguntas mejor que yo. Vale la pena llamar: ${phone}.`,
+      `Genuinamente buena pregunta — merece más que una respuesta automática. Joao está disponible — ${contact}.`,
+      `Fuera de mi base de conocimiento. Pero no de la de Joao — es mucho más encantador en conversación que yo en texto. ${contact}`
+    ];
+  }
+
+  if(lang === 'fr'){
+    if(tone==='executive') return [
+      `Cela sort du cadre de ce dossier. Pour une conversation directe, je recommande de contacter : ${contact}.`,
+      `Cette question mérite un dialogue direct. Joao est disponible à ${contact}.`,
+      `Je ne suis pas en mesure de répondre à cela ici. La prochaine étape est une conversation directe — ${contact} ou ${phone}.`
+    ];
+    if(tone==='professional') return [
+      `C'est au-delà de ce que je peux répondre ici. Joao peut répondre directement — ${contact} ou ${phone}.`,
+      `Bonne question, mais mieux répondue en conversation. Contactez Joao à ${contact}.`,
+      `Je préfère vous mettre directement en contact avec Joao sur ce point — ${contact}.`
+    ];
+    return [
+      `C'est au-dessus de mes compétences — mais pas de celles de Joao. Contactez-le à ${contact} ou ${phone}.`,
+      `Excellente question. Je suis configuré pour l'essentiel de la candidature, mais celle-ci mérite une vraie conversation. Joao la recevrait volontiers — ${contact}.`,
+      `Franchement : je n'ai pas de réponse préparée pour ça. Joao répond à ses propres questions mieux que moi. Ça vaut le coup d'appeler : ${phone}.`,
+      `Vraiment bonne question — elle mérite plus qu'une réponse automatique. Joao est disponible — ${contact}.`,
+      `Hors de ma base de connaissances. Mais pas de celle de Joao — il est bien plus charmant en conversation que moi par écrit. ${contact}`
+    ];
+  }
+
+  // English (default)
   if(tone === 'executive') return [
     `That falls outside the scope of this briefing. For a substantive conversation, I'd recommend reaching out directly — ${contact}.`,
     `This warrants a direct dialogue rather than an automated response. Joao is available at ${contact}.`,
@@ -1422,7 +1632,6 @@ function getRedirectMsgs(){
     `Good question, but it's better answered in conversation. Reach Joao at ${contact}.`,
     `I'd rather connect you with Joao directly on this one — ${contact}.`
   ];
-  // friendly (default)
   return [
     `That one's above my pay grade — but not Joao's. Reach him at ${contact} or ${phone}.`,
     `Excellent question. I'm set up for the application essentials, but this one deserves a real conversation. Joao would welcome it — ${contact}.`,
@@ -1435,11 +1644,15 @@ let redirectIdx = 0;
 
 async function sendChat(){
   const inp=document.getElementById('cb-in');
+  if(inp.disabled) return;
   const q=inp.value.trim(); if(!q) return;
   const m=document.getElementById('cb-msgs');
+  const visitorLabel = visitorName || (getCbI18n().sendBtn === 'Send' ? 'You' : (getCbI18n().sendBtn === 'Enviar' ? 'Você' : 'Vous'));
   const rd=document.createElement('div'); rd.className='cbm';
-  rd.innerHTML=`<div class="cbm-who">You</div><div class="cbm-txt rec">${escHtml(q)}</div>`;
+  rd.innerHTML=`<div class="cbm-who">${escHtml(visitorName||'You')}</div><div class="cbm-txt rec">${escHtml(q)}</div>`;
   m.appendChild(rd); inp.value=''; m.scrollTop=m.scrollHeight;
+  chatTranscript.push({who:'visitor', txt:q});
+  _resetInactivityTimer();
 
   const groqKey = localStorage.getItem('vr_fifa_groq_key') || '';
 
@@ -1465,7 +1678,8 @@ KEY FACTS:
 - Education: BBA, PUC Campinas
 - Contact: jvrossil@gmail.com · +1 (786) 609-3110
 
-Tone: ' + (localStorage.getItem('vr_fifa_bot_tone')||'friendly') + '. Friendly=warm & light humor. Professional=concise & direct. Executive=formal & precise. Answer only about this application. If outside scope, redirect warmly to direct contact. Max 3 sentences unless a list is needed.`},
+LANGUAGE: Always respond in ${currentLang==='pt'?'Brazilian Portuguese':currentLang==='es'?'Spanish':currentLang==='fr'?'French':'English'}.
+Tone: ${localStorage.getItem('vr_fifa_bot_tone')||'friendly'}. Friendly=warm & light humor. Professional=concise & direct. Executive=formal & precise. Answer only about this application. If outside scope, redirect warmly to direct contact. Max 3 sentences unless a list is needed.`},
             {role:'user',content:q}
           ]
         })
@@ -1627,12 +1841,32 @@ function onChatbotToggle(enabled){
   applyChatbotVisibility(enabled);
   const settings = document.getElementById('ep-chatbot-settings');
   if(settings) settings.style.display = enabled ? '' : 'none';
+  updateNavChatToggle(enabled);
 }
 function applyChatbotVisibility(enabled){
   const chatbot = document.getElementById('chatbot');
   const navAsk = document.getElementById('nl-ask');
   if(chatbot) chatbot.style.display = enabled ? '' : 'none';
   if(navAsk) navAsk.style.display = enabled ? '' : 'none';
+}
+function adminToggleChat(){
+  const current = localStorage.getItem('vr_fifa_chatbot_enabled') !== '0';
+  const next = !current;
+  localStorage.setItem('vr_fifa_chatbot_enabled', next ? '1' : '0');
+  applyChatbotVisibility(next);
+  updateNavChatToggle(next);
+  // Sync edit panel checkbox if open
+  const cb = document.getElementById('ep-chatbot-enabled');
+  if(cb) cb.checked = next;
+  const settings = document.getElementById('ep-chatbot-settings');
+  if(settings) settings.style.display = next ? '' : 'none';
+}
+function updateNavChatToggle(enabled){
+  const btn = document.getElementById('nav-chat-toggle');
+  if(!btn) return;
+  btn.textContent = enabled ? '✦ Chat ON' : '✦ Chat OFF';
+  btn.style.color = enabled ? 'rgba(200,168,75,.7)' : 'rgba(140,140,155,.48)';
+  btn.style.borderColor = enabled ? 'rgba(200,168,75,.28)' : 'rgba(140,140,155,.16)';
 }
 
 /* ══════════════════════════════════════
@@ -1840,11 +2074,10 @@ function savePasswords(){
 function applyExclusivityBanner(){
   const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
   const comp = localStorage.getItem('vr_fifa_excl_company')   || 'FIFA World Cup 2026 · Guest Relations Coordinator';
-  // 1. Footer bar (pf-left)
+  // 1. Footer bar (pf-left) — always built from actual candidate name, never from hardcoded L translation
   const footer = document.getElementById('pf-left');
   if(footer){
-    const langStr = L[currentLang] && L[currentLang]['pf-left'];
-    footer.innerHTML = langStr || ('Prepared exclusively for ' + cand + ' &middot; ' + comp + ' &middot; Not for redistribution');
+    footer.innerHTML = 'Candidate Briefing &middot; ' + cand + ' &middot; ' + comp + '<br>Not for redistribution';
   }
   // 2. Gate password screen name
   const gateName = document.getElementById('gate-candidate-name');
@@ -1990,7 +2223,6 @@ const DEFAULTS = {
   'ep-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 2026',
   'ep-sb-sub':"If what you've read adds context to this application, a conversation is one click away.",
   'ep-contact':'jvrossil@gmail.com · +1 (786) 609-3110',
-  'ep-calendly':'mailto:jvrossil@gmail.com?subject=FIFA%202026%20-%20Guest%20Relations%20Coordinator',
   'ep-bot-name':'Ask Joao',
   'ep-linkedin':''
 };
@@ -2008,7 +2240,6 @@ const FIELD_MAP = {
   'ep-quote':   {id:'qb-quote', prop:'textContent'},
   'ep-attr':    {id:'qb-attr',  prop:'textContent'},
   'ep-sb-sub':  {id:'sb-sub',   prop:'textContent'},
-  'ep-calendly':{id:'sb-btn',   prop:'',isBtn:true},
   'ep-bot-name':{id:'cb-head-name',prop:'textContent'},
   'ep-linkedin':{id:'linkedin-link',prop:'',isLinkedin:true}
 };
@@ -2061,6 +2292,7 @@ function openEditPanel(){
   const ejsFields = {'ep-emailjs-notify':'vr_emailjs_notify','ep-emailjs-key':'vr_emailjs_key','ep-emailjs-service':'vr_emailjs_service','ep-emailjs-template':'vr_emailjs_template'};
   Object.entries(ejsFields).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.value=localStorage.getItem(key)||''; });
   const ecoEl=document.getElementById('ep-excl-company'); if(ecoEl) ecoEl.value=localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
+  loadNameFormat();
   document.getElementById('edit-panel').classList.add('open');
   // Live preview — attach input listeners once so admin sees changes immediately
   if(!openEditPanel._attached){
@@ -2072,13 +2304,21 @@ function openEditPanel(){
     const nameEl=document.getElementById('ep-excl-candidate');
     if(nameEl) nameEl.addEventListener('input',()=>{
       const cand=nameEl.value.trim()||'Joao V. Rossi';
+      const comp=document.getElementById('ep-excl-company')?.value.trim()||localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
       const gn=document.getElementById('gate-candidate-name'); if(gn) gn.textContent=cand;
       const pt=document.getElementById('ep-panel-title'); if(pt) pt.textContent=cand+' · Portal';
-      const fmt=localStorage.getItem('vr_fifa_name_fmt')||'two';
+      const fmt=document.querySelector('input[name="ep-name-fmt"]:checked')?.value||localStorage.getItem('vr_fifa_name_fmt')||'two';
       const parts=cand.trim().split(/\s+/);
       const last=parts[parts.length-1]; const fp=parts.length>1?parts.slice(0,-1).join(' '):parts[0];
       const hn=document.querySelector('.h-name'); if(hn) hn.innerHTML=fmt==='two'?fp+'<br><em>'+last+'</em>':cand;
       const nn=document.getElementById('nav-name'); if(nn) nn.textContent=cand;
+      const ft=document.getElementById('pf-left'); if(ft) ft.innerHTML='Candidate Briefing &middot; '+cand+' &middot; '+comp+'<br>Not for redistribution';
+    });
+    const compEl=document.getElementById('ep-excl-company');
+    if(compEl) compEl.addEventListener('input',()=>{
+      const cand=document.getElementById('ep-excl-candidate')?.value.trim()||localStorage.getItem('vr_fifa_excl_candidate')||'Joao V. Rossi';
+      const comp=compEl.value.trim()||'FIFA World Cup 2026 · Guest Relations Coordinator';
+      const ft=document.getElementById('pf-left'); if(ft) ft.innerHTML='Candidate Briefing &middot; '+cand+' &middot; '+comp+'<br>Not for redistribution';
     });
   }
   document.getElementById('edit-overlay').classList.add('show');
