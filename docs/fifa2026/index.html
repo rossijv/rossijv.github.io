@@ -180,6 +180,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
 .sb-sub{font-size:13px;color:rgba(255,255,255,.72);line-height:1.82;margin-bottom:2rem}
 .sb-btn{background:rgba(200,168,75,.16);border:1px solid rgba(200,168,75,.65);border-radius:30px;padding:14px 36px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#e8c86a;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .25s;margin-bottom:1rem;display:inline-block}
 .sb-btn:hover{border-color:rgba(200,168,75,1);background:rgba(200,168,75,.26);color:#fff}
+
+/* ── CONTACT OVERLAY ── */
+.ct-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:1.5rem}
+.ct-ov.show{display:flex;animation:apIn .22s ease}
+.ct-card{background:var(--dk);border:.5px solid rgba(200,168,75,.22);border-radius:14px;padding:2rem 2.25rem 1.75rem;max-width:380px;width:100%;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.6)}
+.ct-close{position:absolute;top:.75rem;right:.875rem;background:none;border:none;color:rgba(255,255,255,.32);font-size:18px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;transition:color .2s;font-family:'DM Sans',sans-serif}
+.ct-close:hover{color:rgba(255,255,255,.8)}
+.ct-eye{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--ac);margin-bottom:.625rem}
+.ct-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:#fff;margin-bottom:1.5rem;line-height:1.2}
+.ct-opts{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.ct-opt{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:rgba(255,255,255,.04);border:.5px solid rgba(200,168,75,.12);border-radius:8px;color:rgba(255,255,255,.78);text-decoration:none;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.ct-opt:hover{background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:#fff}
+.ct-opt.primary{background:rgba(200,168,75,.12);border-color:rgba(200,168,75,.3)}
+.ct-opt-ico{font-size:15px;flex-shrink:0;width:22px;text-align:center}
+.ct-opt-lbl{flex:1;letter-spacing:.01em}
+.ct-addr{font-size:10px;color:rgba(255,255,255,.28);text-align:center;letter-spacing:.06em;margin-top:.25rem}
 .sb-note{font-size:11px;color:rgba(255,255,255,.58);letter-spacing:.02em}
 
 /* CHATBOT */
@@ -622,6 +638,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <span class="cb-btn-icon">✦</span>
     <span class="cb-btn-label" id="cb-btn-label">Ask Joao</span>
     <span class="cb-btn-dot"></span>
+  </div>
+</div>
+
+<!-- CONTACT OVERLAY -->
+<div class="ct-ov" id="ct-ov" onclick="closeContact()">
+  <div class="ct-card" onclick="event.stopPropagation()">
+    <button class="ct-close" onclick="closeContact()">✕</button>
+    <div class="ct-eye" id="ct-eye">Get in touch</div>
+    <div class="ct-name" id="ct-name">Joao V. Rossi</div>
+    <div class="ct-opts" id="ct-opts"></div>
+    <div class="ct-addr" id="ct-addr"></div>
   </div>
 </div>
 
@@ -1136,6 +1163,7 @@ const L = {
                 'qb-attr':'Fernando Augusto Moreira Costa · Deputy Consul General · Consulate General of Brazil in Miami · March 2026',
                     /* sched */ 'sb-eye':'Next step','sb-title':'Ready to <em>connect?</em>','sb-sub':"If what you've read adds context to this application, a conversation is one click away.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     /* footer */'pf-left':'Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator Application<br>Prepared exclusively for this application · April 2026',
+    /* cta */   'sb-btn':'Get in touch ✦',
     /* chat */  'cb-head-name':'Ask Joao','cb-email-lbl':'To notify Joao of your visit, share your email? <em>(optional)</em>','cb-start-btn':'Start','cb-skip-lnk':'Continue as guest →','cb-btn-label':'Ask Joao','cb-status-txt':'Available now',
     /* deact */ 'dm-title':'Deactivate this portal?','dm-text':'The briefing will go offline immediately. Your data is retained for 90 days, then permanently deleted on request.','dm-cancel':'Keep active','dm-confirm':'Deactivate now',
     /* anno pillar */'ap-pillars-label':'Design logic','ap-pillars-text':'Three pillars mapped directly to role requirements — service standard, data precision, multilingual reach. Each is evidenced, not claimed. The structure mirrors how a senior reviewer reads a brief: requirement first, proof second.'
@@ -1188,6 +1216,7 @@ const L = {
     'qb-attr':'Fernando Augusto Moreira Costa · Cónsul General Adjunto · Consulado General de Brasil en Miami · Marzo 2026',
         'sb-eye':'Próximo paso','sb-title':'¿Listo para <em>conectar?</em>','sb-sub':'Si lo que has leído añade contexto a esta candidatura, una conversación está a un clic de distancia.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Expediente del candidato · Joao V. Rossi · Candidatura a Coordinador de Relaciones con Invitados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
+    'sb-btn':'Ponerse en contacto ✦',
     'cb-head-name':'Preguntar a Joao','cb-email-lbl':'Para notificar a Joao de su visita, ¿comparte su email? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como invitado →','cb-btn-label':'Preguntar a Joao','cb-status-txt':'Disponible ahora',
     'dm-title':'¿Desactivar este portal?','dm-text':'El expediente quedará offline de inmediato. Sus datos se conservan 90 días y luego se eliminan permanentemente a solicitud.','dm-cancel':'Mantener activo','dm-confirm':'Desactivar ahora',
     'ap-pillars-label':'Lógica de diseño','ap-pillars-text':'Tres pilares mapeados directamente a los requisitos del cargo — estándar de servicio, precisión de datos, alcance multilingüe. Cada uno está evidenciado, no reclamado. La estructura refleja cómo un evaluador senior lee un expediente: requisito primero, prueba después.'
@@ -1240,6 +1269,7 @@ const L = {
     'qb-attr':'Fernando Augusto Moreira Costa · Cônsul-Geral Adjunto · Consulado Geral do Brasil em Miami · Março 2026',
         'sb-eye':'Próximo passo','sb-title':'Pronto para <em>conectar?</em>','sb-sub':'Se o que você leu adiciona contexto a esta candidatura, uma conversa está a um clique de distância.','sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossiê do candidato · Joao V. Rossi · Candidatura a Coordenador de Relações com Convidados<br>Preparado exclusivamente para esta candidatura · Abril 2026',
+    'sb-btn':'Entre em contato ✦',
     'cb-head-name':'Perguntar ao Joao','cb-email-lbl':'Para notificar o Joao da sua visita, compartilha seu e-mail? <em>(opcional)</em>','cb-start-btn':'Iniciar','cb-skip-lnk':'Continuar como visitante →','cb-btn-label':'Perguntar ao Joao','cb-status-txt':'Disponível agora',
     'dm-title':'Desativar este portal?','dm-text':'O dossiê ficará offline imediatamente. Seus dados são retidos por 90 dias e excluídos permanentemente mediante solicitação.','dm-cancel':'Manter ativo','dm-confirm':'Desativar agora',
     'ap-pillars-label':'Lógica de design','ap-pillars-text':'Três pilares mapeados diretamente aos requisitos do cargo — padrão de serviço, precisão de dados, alcance multilíngue. Cada um é evidenciado, não afirmado. A estrutura espelha como um avaliador sênior lê um dossiê: requisito primeiro, prova depois.'
@@ -1292,6 +1322,7 @@ const L = {
     'qb-attr':'Fernando Augusto Moreira Costa · Consul Général Adjoint · Consulat Général du Brésil à Miami · Mars 2026',
         'sb-eye':'Prochaine étape','sb-title':'Prêt à <em>échanger?</em>','sb-sub':"Si ce que vous avez lu apporte du contexte à cette candidature, une conversation est à un clic.",'sb-note':'jvrossil@gmail.com · +1 (786) 609-3110',
     'pf-left':'Dossier du candidat · Joao V. Rossi · Candidature au poste de Coordinateur des Relations Invités<br>Préparé exclusivement pour cette candidature · Avril 2026',
+    'sb-btn':'Entrer en contact ✦',
     'cb-head-name':'Demander à Joao','cb-email-lbl':'Pour notifier Joao de votre visite, partagez votre email ? <em>(optionnel)</em>','cb-start-btn':'Démarrer','cb-skip-lnk':"Continuer en tant qu'invité →",'cb-btn-label':'Demander à Joao','cb-status-txt':'Disponible maintenant',
     'dm-title':'Désactiver ce portail ?','dm-text':"Le dossier sera mis hors ligne immédiatement. Vos données sont conservées 90 jours puis supprimées définitivement sur demande.",'dm-cancel':'Maintenir actif','dm-confirm':'Désactiver maintenant',
     'ap-pillars-label':'Logique de design','ap-pillars-text':"Trois piliers mappés directement aux exigences du poste — standard de service, précision des données, portée multilingue. Chacun est étayé, pas simplement affirmé. La structure reflète la façon dont un évaluateur senior lit un dossier : exigence d'abord, preuve ensuite."
@@ -1299,7 +1330,7 @@ const L = {
 };
 
 // IDs that must use textContent (have child elements or event listeners we must preserve)
-const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','sb-eye','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
+const TEXT_ONLY = new Set(['nav-eye','nl-exp','nl-fit','nl-rec','nl-ask','nav-deact','r-label-txt','sc-txt','rb-eye','hl-pt','hl-pt-lvl','hl-en','hl-en-lvl','hl-es','hl-es-lvl','hl-fr','hl-fr-lvl','h-eye','h-tag','tl1-when','tl1-role','tl1-where','tl1-pt1','tl1-pt2','tl1-pt3','tl1-pt4','tl1-pt5','tl1-c1','tl1-c2','tl1-c3','tl1-c4','tl1-c5','tl2-when','tl2-role','tl2-where','tl2-pt1','tl2-pt2','tl2-pt3','tl2-c1','tl2-c2','tl2-c3','tl2-c4','tl3-when','tl3-role','tl3-where','tl3-c1','tl3-c2','tl3-c3','tl3-c4','tl4-when','tl4-role','tl4-where','tl4-c1','tl4-c2','tl4-c3','tl4-c4','rbl1','rbl2','rbl3','rbl4','rbl5','rbl6','sb-eye','sb-btn','sb-note','g-title','g-lbl','ap-exp-label','ap-rec-label','ap-pillars-label','cb-head-name','cb-status-txt','cb-btn-label','dm-title','dm-cancel','dm-confirm']);
 
 /* ── LANG BAR REORDER v4.5 — primary tab moves to position 0 ── */
 function reorderLangBar(lang){
@@ -1319,10 +1350,15 @@ function setLang(lang){
     if(id === 'pf-left') return; // always managed by applyExclusivityBanner
     const el = document.getElementById(id);
     if(!el) return;
-    // Respect admin custom overrides over L translations (FIELD_MAP_REVERSE built after FIELD_MAP def)
+    // Use stored value ONLY when admin genuinely customized the field
+    // (i.e., it differs from both the DEFAULTS value and the English L translation).
+    // If admin saved the panel without changing anything, stored === enDefault → use translation.
     const epKey = (typeof FIELD_MAP_REVERSE !== 'undefined') ? FIELD_MAP_REVERSE[id] : null;
-    const stored = epKey ? localStorage.getItem('vr_fifa_'+epKey) : null;
-    const val = stored !== null ? stored : t[id];
+    const stored  = epKey ? localStorage.getItem('vr_fifa_'+epKey) : null;
+    const enDef   = (epKey && typeof DEFAULTS !== 'undefined') ? (DEFAULTS[epKey] ?? null) : null;
+    const enTrans = (typeof L !== 'undefined' && L.en) ? (L.en[id] ?? null) : null;
+    const isAdminCustom = stored !== null && stored !== enDef && stored !== enTrans;
+    const val = isAdminCustom ? stored : t[id];
     if(TEXT_ONLY.has(id)) el.textContent = val;
     else el.innerHTML = val;
   });
@@ -1369,7 +1405,8 @@ const CB_I18N = {
     sendBtn: "Send",
     inputPh: "Ask anything about this application...",
     endLnk: "End conversation →",
-    endMsg: cand => `Thanks for visiting. I'll let ${cand} know about this conversation.`,
+    endMsg: cand => `Thanks for visiting. This conversation has been forwarded to ${cand}.`,
+    restartBtn: "New conversation",
     statusTxt: "Available now"
   },
   es: {
@@ -1382,7 +1419,8 @@ const CB_I18N = {
     sendBtn: "Enviar",
     inputPh: "Pregunta lo que quieras sobre esta candidatura...",
     endLnk: "Terminar conversación →",
-    endMsg: cand => `Gracias por tu visita. Le haré saber a ${cand} sobre esta conversación.`,
+    endMsg: cand => `Gracias por tu visita. Esta conversación ha sido enviada a ${cand}.`,
+    restartBtn: "Nueva conversación",
     statusTxt: "Disponible ahora"
   },
   pt: {
@@ -1395,7 +1433,8 @@ const CB_I18N = {
     sendBtn: "Enviar",
     inputPh: "Pergunte qualquer coisa sobre esta candidatura...",
     endLnk: "Encerrar conversa →",
-    endMsg: cand => `Obrigado pela visita. Vou avisar ${cand} sobre esta conversa.`,
+    endMsg: cand => `Obrigado pela visita. Esta conversa foi encaminhada para ${cand}.`,
+    restartBtn: "Nova conversa",
     statusTxt: "Disponível agora"
   },
   fr: {
@@ -1408,7 +1447,8 @@ const CB_I18N = {
     sendBtn: "Envoyer",
     inputPh: "Posez n'importe quelle question sur cette candidature...",
     endLnk: "Terminer la conversation →",
-    endMsg: cand => `Merci de votre visite. Je ferai savoir à ${cand} que vous êtes passé.`,
+    endMsg: cand => `Merci de votre visite. Cette conversation a été transmise à ${cand}.`,
+    restartBtn: "Nouvelle conversation",
     statusTxt: "Disponible maintenant"
   }
 };
@@ -1475,11 +1515,45 @@ function endChat(){
   const endMsg = i18n.endMsg(cand);
   addBot(endMsg);
   chatTranscript.push({who:'bot', txt: endMsg});
-  // Disable input
+  // Disable text input, hide end bar
   const inp=document.getElementById('cb-in'); if(inp){ inp.disabled=true; inp.placeholder=''; }
-  const snd=document.getElementById('cb-send-btn'); if(snd) snd.disabled=true;
   const endBar=document.getElementById('cb-end-bar'); if(endBar) endBar.style.display='none';
+  // Convert Send button → Restart button
+  const snd=document.getElementById('cb-send-btn');
+  if(snd){
+    snd.disabled=false;
+    snd.textContent = i18n.restartBtn || 'New conversation';
+    snd.style.background='rgba(200,168,75,.22)';
+    snd.style.borderColor='rgba(200,168,75,.45)';
+    snd.onclick = restartChat;
+  }
   sendTranscriptEmail(cand, 'manual');
+}
+function restartChat(){
+  // Reset state
+  chatTranscript=[]; _transcriptAlreadySent=false;
+  visitorName=''; visitorEmail='';
+  clearTimeout(_chatInactivityTimer);
+  // Clear messages
+  const m=document.getElementById('cb-msgs'); if(m){ m.innerHTML=''; m.classList.remove('show'); }
+  // Show pre-chat form, hide chat zones
+  const ez=document.getElementById('cb-email-z'); if(ez) ez.style.display='';
+  const badge=document.getElementById('cb-badge'); if(badge) badge.classList.remove('show');
+  const ir=document.getElementById('cb-ir'); if(ir) ir.classList.remove('show');
+  const endBar=document.getElementById('cb-end-bar'); if(endBar) endBar.style.display='none';
+  // Clear name/email inputs
+  const ni=document.getElementById('cb-name-i'); if(ni) ni.value='';
+  const ei=document.getElementById('cb-ei'); if(ei) ei.value='';
+  // Restore send button
+  const inp=document.getElementById('cb-in');
+  if(inp){ inp.disabled=false; inp.placeholder=getCbI18n().inputPh||'Ask anything...'; }
+  const snd=document.getElementById('cb-send-btn');
+  if(snd){
+    snd.disabled=false;
+    snd.textContent=getCbI18n().sendBtn||'Send';
+    snd.style.background=''; snd.style.borderColor='';
+    snd.onclick=sendChat;
+  }
 }
 function sendTranscriptEmail(cand, trigger){
   if(_transcriptAlreadySent) return;
@@ -1773,14 +1847,62 @@ function buildContactUrl(){
 }
 function contactAction(){
   syncContactRuntime();
-  const url = buildContactUrl();
-  if(!url){ alert('Contact not yet configured — please set up in the Edit panel.'); return; }
-  // mailto: and tel: must use location.href — window.open is blocked on iOS/Safari
-  if(url.startsWith('mailto:') || url.startsWith('tel:')){
-    window.location.href = url;
-  } else {
-    window.open(url, '_blank');
+  const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+
+  // WhatsApp / Calendly / Custom — open directly, no overlay needed
+  if(CONTACT.type === 'whatsapp' && CONTACT.whatsapp){
+    const num = CONTACT.whatsapp.replace(/\D/g,'');
+    window.open('https://wa.me/'+num+'?text=Hi%2C%20I%20saw%20your%20application%20portal.','_blank'); return;
   }
+  if(CONTACT.type === 'calendly' && CONTACT.calendly){
+    window.open(CONTACT.calendly,'_blank'); return;
+  }
+  if(CONTACT.type === 'custom' && CONTACT.custom){
+    window.open(CONTACT.custom,'_blank'); return;
+  }
+
+  // Email — show overlay (mailto alone is silently swallowed when no mail client is configured)
+  const email = CONTACT.email || 'jvrossil@gmail.com';
+  const subj  = encodeURIComponent('Application Briefing — ' + cand);
+  const gmailUrl = 'https://mail.google.com/mail/u/0/?view=cm&to='+encodeURIComponent(email)+'&su='+subj;
+  const mailtoUrl = 'mailto:'+email+'?subject='+subj;
+
+  // Overlay labels (multilingual)
+  const labels = {
+    en:{eye:'Get in touch',gmail:'Open in Gmail',app:'Open mail app',copy:'Copy email address',copied:'Copied!'},
+    pt:{eye:'Entre em contato',gmail:'Abrir no Gmail',app:'Abrir app de email',copy:'Copiar endereço de email',copied:'Copiado!'},
+    es:{eye:'Ponerse en contacto',gmail:'Abrir en Gmail',app:'Abrir app de correo',copy:'Copiar dirección de email',copied:'¡Copiado!'},
+    fr:{eye:'Entrer en contact',gmail:'Ouvrir dans Gmail',app:"Ouvrir l'app email",copy:"Copier l'adresse email",copied:'Copié !'}
+  };
+  const lb = labels[currentLang] || labels.en;
+
+  const eyeEl  = document.getElementById('ct-eye');  if(eyeEl)  eyeEl.textContent  = lb.eye;
+  const nameEl = document.getElementById('ct-name'); if(nameEl) nameEl.textContent = cand;
+  const addrEl = document.getElementById('ct-addr'); if(addrEl) addrEl.textContent = email;
+  const opts   = document.getElementById('ct-opts');
+  if(opts){
+    opts.innerHTML = `
+      <a class="ct-opt primary" href="${gmailUrl}" target="_blank" rel="noopener">
+        <span class="ct-opt-ico">📧</span><span class="ct-opt-lbl">${lb.gmail}</span>
+      </a>
+      <a class="ct-opt" href="${mailtoUrl}">
+        <span class="ct-opt-ico">✉️</span><span class="ct-opt-lbl">${lb.app}</span>
+      </a>
+      <button type="button" class="ct-opt" id="ct-copy-btn" onclick="
+        navigator.clipboard.writeText('${email}').then(()=>{
+          const b=document.getElementById('ct-copy-btn');
+          if(b) b.querySelector('.ct-opt-lbl').textContent='${lb.copied}';
+          setTimeout(()=>{ if(b) b.querySelector('.ct-opt-lbl').textContent='${lb.copy}'; },2200);
+        }).catch(()=>{ prompt('Copy this address:','${email}'); });
+      ">
+        <span class="ct-opt-ico">📋</span><span class="ct-opt-lbl">${lb.copy}</span>
+      </button>`;
+  }
+  document.getElementById('ct-ov').classList.add('show');
+}
+function closeContact(){
+  const ov = document.getElementById('ct-ov');
+  if(ov) ov.classList.remove('show');
 }
 function onContactTypeChange(type){
   localStorage.setItem('vr_fifa_contact_type', type);
