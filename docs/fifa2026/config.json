@@ -19,7 +19,7 @@
   "contact_calendly": "",
   "contact_whatsapp": "",
   "contact_custom": "",
-  "chatbot_enabled": true,
+  "chatbot_enabled": false,
   "groq_key": "",
   "tab_es": true,
   "tab_pt": true,
