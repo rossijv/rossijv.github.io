@@ -410,7 +410,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     <!-- Admin buttons — hidden by default, shown only in admin mode -->
     <div class="nav-admin-btns" id="admin-btns" style="display:none">
       <button class="nav-edit-btn" onclick="openEditPanel()">✎ Edit</button>
-      <button class="nav-edit-btn" id="nav-chat-toggle" onclick="adminToggleChat()" style="font-size:9px;letter-spacing:.1em">✦ Chat ON</button>
       <button class="nav-deact" id="nav-deact" onclick="showDeact()">Deactivate</button>
     </div>
   </nav>
@@ -1044,7 +1043,6 @@ function unlock(){
     document.getElementById('portal').classList.add('show');
     if(isAdmin){
       document.getElementById('admin-btns').style.display = 'flex';
-      updateNavChatToggle(localStorage.getItem('vr_fifa_chatbot_enabled') !== '0');
       initToken(v); // decrypt token using admin password as key
     }
     setTimeout(initPortal, 600);
@@ -2007,7 +2005,6 @@ function onChatbotToggle(enabled){
   applyChatbotVisibility(enabled);
   const settings = document.getElementById('ep-chatbot-settings');
   if(settings) settings.style.display = enabled ? '' : 'none';
-  updateNavChatToggle(enabled);
 }
 function applyChatbotVisibility(enabled){
   const chatbot = document.getElementById('chatbot');
@@ -2015,32 +2012,8 @@ function applyChatbotVisibility(enabled){
   if(chatbot) chatbot.style.display = enabled ? '' : 'none';
   if(navAsk) navAsk.style.display = enabled ? '' : 'none';
 }
-async function adminToggleChat(){
-  const current = localStorage.getItem('vr_fifa_chatbot_enabled') !== '0';
-  const next = !current;
-  localStorage.setItem('vr_fifa_chatbot_enabled', next ? '1' : '0');
-  applyChatbotVisibility(next);
-  updateNavChatToggle(next);
-  // Sync edit panel checkbox if open
-  const cb = document.getElementById('ep-chatbot-enabled');
-  if(cb) cb.checked = next;
-  const settings = document.getElementById('ep-chatbot-settings');
-  if(settings) settings.style.display = next ? '' : 'none';
-  // Auto-publish to GitHub if credentials are configured so visitors see the change immediately
-  const {token, repo} = ghCreds();
-  if(token && repo){
-    try {
-      await saveToGitHub();
-    } catch(e){ /* silent — admin can always use Save & Sync in edit panel */ }
-  }
-}
-function updateNavChatToggle(enabled){
-  const btn = document.getElementById('nav-chat-toggle');
-  if(!btn) return;
-  btn.textContent = enabled ? '✦ Chat ON' : '✦ Chat OFF';
-  btn.style.color = enabled ? 'rgba(200,168,75,.7)' : 'rgba(140,140,155,.48)';
-  btn.style.borderColor = enabled ? 'rgba(200,168,75,.28)' : 'rgba(140,140,155,.16)';
-}
+// updateNavChatToggle is a no-op — toggle moved to edit panel only
+function updateNavChatToggle(enabled){ /* nav button removed — toggle lives in edit panel */ }
 
 /* ══════════════════════════════════════
    HIGHLIGHT ENGINE
