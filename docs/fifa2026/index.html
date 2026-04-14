@@ -1100,9 +1100,8 @@ function initPortal(){
     fadeObs.observe(el);
   });
 
-  // Apply saved edits
-  applySavedEdits();
-  initEmailJS();
+  // Apply saved edits — await so EmailJS config from GitHub is in localStorage before initEmailJS runs
+  applySavedEdits().then(()=>{ initEmailJS(); });
 
   // Nav scroll shadow + progress
   window.addEventListener('scroll', ()=>{
@@ -1580,7 +1579,10 @@ function sendTranscriptEmail(cand, trigger){
   const template = localStorage.getItem('vr_emailjs_template') || '';
   const key      = localStorage.getItem('vr_emailjs_key')      || '';
   const notify   = localStorage.getItem('vr_emailjs_notify')   || '';
-  if(!service || !template || !key || !notify) return;
+  if(!service || !template || !key || !notify){
+    console.warn('[VR] Transcript email skipped — EmailJS not configured (service/template/key/notify missing).');
+    return;
+  }
   const isGuest = !visitorName && !visitorEmail;
   const visitorLabel = isGuest ? 'Guest (anonymous — no name or email provided)' : ((visitorName||'Unknown')+' · '+(visitorEmail||'no email'));
   const visitTime = new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour12:true,weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -1588,19 +1590,34 @@ function sendTranscriptEmail(cand, trigger){
   const header = `Portal: ${cand} — FIFA 2026\nVisitor: ${visitorLabel}\nDate/Time: ${visitTime} (ET)${triggerNote}\n${'─'.repeat(40)}`;
   const lines = chatTranscript.map(m=>(m.who==='bot'?cand:(visitorName||'Visitor'))+':\n'+m.txt).join('\n\n');
   const subject = (trigger==='inactivity'?'[Auto] ':'')+'Chat transcript — '+(isGuest?'Guest':visitorName||'Visitor')+' · '+cand+' portal';
-  try{
-    emailjs.init(key);
-    emailjs.send(service, template, {
-      to_email:    notify,
-      from_email:  visitorEmail || 'no-reply@portal',
-      visitor_name: isGuest ? 'Guest (anonymous)' : (visitorName||'Unknown'),
-      portal_name: cand + ' — FIFA 2026 Portal',
-      visit_time:  visitTime,
-      portal_url:  window.location.href,
-      transcript:  header + '\n\n' + lines,
-      subject:     subject
-    });
-  }catch(e){ console.log('Transcript send error:',e); }
+  const params = {
+    to_email:     notify,
+    from_email:   visitorEmail || 'no-reply@portal',
+    visitor_name: isGuest ? 'Guest (anonymous)' : (visitorName||'Unknown'),
+    portal_name:  cand + ' — FIFA 2026 Portal',
+    visit_time:   visitTime,
+    portal_url:   window.location.href,
+    transcript:   header + '\n\n' + lines,
+    subject:      subject
+  };
+  const _doSend = () => {
+    try{
+      emailjs.init(key);
+      emailjs.send(service, template, params)
+        .then(()=>console.log('[VR] Transcript email sent.'))
+        .catch(err=>console.warn('[VR] Transcript send failed:',err));
+    }catch(e){ console.warn('[VR] EmailJS error:',e); }
+  };
+  // If library already loaded, send immediately; otherwise load it first
+  if(typeof emailjs !== 'undefined'){
+    _doSend();
+  } else {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/' + '@emailjs/browser@4/dist/email.min.js';
+    s.onload = _doSend;
+    s.onerror = ()=>console.warn('[VR] Failed to load EmailJS library.');
+    document.head.appendChild(s);
+  }
 }
 function addBot(txt, isHtml, skipTranscript){
   const m=document.getElementById('cb-msgs');
