@@ -734,10 +734,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
 
     <div class="ep-field" style="margin-bottom:.25rem">
-      <label>Target role &amp; company</label>
-      <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026 · Guest Relations Coordinator"></textarea>
+      <label>Position / Job title</label>
+      <textarea id="ep-position" rows="1" placeholder="Guest Relations Coordinator"></textarea>
     </div>
-    <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">These appear in the footer as a locked, non-editable line — proof this briefing was created for this specific application.</div>
+    <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">Propagates to the hero label, nav label, and footer automatically. Also update those fields below if you want full control of the wording.</div>
+
+    <div class="ep-field" style="margin-bottom:.25rem">
+      <label>Target company / event</label>
+      <textarea id="ep-excl-company" rows="1" placeholder="FIFA World Cup 2026"></textarea>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">Appears in the footer alongside the candidate name and position.</div>
+
+    <div class="ep-field" style="margin-bottom:.25rem">
+      <label>Footer note (optional — leave blank for auto)</label>
+      <textarea id="ep-footnote" rows="2" placeholder="Candidate Briefing · Joao V. Rossi · Guest Relations Coordinator · FIFA 2026&#10;Prepared exclusively for this application · Not for redistribution"></textarea>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.32);line-height:1.6;margin-bottom:.5rem">If filled, replaces the auto-generated footer line completely. Useful when applying to different positions.</div>
 
     <!-- GitHub Persistence — VR managed -->
 
@@ -897,6 +909,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
     </div>
 
     <!-- ── PASSWORD CHANGE ── -->
+    <!-- ── EMAIL NOTIFICATIONS ── -->
+    <div class="ep-section">📧 Chat transcript email</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.75rem">Receive a transcript of every chat session by email. Uses <strong style="color:rgba(255,255,255,.8)">EmailJS</strong> (free plan covers ~200 emails/month). <strong style="color:rgba(200,168,75,.8)">Must Save &amp; Sync to GitHub for visitors to trigger this.</strong></div>
+
+    <div style="background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:6px;padding:.875rem;margin-bottom:.75rem">
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,75,.5);margin-bottom:.625rem">Setup (one time — 5 min)</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.72;margin-bottom:.5rem">
+        1. Go to <strong style="color:rgba(200,168,75,.65)">emailjs.com</strong> → create free account<br>
+        2. Add an <strong style="color:rgba(200,168,75,.65)">Email Service</strong> (Gmail recommended) → copy <em>Service ID</em><br>
+        3. Create an <strong style="color:rgba(200,168,75,.65)">Email Template</strong> with these variables:<br>
+        <code style="background:rgba(255,255,255,.06);padding:2px 5px;border-radius:3px;font-size:10px;color:rgba(200,168,75,.8)">&#123;&#123;transcript&#125;&#125;  &#123;&#123;visitor_name&#125;&#125;  &#123;&#123;visit_time&#125;&#125;  &#123;&#123;to_email&#125;&#125;</code><br>
+        Copy the <em>Template ID</em> and <em>Public Key</em> (Account → API Keys)
+      </div>
+      <div class="ep-field" style="margin-bottom:.5rem"><label>Your email (receives transcripts)</label><textarea id="ep-emailjs-notify" rows="1" placeholder="your@email.com"></textarea></div>
+      <div class="ep-field" style="margin-bottom:.5rem"><label>EmailJS Service ID</label><textarea id="ep-emailjs-service" rows="1" placeholder="service_xxxxxxx"></textarea></div>
+      <div class="ep-field" style="margin-bottom:.5rem"><label>EmailJS Template ID</label><textarea id="ep-emailjs-template" rows="1" placeholder="template_xxxxxxx"></textarea></div>
+      <div class="ep-field" style="margin-bottom:.25rem"><label>EmailJS Public Key</label><textarea id="ep-emailjs-key" rows="1" placeholder="xxxxxxxxxxxxxxxxxxxx"></textarea></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.28);margin-top:.375rem;line-height:1.6">⚠ After filling all four fields, click <strong>Save &amp; Sync</strong>. Visitor browsers load credentials from GitHub on every session — without sync, no email is sent.</div>
+    </div>
+
     <div class="ep-section">Access passwords</div>
     <div style="font-size:11px;color:rgba(255,255,255,.62);line-height:1.72;margin-bottom:.75rem">Change the passwords for this portal. Visitor password is printed on the one-pager. Admin password is yours only.</div>
     <div class="ep-field">
@@ -2322,12 +2354,18 @@ function savePasswords(){
 }
 /* ── EXCLUSIVITY BANNER — updates ALL name elements simultaneously ── */
 function applyExclusivityBanner(){
-  const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
-  const comp = localStorage.getItem('vr_fifa_excl_company')   || 'FIFA World Cup 2026 · Guest Relations Coordinator';
-  // 1. Footer bar (pf-left) — always built from actual candidate name, never from hardcoded L translation
+  const cand     = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+  const company  = localStorage.getItem('vr_fifa_excl_company')   || 'FIFA World Cup 2026';
+  const position = localStorage.getItem('vr_fifa_position')       || 'Guest Relations Coordinator';
+  const footnote = localStorage.getItem('vr_fifa_footnote')       || '';
+  // 1. Footer bar (pf-left) — custom footnote wins; otherwise auto-generate
   const footer = document.getElementById('pf-left');
   if(footer){
-    footer.innerHTML = 'Candidate Briefing &middot; ' + cand + ' &middot; ' + comp + '<br>Not for redistribution';
+    if(footnote.trim()){
+      footer.innerHTML = footnote.trim().replace(/\n/g,'<br>');
+    } else {
+      footer.innerHTML = 'Candidate Briefing &middot; ' + cand + ' &middot; ' + position + ' &middot; ' + company + '<br>Not for redistribution';
+    }
   }
   // 2. Gate password screen name
   const gateName = document.getElementById('gate-candidate-name');
@@ -2343,10 +2381,26 @@ function applyExclusivityBanner(){
   if(linkedinLink && linkedinVal) linkedinLink.href = linkedinVal;
 }
 function saveExclusivity(){
-  const c = document.getElementById('ep-excl-candidate');
+  const c  = document.getElementById('ep-excl-candidate');
   const co = document.getElementById('ep-excl-company');
-  if(c) localStorage.setItem('vr_fifa_excl_candidate', c.value.trim());
-  if(co) localStorage.setItem('vr_fifa_excl_company', co.value.trim());
+  const po = document.getElementById('ep-position');
+  const fn = document.getElementById('ep-footnote');
+  if(c)  localStorage.setItem('vr_fifa_excl_candidate', c.value.trim());
+  if(co) localStorage.setItem('vr_fifa_excl_company',   co.value.trim());
+  if(po) localStorage.setItem('vr_fifa_position',       po.value.trim());
+  if(fn) localStorage.setItem('vr_fifa_footnote',       fn.value.trim());
+  // Propagate position to hero and nav labels if not already customised
+  const pos = po ? po.value.trim() : localStorage.getItem('vr_fifa_position') || '';
+  if(pos){
+    const hEyeEl = document.getElementById('h-eye');
+    if(hEyeEl && !localStorage.getItem('vr_fifa_ep-h-eye')){
+      hEyeEl.textContent = pos + ' · FIFA World Cup 2026 · Miami';
+    }
+    const navEyeEl = document.getElementById('nav-eye');
+    if(navEyeEl && !localStorage.getItem('vr_fifa_ep-nav-eye')){
+      navEyeEl.textContent = 'Application briefing · ' + pos;
+    }
+  }
   applyExclusivityBanner();
   setNameFormat(localStorage.getItem('vr_fifa_name_fmt')||'two');
 }
@@ -2540,10 +2594,12 @@ function openEditPanel(){
   const apEl=document.getElementById('ep-pwd-admin'); if(apEl) apEl.value=localStorage.getItem('vr_fifa_pwd_admin')||'JVRADMIN2026';
   // Load exclusivity fields
   const ecEl=document.getElementById('ep-excl-candidate'); if(ecEl) ecEl.value=localStorage.getItem('vr_fifa_excl_candidate')||'Joao V. Rossi';
+  const ecoEl=document.getElementById('ep-excl-company'); if(ecoEl) ecoEl.value=localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026';
+  const epoEl=document.getElementById('ep-position'); if(epoEl) epoEl.value=localStorage.getItem('vr_fifa_position')||'Guest Relations Coordinator';
+  const efnEl=document.getElementById('ep-footnote'); if(efnEl) efnEl.value=localStorage.getItem('vr_fifa_footnote')||'';
   // Load EmailJS fields
   const ejsFields = {'ep-emailjs-notify':'vr_emailjs_notify','ep-emailjs-key':'vr_emailjs_key','ep-emailjs-service':'vr_emailjs_service','ep-emailjs-template':'vr_emailjs_template'};
   Object.entries(ejsFields).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.value=localStorage.getItem(key)||''; });
-  const ecoEl=document.getElementById('ep-excl-company'); if(ecoEl) ecoEl.value=localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
   loadNameFormat();
   document.getElementById('edit-panel').classList.add('open');
   // Live preview — attach input listeners once so admin sees changes immediately
@@ -2556,7 +2612,9 @@ function openEditPanel(){
     const nameEl=document.getElementById('ep-excl-candidate');
     if(nameEl) nameEl.addEventListener('input',()=>{
       const cand=nameEl.value.trim()||'Joao V. Rossi';
-      const comp=document.getElementById('ep-excl-company')?.value.trim()||localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026 · Guest Relations Coordinator';
+      const comp=document.getElementById('ep-excl-company')?.value.trim()||localStorage.getItem('vr_fifa_excl_company')||'FIFA World Cup 2026';
+      const pos=document.getElementById('ep-position')?.value.trim()||localStorage.getItem('vr_fifa_position')||'Guest Relations Coordinator';
+      const fn=document.getElementById('ep-footnote')?.value.trim()||'';
       const gn=document.getElementById('gate-candidate-name'); if(gn) gn.textContent=cand;
       const pt=document.getElementById('ep-panel-title'); if(pt) pt.textContent=cand+' · Portal';
       const fmt=document.querySelector('input[name="ep-name-fmt"]:checked')?.value||localStorage.getItem('vr_fifa_name_fmt')||'two';
@@ -2564,14 +2622,28 @@ function openEditPanel(){
       const last=parts[parts.length-1]; const fp=parts.length>1?parts.slice(0,-1).join(' '):parts[0];
       const hn=document.querySelector('.h-name'); if(hn) hn.innerHTML=fmt==='two'?fp+'<br><em>'+last+'</em>':cand;
       const nn=document.getElementById('nav-name'); if(nn) nn.textContent=cand;
-      const ft=document.getElementById('pf-left'); if(ft) ft.innerHTML='Candidate Briefing &middot; '+cand+' &middot; '+comp+'<br>Not for redistribution';
+      const ft=document.getElementById('pf-left');
+      if(ft) ft.innerHTML=fn?fn.replace(/\n/g,'<br>'):'Candidate Briefing &middot; '+cand+' &middot; '+pos+' &middot; '+comp+'<br>Not for redistribution';
     });
-    const compEl=document.getElementById('ep-excl-company');
-    if(compEl) compEl.addEventListener('input',()=>{
+    // Live preview: company, position, footnote all update the footer
+    const _updateFooter = ()=>{
       const cand=document.getElementById('ep-excl-candidate')?.value.trim()||localStorage.getItem('vr_fifa_excl_candidate')||'Joao V. Rossi';
-      const comp=compEl.value.trim()||'FIFA World Cup 2026 · Guest Relations Coordinator';
-      const ft=document.getElementById('pf-left'); if(ft) ft.innerHTML='Candidate Briefing &middot; '+cand+' &middot; '+comp+'<br>Not for redistribution';
+      const comp=document.getElementById('ep-excl-company')?.value.trim()||'FIFA World Cup 2026';
+      const pos=document.getElementById('ep-position')?.value.trim()||'Guest Relations Coordinator';
+      const fn=document.getElementById('ep-footnote')?.value.trim()||'';
+      const ft=document.getElementById('pf-left');
+      if(ft) ft.innerHTML=fn?fn.replace(/\n/g,'<br>'):'Candidate Briefing &middot; '+cand+' &middot; '+pos+' &middot; '+comp+'<br>Not for redistribution';
+    };
+    const compEl=document.getElementById('ep-excl-company'); if(compEl) compEl.addEventListener('input',_updateFooter);
+    const posEl=document.getElementById('ep-position');
+    if(posEl) posEl.addEventListener('input',()=>{
+      _updateFooter();
+      // Also preview h-eye and nav-eye if not yet customised
+      const pos=posEl.value.trim();
+      const hEyeEl=document.getElementById('h-eye'); if(hEyeEl && !localStorage.getItem('vr_fifa_ep-h-eye')) hEyeEl.textContent=pos+' · FIFA World Cup 2026 · Miami';
+      const navEyeEl=document.getElementById('nav-eye'); if(navEyeEl && !localStorage.getItem('vr_fifa_ep-nav-eye')) navEyeEl.textContent='Application briefing · '+pos;
     });
+    const fnEl=document.getElementById('ep-footnote'); if(fnEl) fnEl.addEventListener('input',_updateFooter);
   }
   document.getElementById('edit-overlay').classList.add('show');
 }
@@ -2614,6 +2686,8 @@ function buildConfig(){
   cfg['ep-linkedin']=localStorage.getItem('vr_fifa_ep-linkedin')||'';
   cfg['excl_candidate']=localStorage.getItem('vr_fifa_excl_candidate')||'';
   cfg['excl_company']=localStorage.getItem('vr_fifa_excl_company')||'';
+  cfg['position']=localStorage.getItem('vr_fifa_position')||'';
+  cfg['footnote']=localStorage.getItem('vr_fifa_footnote')||'';
   cfg['archived']=localStorage.getItem('vr_fifa_archived')||'';
   cfg['emailjs_service']=localStorage.getItem('vr_emailjs_service')||'';
   cfg['emailjs_template']=localStorage.getItem('vr_emailjs_template')||'';
@@ -2658,6 +2732,8 @@ function applyConfig(cfg){
   if(cfg['pwd_admin']){ localStorage.setItem('vr_fifa_pwd_admin',cfg['pwd_admin']); ADMIN_PWD_RUNTIME=cfg['pwd_admin']; }
   if(cfg['excl_candidate']!==undefined) localStorage.setItem('vr_fifa_excl_candidate',cfg['excl_candidate']);
   if(cfg['excl_company']!==undefined) localStorage.setItem('vr_fifa_excl_company',cfg['excl_company']);
+  if(cfg['position']!==undefined) localStorage.setItem('vr_fifa_position',cfg['position']);
+  if(cfg['footnote']!==undefined) localStorage.setItem('vr_fifa_footnote',cfg['footnote']);
   if(cfg['archived']) localStorage.setItem('vr_fifa_archived',cfg['archived']);
   if(cfg['emailjs_service']) localStorage.setItem('vr_emailjs_service',cfg['emailjs_service']);
   if(cfg['emailjs_template']) localStorage.setItem('vr_emailjs_template',cfg['emailjs_template']);
@@ -2786,6 +2862,8 @@ function revertEdits(){
   localStorage.removeItem('vr_fifa_chatbot_enabled');
   localStorage.removeItem('vr_fifa_groq_key');
   localStorage.removeItem('vr_fifa_custom_kb');
+  localStorage.removeItem('vr_fifa_position');
+  localStorage.removeItem('vr_fifa_footnote');
   localStorage.removeItem('vr_fifa_highlights');
   localStorage.removeItem('vr_fifa_palette'); applyPalette('A'); selectPalette('A');
   localStorage.removeItem('vr_fifa_name_fmt'); loadNameFormat();
