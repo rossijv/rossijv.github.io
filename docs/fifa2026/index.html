@@ -1713,13 +1713,51 @@ const KB = [
 function getCustomKB(){
   try{ return JSON.parse(localStorage.getItem('vr_fifa_custom_kb')||'[]'); }catch(e){ return []; }
 }
+
+/* Levenshtein distance — counts insertions, deletions, substitutions */
+function _lev(a, b){
+  const m=a.length, n=b.length;
+  if(!m) return n; if(!n) return m;
+  const row = Array.from({length:n+1},(_,i)=>i);
+  for(let i=1;i<=m;i++){
+    let prev=row[0]; row[0]=i;
+    for(let j=1;j<=n;j++){
+      const tmp=row[j];
+      row[j]=a[i-1]===b[j-1]?prev:1+Math.min(prev,row[j],row[j-1]);
+      prev=tmp;
+    }
+  }
+  return row[n];
+}
+
+/* Fuzzy word match — true when two words are "close enough"
+   Rules:
+   ① One word contains the other as substring  (strong ↔ strengths, avail ↔ availability)
+   ② Levenshtein ≤ 1 for words 4-6 chars       (typos: strenght → strength)
+   ③ Levenshtein ≤ 2 for words ≥ 7 chars       (longer typos: experiense → experience)
+*/
+function _fuzzyWord(a, b){
+  if(a===b) return true;
+  if(a.includes(b) || b.includes(a)) return true;   // prefix/suffix/contains
+  const len = Math.max(a.length, b.length);
+  if(len < 4) return false;                           // too short — exact only
+  const maxDist = len >= 7 ? 2 : 1;
+  return _lev(a, b) <= maxDist;
+}
+
+/* Match visitor question against a custom KB entry using fuzzy word comparison.
+   Extracts keywords from the ADMIN question (≥3 chars), then checks each against
+   every word in the VISITOR question using _fuzzyWord().
+   A single keyword match is enough to trigger the trained answer.
+*/
 function matchCustomKB(q){
-  const ql = q.toLowerCase();
+  const visitorWords = q.toLowerCase().replace(/[^a-z0-9àáâãäåæçèéêëìíîïðñòóôõöùúûüýþ\s]/gi,'').split(/\s+/).filter(w=>w.length>=3);
   for(const entry of getCustomKB()){
     if(!entry.q || !entry.a) continue;
-    // Match if the visitor's question contains any word (3+ chars) from the admin question
-    const adminWords = entry.q.toLowerCase().split(/\s+/).filter(w=>w.length>=3);
-    if(adminWords.some(w=>ql.includes(w))) return entry.a;
+    const adminWords = entry.q.toLowerCase().replace(/[^a-z0-9àáâãäåæçèéêëìíîïðñòóôõöùúûüýþ\s]/gi,'').split(/\s+/).filter(w=>w.length>=3);
+    // Check if any admin keyword fuzzy-matches any visitor word
+    const matched = adminWords.some(aw => visitorWords.some(vw => _fuzzyWord(aw, vw)));
+    if(matched) return entry.a;
   }
   return null;
 }
