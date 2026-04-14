@@ -885,6 +885,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--lt);color:var(--dk);-webk
         <div class="ep-field" style="margin-bottom:.5rem"><label>Groq API key (AI add-on — leave blank for free 3-question plan)</label><textarea id="ep-groq-key" rows="1" placeholder="gsk_..."></textarea></div>
         <div style="font-size:10px;color:rgba(255,255,255,.38);line-height:1.68;background:rgba(255,255,255,.03);border-radius:4px;padding:.5rem .625rem;border:.5px solid rgba(255,255,255,.07)">📋 <strong style="color:rgba(255,255,255,.52)">How to get a free Groq key:</strong><br>1. Go to <strong style="color:rgba(200,168,75,.7)">console.groq.com</strong> → create a free account (no credit card)<br>2. Click <em>API Keys</em> → <em>Create API Key</em> → copy it (starts with <strong style="color:rgba(200,168,75,.7)">gsk_</strong>)<br>3. Paste it above and save. The chatbot instantly upgrades to full AI.<br><span style="color:rgba(255,255,255,.3)">Groq free tier: ~6,000 requests/day · Llama 3.1 8B · Resets daily</span></div>
       </div>
+
+      <!-- ── CUSTOM Q&A TRAINING ── -->
+      <div style="background:rgba(255,255,255,.03);border:.5px solid rgba(200,168,75,.1);border-radius:6px;padding:.875rem;margin-top:.625rem">
+        <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,168,75,.55);margin-bottom:.375rem">Custom answers · chatbot training</div>
+        <div style="font-size:10.5px;color:rgba(255,255,255,.42);line-height:1.68;margin-bottom:.75rem">Train the bot with your own answers. These are checked <strong style="color:rgba(255,255,255,.6)">before</strong> the built-in responses — your answer always wins. Works on the free plan too.</div>
+        <div id="ep-custom-qa-list"></div>
+        <button onclick="addCustomQARow()" style="width:100%;margin-top:.5rem;padding:.5rem;background:rgba(200,168,75,.08);border:.5px solid rgba(200,168,75,.22);border-radius:5px;color:rgba(200,168,75,.7);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif">+ Add question &amp; answer</button>
+        <div style="font-size:10px;color:rgba(255,255,255,.28);margin-top:.5rem;line-height:1.6">Tip: write the question as a visitor would ask it. The bot matches keywords automatically.</div>
+      </div>
     </div>
 
     <!-- ── PASSWORD CHANGE ── -->
@@ -1586,7 +1595,9 @@ function sendTranscriptEmail(cand, trigger){
   const isGuest = !visitorName && !visitorEmail;
   const visitorLabel = isGuest ? 'Guest (anonymous — no name or email provided)' : ((visitorName||'Unknown')+' · '+(visitorEmail||'no email'));
   const visitTime = new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour12:true,weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-  const triggerNote = trigger==='inactivity' ? '\n⚠ Sent automatically after 3 min of inactivity (visitor did not click End).' : '\n✓ Visitor clicked End conversation.';
+  const triggerNote = trigger==='inactivity' ? '\n⚠ Sent automatically after 3 min of inactivity (visitor did not click End).'
+    : trigger==='free_limit' ? '\n⚡ Sent automatically — visitor reached the 3-question free limit.'
+    : '\n✓ Visitor clicked End conversation.';
   const header = `Portal: ${cand} — FIFA 2026\nVisitor: ${visitorLabel}\nDate/Time: ${visitTime} (ET)${triggerNote}\n${'─'.repeat(40)}`;
   const lines = chatTranscript.map(m=>(m.who==='bot'?cand:(visitorName||'Visitor'))+':\n'+m.txt).join('\n\n');
   const subject = (trigger==='inactivity'?'[Auto] ':'')+'Chat transcript — '+(isGuest?'Guest':visitorName||'Visitor')+' · '+cand+' portal';
@@ -1634,7 +1645,7 @@ function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 const KB = [
   { keys:['disney','paris','disneyland','hospitality','hotel'],
     ans:"Joao's time at Disneyland Resort Paris is where the standard was set. Guest-facing operations in one of the world's highest-volume hospitality environments — multilingual, multicultural, and held to the strictest quality benchmarks in the industry. Not \"good enough\" service: a consistently exceptional experience, for every guest, every visit. That benchmark has carried through every role since." },
-  { keys:['language','portuguese','english','spanish','french','multilingual','speak','fluent','idioma'],
+  { keys:['language','portuguese','english','spanish','french','multilingual','speak','fluent','idioma','lingua','langue','idiom'],
     ans:"Four languages, all active. Portuguese is native. English and Spanish are at professional working proficiency — used daily in client-facing roles. French is professional working level, reinforced during his time in Paris. Those four cover the primary guest corridors at FIFA 2026 as an operational reality, not a background detail." },
   { keys:['ifes','data','guest list','database','system','profile','record','accuracy','management'],
     ans:"His consular work is the closest structural analogue to IFES. High-volume applicant intake — tracking status, maintaining data accuracy, resolving discrepancies across in-person and mail channels simultaneously. The workflow logic is identical: intake, validate, track, update, resolve. Same discipline, different institution." },
@@ -1646,23 +1657,40 @@ const KB = [
     ans:"Proficient across the full MS Office suite — Excel, Word, PowerPoint — documented across all roles. Used for process documentation, operational tracking, reporting, and workflow development. The consular tutorial he co-developed was built in these tools." },
   { keys:['recommendation','reference','letter','endorse','deputy','fernando','moreira'],
     ans:()=>{ const attr=localStorage.getItem('vr_fifa_ep-attr')||DEFAULTS['ep-attr']; return `The recommendation is from ${attr} — on official government letterhead, signed March 2026. It includes direct institutional contact information. That level of third-party endorsement, from a named signatory with a verifiable direct line, is rare at any career stage.`; } },
-  { keys:['available','start','when','location','miami','relocat','where'],
-    ans:"Joao is based in Miami, FL. The role is in Miami. No relocation, no logistics — he walks in day one." },
+  { keys:['available','availab','start date','when can','start work','location','miami','relocat','where','disponib','quand','cuándo','início','inicio'],
+    ans:"Joao is based in Miami, FL — the role is in Miami. No relocation, no transition period needed. He's available to start and ready to hit the ground running." },
+  { keys:['experience','career','background','professional','work history','professional experience','trajetória','trayectoria','parcours','trajectory','work experience','profile','historique','historial','experiência','experiencia'],
+    ans:"Three environments, all directly relevant. Disneyland Paris: world-class multilingual guest operations. Consulate General of Brazil in Miami: institutional-scale intake, data management, and event coordination with verifiable endorsement. VR Capital LLC: five years as primary liaison for international investors, managing complex multi-party logistics. Each role layers onto the next — and all three are in the brief if you'd like the detail." },
   { keys:['cruise','ship','latin america','latam','carnival','norwegian'],
     ans:"International cruise operations in Latin America — multilingual guest service at scale, covering LatAm markets. Combined with Disneyland Paris, it builds an international hospitality foundation that's rare in a single profile." },
   { keys:['vr capital','vrcapital','investor','financial','client coordination','cinco','five year'],
     ans:"Five years at VR Capital LLC in Miami as the primary point of contact for international investors — coordinating logistics, documentation, vendor management, and multi-party service delivery. This is where the operational discipline of tracking multiple active priorities simultaneously, without dropping a thread, was built." },
-  { keys:['education','degree','university','study','college','puc','campinas'],
+  { keys:['education','degree','university','study','college','puc','campinas','formação','formacion','formation'],
     ans:"Bachelor of Business Administration from PUC Campinas — a U.S. 4-year equivalent. The academic grounding supports the operational and analytical work across all his roles." },
-  { keys:['salary','pay','compensation','rate','cost'],
+  { keys:['salary','pay','compensation','rate','cost','salário','salario','salaire','remuner'],
     ans:()=>{ const i18n=getCbI18n(); return i18n.salaryRedirect; } },
-  { keys:['weakness','gap','concern','lack','miss','never done'],
-    ans:"Honest question — I respect that. The honest answer is that Joao hasn't held the exact title before. But the operational components — guest data management, multilingual service, event coordination, stakeholder delivery under visibility — are all evidenced across institutional environments. The question is whether you're hiring a title or a capability. The profile makes the case for the latter. Joao would be glad to address this directly if you want to have that conversation." },
-  { keys:['why','motivation','interested','apply','why joao','why him'],
-    ans:"Guest Relations Coordinator at FIFA 2026 in Miami is the intersection of everything in his profile: multilingual guest operations, data management at scale, institutional service standards, and Miami as home. It's not a stretch — it's a fit. He built the case in detail in this portal, but if you'd like to hear it from him directly, he's one click away." },
-  { keys:['contact','email','phone','reach','talk','call','schedule','meeting','interview'],
+  { keys:['weakness','gap','concern','lack','miss','never done','ponto fraco','debilidad','faiblesse'],
+    ans:"Honest question — I respect that. The honest answer is that Joao hasn't held the exact title before. But the operational components — guest data management, multilingual service, event coordination, stakeholder delivery under visibility — are all evidenced across institutional environments. The question is whether you're hiring a title or a capability. The profile makes the case for the latter." },
+  { keys:['why','motivation','interested','apply','why joao','why him','por que','porqué','pourquoi'],
+    ans:"Guest Relations Coordinator at FIFA 2026 in Miami is the intersection of everything in his profile: multilingual guest operations, data management at scale, institutional service standards, and Miami as home. It's not a stretch — it's a fit. He built the case in detail in this portal." },
+  { keys:['contact','email','phone','reach','talk','call','schedule','meeting','interview','contato','contacto','contact'],
     ans:()=>{ const i18n=getCbI18n(); return i18n.contactRedirect; } },
 ];
+
+/* ── CUSTOM KB (Admin trained Q&A — checked before built-in KB) ── */
+function getCustomKB(){
+  try{ return JSON.parse(localStorage.getItem('vr_fifa_custom_kb')||'[]'); }catch(e){ return []; }
+}
+function matchCustomKB(q){
+  const ql = q.toLowerCase();
+  for(const entry of getCustomKB()){
+    if(!entry.q || !entry.a) continue;
+    // Match if the visitor's question contains any word (3+ chars) from the admin question
+    const adminWords = entry.q.toLowerCase().split(/\s+/).filter(w=>w.length>=3);
+    if(adminWords.some(w=>ql.includes(w))) return entry.a;
+  }
+  return null;
+}
 
 function getRedirectMsgs(){
   const tone = localStorage.getItem('vr_fifa_bot_tone') || 'friendly';
@@ -1773,7 +1801,7 @@ async function sendChat(){
       return;
     }
     if(chatQuestionCount === CHAT_FREE_LIMIT){
-      // This is the last free question — answer it, then show upgrade notice after response
+      // Last free question — answer it, then show limit message and send transcript
       setTimeout(()=>{
         const i18n = getCbI18n();
         addBot(i18n.freeLimitMsg, true);
@@ -1785,6 +1813,9 @@ async function sendChat(){
         const snd=document.getElementById('cb-send-btn');
         if(snd){ snd.textContent=i18n.restartBtn||'New conversation'; snd.style.background='rgba(200,168,75,.22)'; snd.style.borderColor='rgba(200,168,75,.45)'; snd.onclick=restartChat; }
         const endBar=document.getElementById('cb-end-bar'); if(endBar) endBar.style.display='none';
+        // ── Send transcript email when free limit is reached ──
+        const cand = localStorage.getItem('vr_fifa_excl_candidate') || 'Joao V. Rossi';
+        sendTranscriptEmail(cand, 'free_limit');
       }, 1200 + Math.random()*400);
     }
   }
@@ -1826,9 +1857,13 @@ IMPORTANT: Answer only about this application. Never share email addresses or ph
       addBot(REDIRECT_MSGS[redirectIdx++ % REDIRECT_MSGS.length], true);
     }
   } else {
-    // ── KB LOCAL PATH ──
+    // ── KB LOCAL PATH (custom admin Q&A checked first, then built-in) ──
     setTimeout(()=>{
       const ql = q.toLowerCase();
+      // 1. Admin custom Q&A (add-on — trained by admin in edit panel)
+      const customAns = matchCustomKB(q);
+      if(customAns){ addBot(customAns, customAns.includes('<')); return; }
+      // 2. Built-in KB
       let matched = null;
       for(const e of KB){
         if(e.keys.some(k=>ql.includes(k))){ matched=e; break; }
@@ -2143,6 +2178,58 @@ function saveGroqKey(){
   if(el) localStorage.setItem('vr_fifa_groq_key', el.value.trim());
 }
 
+/* ── CUSTOM Q&A TRAINING ── */
+function renderCustomQAPanel(){
+  const list = document.getElementById('ep-custom-qa-list');
+  if(!list) return;
+  const data = getCustomKB();
+  list.innerHTML = '';
+  if(data.length === 0){
+    list.innerHTML = '<div style="font-size:10.5px;color:rgba(255,255,255,.28);text-align:center;padding:.5rem 0">No custom answers yet. Click + Add below.</div>';
+    return;
+  }
+  data.forEach((entry, i)=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:6px;padding:.625rem .75rem;margin-bottom:.5rem;position:relative';
+    row.innerHTML = `
+      <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,168,75,.5);margin-bottom:.25rem">Q ${i+1}</div>
+      <textarea data-qa-idx="${i}" data-qa-field="q" rows="1" placeholder="Question the visitor might ask…" style="width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(200,168,75,.18);border-radius:4px;padding:.375rem .5rem;font-size:11.5px;color:rgba(255,255,255,.82);font-family:'DM Sans',sans-serif;resize:vertical;outline:none;margin-bottom:.375rem">${escHtml(entry.q||'')}</textarea>
+      <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,168,75,.5);margin-bottom:.25rem">A ${i+1}</div>
+      <textarea data-qa-idx="${i}" data-qa-field="a" rows="2" placeholder="Bot's answer…" style="width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(200,168,75,.18);border-radius:4px;padding:.375rem .5rem;font-size:11.5px;color:rgba(255,255,255,.82);font-family:'DM Sans',sans-serif;resize:vertical;outline:none">${escHtml(entry.a||'')}</textarea>
+      <button onclick="removeCustomQARow(${i})" style="position:absolute;top:.5rem;right:.5rem;background:transparent;border:none;color:rgba(255,100,100,.5);font-size:13px;cursor:pointer;line-height:1" title="Remove">✕</button>`;
+    // Auto-save on change
+    row.querySelectorAll('textarea').forEach(ta=>{
+      ta.addEventListener('input', ()=>saveCustomQAFromPanel());
+    });
+    list.appendChild(row);
+  });
+}
+function addCustomQARow(){
+  const data = getCustomKB();
+  data.push({q:'',a:''});
+  localStorage.setItem('vr_fifa_custom_kb', JSON.stringify(data));
+  renderCustomQAPanel();
+  // Focus the new Q field
+  const rows = document.querySelectorAll('#ep-custom-qa-list textarea[data-qa-field="q"]');
+  if(rows.length) rows[rows.length-1].focus();
+}
+function removeCustomQARow(idx){
+  const data = getCustomKB();
+  data.splice(idx, 1);
+  localStorage.setItem('vr_fifa_custom_kb', JSON.stringify(data));
+  renderCustomQAPanel();
+}
+function saveCustomQAFromPanel(){
+  const rows = document.querySelectorAll('#ep-custom-qa-list textarea');
+  const data = getCustomKB();
+  rows.forEach(ta=>{
+    const idx = parseInt(ta.dataset.qaIdx);
+    const field = ta.dataset.qaField;
+    if(!isNaN(idx) && data[idx]) data[idx][field] = ta.value.trim();
+  });
+  localStorage.setItem('vr_fifa_custom_kb', JSON.stringify(data));
+}
+
 /* ── DEACT & ARCHIVE SYSTEM ── */
 let dmAction = '';
 function showDeact(){ document.getElementById('deact-bg').classList.add('show'); dmGoStep(1,''); }
@@ -2439,6 +2526,8 @@ function openEditPanel(){
   // Groq key
   const groqEl = document.getElementById('ep-groq-key');
   if(groqEl) groqEl.value = localStorage.getItem('vr_fifa_groq_key') || '';
+  // Custom Q&A panel
+  renderCustomQAPanel();
   // Highlight preview
   buildHighlightPreview();
   loadGhCreds();
@@ -2530,6 +2619,7 @@ function buildConfig(){
   cfg['emailjs_template']=localStorage.getItem('vr_emailjs_template')||'';
   cfg['emailjs_key']=localStorage.getItem('vr_emailjs_key')||'';
   cfg['emailjs_notify']=localStorage.getItem('vr_emailjs_notify')||'';
+  cfg['custom_kb']=localStorage.getItem('vr_fifa_custom_kb')||'[]';
   return cfg;
 }
 function applyConfig(cfg){
@@ -2573,6 +2663,7 @@ function applyConfig(cfg){
   if(cfg['emailjs_template']) localStorage.setItem('vr_emailjs_template',cfg['emailjs_template']);
   if(cfg['emailjs_key']) localStorage.setItem('vr_emailjs_key',cfg['emailjs_key']);
   if(cfg['emailjs_notify']) localStorage.setItem('vr_emailjs_notify',cfg['emailjs_notify']);
+  if(cfg['custom_kb']) localStorage.setItem('vr_fifa_custom_kb',cfg['custom_kb']);
   // Sync runtime objects after applying config
   syncContactRuntime();
 }
@@ -2667,7 +2758,7 @@ function loadGhCreds(){
 }
 function commitLocalEdits(){
   Object.keys(DEFAULTS).forEach(key=>{ const el=document.getElementById(key); if(!el) return; const val=el.value.trim(); localStorage.setItem('vr_fifa_'+key,val); applyField(key,val); });
-  saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity(); saveEmailJSConfig();
+  saveContactConfig(); saveGroqKey(); saveGhCreds(); savePasswords(); saveExclusivity(); saveEmailJSConfig(); saveCustomQAFromPanel();
 }
 function saveEdits(){
   commitLocalEdits();
@@ -2694,6 +2785,7 @@ function revertEdits(){
   ['type','email','calendly','whatsapp','custom'].forEach(k=>localStorage.removeItem('vr_fifa_contact_'+k));
   localStorage.removeItem('vr_fifa_chatbot_enabled');
   localStorage.removeItem('vr_fifa_groq_key');
+  localStorage.removeItem('vr_fifa_custom_kb');
   localStorage.removeItem('vr_fifa_highlights');
   localStorage.removeItem('vr_fifa_palette'); applyPalette('A'); selectPalette('A');
   localStorage.removeItem('vr_fifa_name_fmt'); loadNameFormat();
