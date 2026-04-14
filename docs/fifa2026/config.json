@@ -43,5 +43,6 @@
   "emailjs_service": "",
   "emailjs_template": "",
   "emailjs_key": "",
-  "emailjs_notify": ""
+  "emailjs_notify": "",
+  "custom_kb": "[{\"q\":\"Salary\",\"a\":\"Open to a competitive offer aligned with the role and market standards.\"},{\"q\":\"Availability\",\"a\":\"Available to start within a standard notice period, or sooner if needed.\"},{\"q\":\"Strengths\",\"a\":\"Strong in problem-solving, adaptability, and communication.”\"},{\"q\":\"Weakness\",\"a\":\"Can be very detail-oriented at times, but is improving balance between detail and execution.\"}]"
 }
