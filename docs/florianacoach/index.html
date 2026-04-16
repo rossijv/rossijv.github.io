@@ -1,519 +1,419 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Floriana Martinez | Life & Career Coach</title>
-  <meta name="description" content="Coaching de carreira especializado para brasileiros nos EUA. Transforme sua trajetória profissional com estratégia e clareza." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --primary: #0A1628;
-      --primary-fg: #F5F0E8;
-      --secondary: #C9A96E;
-      --secondary-fg: #0A1628;
-      --background: #FAFAF8;
-      --foreground: #0A1628;
-      --muted: #F0EDE6;
-      --muted-fg: #6B6560;
-      --card: #FFFFFF;
-      --card-fg: #0A1628;
-      --border: #E8E3DB;
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans: 'DM Sans', system-ui, sans-serif;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Floriana Martinez | Life & Career Coach</title>
+<meta name="description" content="Coaching de carreira especializado para brasileiros nos EUA."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<!-- Calendly widget -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"/>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --p:#0A1628;--p-fg:#F5F0E8;
+  --s:#C9A96E;--s-fg:#0A1628;
+  --bg:#FAFAF8;--fg:#0A1628;
+  --muted:#F0EDE6;--muted-fg:#6B6560;
+  --card:#FFFFFF;--card-fg:#0A1628;
+  --border:#E8E3DB;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --radius:0.75rem;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--sans);cursor:pointer}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── VIEWS ── */
+.view{display:none}
+.view.active{display:block}
 
-    html { scroll-behavior: smooth; }
+/* ── SHARED BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:999px;font-size:.9rem;font-weight:500;border:none;cursor:pointer;transition:all .25s;text-decoration:none}
+.btn-p{background:var(--p);color:var(--p-fg)}.btn-p:hover{background:#162040;transform:translateY(-1px)}
+.btn-s{background:var(--s);color:var(--s-fg)}.btn-s:hover{background:#b8914f}
+.btn-ghost{background:none;color:var(--muted-fg)}.btn-ghost:hover{color:var(--p)}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--fg)}.btn-outline:hover{border-color:var(--s);color:var(--s)}
+.btn-sm{padding:.5rem 1rem;font-size:.8rem}
+.btn-lg{padding:1rem 2rem;font-size:1rem}
 
-    body {
-      font-family: var(--font-sans);
-      background: var(--background);
-      color: var(--foreground);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+/* ── SECTION SHARED ── */
+.sec{padding:5rem 2rem}
+.sec-inner{max-width:1200px;margin:0 auto}
+.sec-label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--s);margin-bottom:.75rem}
+.sec-title{font-family:var(--serif);font-size:clamp(1.75rem,3.5vw,2.75rem);font-weight:600;line-height:1.15;color:var(--p)}
+.sec-sub{margin-top:1rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.7;max-width:600px}
+.bg-m{background:rgba(240,237,230,.4)}
+.bg-p{background:var(--p);color:var(--p-fg)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
 
-    /* ── NAVBAR ── */
-    #navbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      transition: all 0.4s ease;
-    }
-    #navbar.scrolled {
-      background: rgba(250,250,248,0.96);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 1px 20px rgba(10,22,40,0.06);
-    }
-    .nav-inner {
-      max-width: 1280px; margin: 0 auto;
-      padding: 0 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 80px;
-    }
-    .nav-logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; text-decoration: none; color: var(--primary); }
-    .nav-logo span { color: var(--secondary); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--muted-fg); transition: color 0.3s; }
-    .nav-links a:hover { color: var(--primary); }
-    .nav-cta {
-      display: flex; gap: 1rem; align-items: center;
-    }
-    .btn-ghost {
-      background: none; border: none; cursor: pointer;
-      font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500;
-      color: var(--muted-fg); padding: 0.5rem 1rem; border-radius: 999px;
-      text-decoration: none; transition: color 0.3s;
-    }
-    .btn-ghost:hover { color: var(--primary); }
-    .btn-primary {
-      background: var(--primary); color: var(--primary-fg);
-      border: none; border-radius: 999px;
-      padding: 0.625rem 1.5rem;
-      font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500;
-      cursor: pointer; text-decoration: none;
-      transition: background 0.3s;
-    }
-    .btn-primary:hover { background: #162040; }
-    .hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--primary); padding: 0.5rem; }
-    .mobile-menu {
-      display: none; position: fixed; inset: 0; z-index: 90;
-      background: var(--background); padding-top: 6rem;
-      flex-direction: column; align-items: center; gap: 2rem;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); text-decoration: none; }
+/* ── FADE IN ── */
+.fi{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fi.v{opacity:1;transform:none}
+.fi-l{opacity:0;transform:translateX(-24px);transition:opacity .6s ease,transform .6s ease}
+.fi-l.v{opacity:1;transform:none}
+.fi-r{opacity:0;transform:translateX(24px);transition:opacity .6s ease,transform .6s ease}
+.fi-r.v{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
-    @media (max-width: 768px) {
-      .nav-links, .nav-cta { display: none; }
-      .hamburger { display: block; }
-    }
+/* ─────────── LANDING ─────────── */
 
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--background);
-      position: relative; overflow: hidden;
-    }
-    .hero-blob1 {
-      position: absolute; top: 25%; right: 25%;
-      width: 384px; height: 384px;
-      background: rgba(201,169,110,0.08);
-      border-radius: 50%; filter: blur(60px);
-      pointer-events: none;
-    }
-    .hero-blob2 {
-      position: absolute; bottom: 25%; left: 25%;
-      width: 320px; height: 320px;
-      background: rgba(10,22,40,0.04);
-      border-radius: 50%; filter: blur(60px);
-      pointer-events: none;
-    }
-    .hero-inner {
-      position: relative; z-index: 1;
-      max-width: 1280px; margin: 0 auto;
-      padding: 8rem 2rem 5rem;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-    }
-    @media (max-width: 1024px) {
-      .hero-inner { grid-template-columns: 1fr; text-align: center; }
-      .hero-photo-col { display: none; }
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.5rem 1rem; border-radius: 999px;
-      background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);
-      margin-bottom: 2rem;
-    }
-    .hero-badge-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--secondary);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
-    }
-    .hero-badge span { font-size: 0.875rem; font-weight: 500; color: var(--secondary); }
-    .hero-title {
-      font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 600; line-height: 1.1;
-      letter-spacing: -0.02em; color: var(--primary);
-    }
-    .hero-title .gold { display: block; color: var(--secondary); }
-    .hero-sub {
-      margin-top: 1.5rem;
-      font-size: 1.125rem; color: var(--muted-fg);
-      line-height: 1.7; max-width: 540px;
-    }
-    @media (max-width: 1024px) { .hero-sub { margin: 1.5rem auto 0; } }
-    .hero-btns {
-      margin-top: 2.5rem;
-      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
-    }
-    @media (max-width: 1024px) { .hero-btns { justify-content: center; } }
-    .btn-lg {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 1rem 2rem; border-radius: 999px;
-      font-family: var(--font-sans); font-size: 1rem; font-weight: 500;
-      text-decoration: none; cursor: pointer; border: none;
-      transition: all 0.3s;
-    }
-    .btn-lg.primary { background: var(--primary); color: var(--primary-fg); }
-    .btn-lg.primary:hover { background: #162040; transform: translateY(-1px); }
-    .btn-lg.ghost { background: none; color: var(--muted-fg); }
-    .btn-lg.ghost:hover { color: var(--primary); }
-    .hero-stats {
-      margin-top: 4rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    }
-    .hero-stat-val { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 600; color: var(--primary); }
-    .hero-stat-lbl { font-size: 0.8rem; color: var(--muted-fg); margin-top: 0.25rem; }
-    .hero-photo-col { position: relative; }
-    .hero-photo-frame {
-      aspect-ratio: 4/5; border-radius: 1rem; overflow: hidden;
-      background: var(--muted);
-      border: 2px dashed var(--border);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 0.75rem; color: rgba(10,22,40,0.25);
-    }
-    .hero-photo-frame svg { width: 2.5rem; height: 2.5rem; }
-    .hero-photo-frame p { font-size: 0.875rem; text-align: center; padding: 0 2rem; line-height: 1.6; }
-    .scroll-indicator {
-      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    }
-    .scroll-dot-wrap {
-      width: 24px; height: 40px; border-radius: 12px;
-      border: 2px solid rgba(10,22,40,0.2);
-      display: flex; align-items: flex-start; justify-content: center; padding: 6px;
-    }
-    .scroll-dot {
-      width: 4px; height: 8px; border-radius: 2px;
-      background: rgba(10,22,40,0.3);
-      animation: scrollBounce 2s infinite ease-in-out;
-    }
-    @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:all .4s}
+#nav.scrolled{background:rgba(250,250,248,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:0 1px 20px rgba(10,22,40,.06)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:76px}
+.nav-logo{font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p)}
+.nav-logo span{color:var(--s)}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--muted-fg);transition:color .3s}
+.nav-links a:hover{color:var(--p)}
+.nav-actions{display:flex;gap:.75rem;align-items:center}
+.nav-demo-btns{display:flex;gap:.5rem}
+.nav-demo-btn{padding:.4rem .9rem;border-radius:999px;font-size:.78rem;font-weight:500;border:1px solid var(--border);background:none;color:var(--muted-fg);cursor:pointer;transition:all .2s}
+.nav-demo-btn:hover{border-color:var(--s);color:var(--s)}
+.hamburger{display:none;background:none;border:none;color:var(--p);padding:.5rem}
+.mobile-nav{display:none;position:fixed;inset:0;z-index:190;background:var(--bg);padding-top:5rem;flex-direction:column;align-items:center;gap:1.5rem}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-family:var(--serif);font-size:1.25rem;color:var(--p)}
+@media(max-width:768px){.nav-links,.nav-actions{display:none}.hamburger{display:block}}
 
-    /* ── SECTIONS SHARED ── */
-    .section { padding: 6rem 2rem; }
-    .section-inner { max-width: 1280px; margin: 0 auto; }
-    .section-label {
-      display: block; font-size: 0.75rem; font-weight: 500;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--secondary); margin-bottom: 1rem;
-    }
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: clamp(1.75rem, 3.5vw, 3rem);
-      font-weight: 600; line-height: 1.15;
-      color: var(--primary); max-width: 680px;
-    }
-    .section-sub {
-      margin-top: 1.25rem; font-size: 1.125rem;
-      color: var(--muted-fg); max-width: 620px; line-height: 1.7;
-    }
-    .bg-muted { background: rgba(240,237,230,0.4); }
-    .bg-primary-section { background: var(--primary); color: var(--primary-fg); }
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+.hero-blob1{top:20%;right:20%;width:360px;height:360px;background:rgba(201,169,110,.08)}
+.hero-blob2{bottom:20%;left:15%;width:300px;height:300px;background:rgba(10,22,40,.04)}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:1024px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-photo-col{display:none}}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:999px;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.2);margin-bottom:1.75rem}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--s);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-badge span{font-size:.85rem;font-weight:500;color:var(--s)}
+.hero-title{font-family:var(--serif);font-size:clamp(2.25rem,5vw,4.25rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--p)}
+.hero-title .gold{display:block;color:var(--s)}
+.hero-sub{margin-top:1.25rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.7;max-width:520px}
+@media(max-width:1024px){.hero-sub{margin:1.25rem auto 0}}
+.hero-btns{margin-top:2.25rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+@media(max-width:1024px){.hero-btns{justify-content:center}}
+.hero-stats{margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.stat-val{font-family:var(--serif);font-size:1.75rem;font-weight:700;color:var(--p)}
+.stat-lbl{font-size:.78rem;color:var(--muted-fg);margin-top:.2rem}
+.photo-frame{aspect-ratio:4/5;border-radius:1rem;overflow:hidden;background:var(--muted);border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:rgba(10,22,40,.3);position:relative}
+.photo-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:none}
+.photo-frame img.loaded{display:block}
+.photo-frame .placeholder{display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.photo-frame svg{width:2.5rem;height:2.5rem}
+.photo-frame p{font-size:.85rem;text-align:center;padding:0 2rem;line-height:1.6}
+.scroll-anim{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%)}
+.scroll-wrap{width:24px;height:40px;border-radius:12px;border:2px solid rgba(10,22,40,.2);display:flex;align-items:flex-start;justify-content:center;padding:6px}
+.scroll-d{width:4px;height:8px;border-radius:2px;background:rgba(10,22,40,.3);animation:sb 2s infinite ease-in-out}
+@keyframes sb{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 
-    /* ── ABOUT ── */
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-    }
-    @media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; } }
-    .about-text blockquote {
-      margin-top: 2rem; padding-left: 1.5rem;
-      border-left: 4px solid var(--secondary);
-    }
-    .about-text blockquote p {
-      font-family: var(--font-serif); font-size: 1.25rem;
-      font-style: italic; color: var(--primary); line-height: 1.5;
-    }
-    .credentials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .credential-card {
-      padding: 1.5rem; background: var(--card);
-      border-radius: 0.75rem; border: 1px solid var(--border);
-      transition: all 0.3s;
-    }
-    .credential-card:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 4px 20px rgba(10,22,40,0.08); }
-    .credential-icon {
-      width: 3rem; height: 3rem; border-radius: 0.5rem;
-      background: rgba(201,169,110,0.1);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem;
-      color: var(--secondary);
-    }
-    .credential-icon svg { width: 1.5rem; height: 1.5rem; }
-    .credential-card h3 { font-weight: 600; font-size: 0.9rem; color: var(--card-fg); }
-    .credential-card p { font-size: 0.8rem; color: var(--muted-fg); margin-top: 0.25rem; }
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:1024px){.about-grid{grid-template-columns:1fr}}
+.about-quote{margin-top:2rem;padding-left:1.5rem;border-left:4px solid var(--s)}
+.about-quote p{font-family:var(--serif);font-size:1.2rem;font-style:italic;color:var(--p);line-height:1.5}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.cred-card{padding:1.5rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);transition:all .3s}
+.cred-card:hover{border-color:rgba(201,169,110,.4);box-shadow:0 4px 20px rgba(10,22,40,.08)}
+.cred-icon{width:2.75rem;height:2.75rem;border-radius:.5rem;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;color:var(--s);margin-bottom:.875rem}
+.cred-icon svg{width:1.4rem;height:1.4rem}
+.cred-card h3{font-weight:600;font-size:.875rem;color:var(--card-fg)}
+.cred-card p{font-size:.78rem;color:var(--muted-fg);margin-top:.2rem}
 
-    /* ── SERVICES ── */
-    .services-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
-    .services-header .section-title, .services-header .section-sub { max-width: none; }
-    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-    @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
-    .service-card {
-      padding: 2rem; background: var(--card);
-      border-radius: 1.25rem; border: 1px solid var(--border);
-      display: flex; gap: 1.5rem; align-items: flex-start;
-      transition: all 0.4s; position: relative; overflow: hidden;
-    }
-    .service-card:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 8px 32px rgba(10,22,40,0.1); }
-    .service-icon {
-      width: 3.5rem; height: 3.5rem; border-radius: 0.75rem; flex-shrink: 0;
-      background: rgba(201,169,110,0.1);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--secondary);
-    }
-    .service-icon svg { width: 1.75rem; height: 1.75rem; }
-    .service-card h3 { font-family: var(--font-serif); font-size: 1.125rem; font-weight: 600; color: var(--card-fg); margin-bottom: 0.5rem; }
-    .service-card p { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.6; margin-bottom: 1rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .tag { padding: 0.25rem 0.75rem; background: var(--muted); color: var(--muted-fg); font-size: 0.75rem; border-radius: 999px; }
-    .services-cta { text-align: center; margin-top: 4rem; }
+/* SERVICES */
+.svc-card{padding:1.75rem;background:var(--card);border-radius:1.25rem;border:1px solid var(--border);display:flex;gap:1.25rem;align-items:flex-start;transition:all .4s}
+.svc-card:hover{border-color:rgba(201,169,110,.4);box-shadow:0 8px 32px rgba(10,22,40,.1)}
+.svc-icon{width:3.25rem;height:3.25rem;border-radius:.75rem;flex-shrink:0;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;color:var(--s)}
+.svc-icon svg{width:1.6rem;height:1.6rem}
+.svc-card h3{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--card-fg);margin-bottom:.4rem}
+.svc-card p{font-size:.875rem;color:var(--muted-fg);line-height:1.6;margin-bottom:.875rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag{padding:.2rem .625rem;background:var(--muted);color:var(--muted-fg);font-size:.72rem;border-radius:999px}
 
-    /* ── PRICING ── */
-    .pricing-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
-    .pricing-header .section-title, .pricing-header .section-sub { max-width: none; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; }
-    @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
-    .pricing-card {
-      border-radius: 1.25rem; padding: 2rem;
-      display: flex; flex-direction: column;
-      position: relative; transition: all 0.3s;
-    }
-    .pricing-card.normal {
-      background: var(--card); border: 1px solid var(--border);
-    }
-    .pricing-card.normal:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 8px 32px rgba(10,22,40,0.1); }
-    .pricing-card.featured {
-      background: var(--primary); border: 1px solid var(--primary);
-      transform: scale(1.04);
-      box-shadow: 0 20px 60px rgba(10,22,40,0.25);
-    }
-    @media (max-width: 900px) { .pricing-card.featured { transform: none; } }
-    .pricing-badge {
-      position: absolute; top: -1rem; left: 50%; transform: translateX(-50%);
-      display: inline-flex; align-items: center; gap: 0.375rem;
-      padding: 0.375rem 1rem; border-radius: 999px;
-      background: var(--secondary); color: var(--secondary-fg);
-      font-size: 0.75rem; font-weight: 600; white-space: nowrap;
-    }
-    .pricing-badge svg { width: 0.75rem; height: 0.75rem; fill: currentColor; }
-    .pricing-name { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .pricing-card.normal .pricing-name { color: var(--card-fg); }
-    .pricing-card.featured .pricing-name { color: var(--primary-fg); }
-    .pricing-desc { font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.5rem; }
-    .pricing-card.normal .pricing-desc { color: var(--muted-fg); }
-    .pricing-card.featured .pricing-desc { color: rgba(245,240,232,0.65); }
-    .pricing-price { display: flex; align-items: baseline; gap: 0.25rem; }
-    .price-currency { font-size: 0.875rem; font-weight: 500; }
-    .pricing-card.normal .price-currency { color: var(--muted-fg); }
-    .pricing-card.featured .price-currency { color: rgba(245,240,232,0.65); }
-    .price-amount { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 600; }
-    .pricing-card.normal .price-amount { color: var(--primary); }
-    .pricing-card.featured .price-amount { color: var(--primary-fg); }
-    .price-period { font-size: 0.875rem; margin-top: 0.25rem; }
-    .pricing-card.normal .price-period { color: var(--muted-fg); }
-    .pricing-card.featured .price-period { color: rgba(245,240,232,0.55); }
-    .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
-    .pricing-card.featured .pricing-divider { border-color: rgba(245,240,232,0.15); }
-    .pricing-benefits { list-style: none; flex: 1; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
-    .pricing-benefits li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; line-height: 1.5; }
-    .pricing-card.normal .pricing-benefits li { color: var(--muted-fg); }
-    .pricing-card.featured .pricing-benefits li { color: rgba(245,240,232,0.8); }
-    .check-wrap {
-      width: 1.25rem; height: 1.25rem; border-radius: 50%; flex-shrink: 0; margin-top: 0.1rem;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .pricing-card.normal .check-wrap { background: rgba(201,169,110,0.1); }
-    .pricing-card.featured .check-wrap { background: rgba(201,169,110,0.25); }
-    .check-wrap svg { width: 0.75rem; height: 0.75rem; color: var(--secondary); }
-    .btn-pricing {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.875rem; border-radius: 999px; width: 100%;
-      font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500;
-      text-decoration: none; cursor: pointer; border: none; transition: all 0.3s;
-    }
-    .pricing-card.normal .btn-pricing { background: var(--primary); color: var(--primary-fg); }
-    .pricing-card.normal .btn-pricing:hover { background: #162040; }
-    .pricing-card.featured .btn-pricing { background: var(--secondary); color: var(--secondary-fg); }
-    .pricing-card.featured .btn-pricing:hover { background: #b8914f; }
-    .pricing-note { text-align: center; margin-top: 2.5rem; font-size: 0.875rem; color: var(--muted-fg); }
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;align-items:stretch}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}}
+.pc{border-radius:1.25rem;padding:2rem;display:flex;flex-direction:column;position:relative;transition:all .3s}
+.pc.normal{background:var(--card);border:1px solid var(--border)}
+.pc.normal:hover{border-color:rgba(201,169,110,.4);box-shadow:0 8px 32px rgba(10,22,40,.1)}
+.pc.feat{background:var(--p);border:1px solid var(--p);transform:scale(1.04);box-shadow:0 20px 60px rgba(10,22,40,.25)}
+@media(max-width:900px){.pc.feat{transform:none}}
+.pc-badge{position:absolute;top:-1rem;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:.375rem;padding:.35rem 1rem;border-radius:999px;background:var(--s);color:var(--s-fg);font-size:.72rem;font-weight:700;white-space:nowrap}
+.pc-name{font-family:var(--serif);font-size:1.2rem;font-weight:600;margin-bottom:.5rem}
+.pc.normal .pc-name{color:var(--card-fg)}.pc.feat .pc-name{color:var(--p-fg)}
+.pc-desc{font-size:.85rem;line-height:1.5;margin-bottom:1.25rem}
+.pc.normal .pc-desc{color:var(--muted-fg)}.pc.feat .pc-desc{color:rgba(245,240,232,.65)}
+.pc-price{display:flex;align-items:baseline;gap:.2rem;margin-bottom:.25rem}
+.pc-cur{font-size:.85rem;font-weight:500}
+.pc.normal .pc-cur{color:var(--muted-fg)}.pc.feat .pc-cur{color:rgba(245,240,232,.6)}
+.pc-amt{font-family:var(--serif);font-size:2.5rem;font-weight:700}
+.pc.normal .pc-amt{color:var(--p)}.pc.feat .pc-amt{color:var(--p-fg)}
+.pc-per{font-size:.8rem;margin-bottom:1.5rem}
+.pc.normal .pc-per{color:var(--muted-fg)}.pc.feat .pc-per{color:rgba(245,240,232,.5)}
+.pc-divider{border:none;border-top:1px solid var(--border);margin:0 0 1.25rem}
+.pc.feat .pc-divider{border-color:rgba(245,240,232,.15)}
+.pc-benefits{list-style:none;flex:1;margin-bottom:1.75rem;display:flex;flex-direction:column;gap:.6rem}
+.pc-benefits li{display:flex;align-items:flex-start;gap:.625rem;font-size:.85rem;line-height:1.5}
+.pc.normal .pc-benefits li{color:var(--muted-fg)}.pc.feat .pc-benefits li{color:rgba(245,240,232,.8)}
+.chk{width:1.2rem;height:1.2rem;border-radius:50%;flex-shrink:0;margin-top:.1rem;display:flex;align-items:center;justify-content:center}
+.pc.normal .chk{background:rgba(201,169,110,.1)}.pc.feat .chk{background:rgba(201,169,110,.25)}
+.chk svg{width:.7rem;height:.7rem;color:var(--s)}
+.pc-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.875rem;border-radius:999px;width:100%;font-size:.9rem;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:all .3s}
+.pc.normal .pc-btn{background:var(--p);color:var(--p-fg)}.pc.normal .pc-btn:hover{background:#162040}
+.pc.feat .pc-btn{background:var(--s);color:var(--s-fg)}.pc.feat .pc-btn:hover{background:#b8914f}
 
-    /* ── TESTIMONIALS ── */
-    .testimonials-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
-    .testimonials-header .section-title { color: var(--primary-fg); max-width: none; }
-    .testimonials-header .section-sub { color: rgba(245,240,232,0.65); max-width: none; }
-    .testimonials-header .section-label { color: var(--secondary); }
-    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-    @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr; } }
-    .testimonial-card {
-      padding: 2rem; border-radius: 1.25rem;
-      background: rgba(245,240,232,0.05);
-      border: 1px solid rgba(245,240,232,0.1);
-    }
-    .testimonial-card svg.quote { width: 2.5rem; height: 2.5rem; color: var(--secondary); margin-bottom: 1.5rem; }
-    .testimonial-text { font-size: 0.95rem; color: rgba(245,240,232,0.85); line-height: 1.7; margin-bottom: 2rem; }
-    .testimonial-author { display: flex; align-items: center; gap: 1rem; }
-    .author-avatar {
-      width: 3rem; height: 3rem; border-radius: 50%; flex-shrink: 0;
-      background: rgba(201,169,110,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-serif); font-size: 1.125rem; color: var(--secondary);
-    }
-    .author-name { font-weight: 600; color: var(--primary-fg); }
-    .author-role { font-size: 0.8rem; color: rgba(245,240,232,0.55); }
+/* TESTIMONIALS */
+.testi-card{padding:2rem;border-radius:1.25rem;background:rgba(245,240,232,.05);border:1px solid rgba(245,240,232,.1)}
+.testi-card .q-icon{width:2.25rem;height:2.25rem;color:var(--s);margin-bottom:1.25rem}
+.testi-text{font-size:.9rem;color:rgba(245,240,232,.85);line-height:1.7;margin-bottom:1.75rem}
+.testi-author{display:flex;align-items:center;gap:.875rem}
+.author-av{width:2.75rem;height:2.75rem;border-radius:50%;background:rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1rem;color:var(--s)}
+.author-name{font-weight:600;color:var(--p-fg)}
+.author-role{font-size:.78rem;color:rgba(245,240,232,.5)}
 
-    /* ── FAQ ── */
-    .faq-header { text-align: center; margin-bottom: 4rem; }
-    .faq-inner { max-width: 800px; margin: 0 auto; }
-    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .faq-item { border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; }
-    .faq-question {
-      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-      padding: 1.25rem 1.5rem; background: var(--card); cursor: pointer; border: none;
-      font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
-      text-align: left; color: var(--card-fg); transition: background 0.2s;
-    }
-    .faq-question:hover { background: var(--muted); }
-    .faq-question.open { color: var(--primary); }
-    .faq-toggle {
-      width: 1.75rem; height: 1.75rem; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--muted); color: var(--muted-fg); transition: all 0.3s;
-    }
-    .faq-question.open .faq-toggle { background: var(--secondary); color: var(--secondary-fg); }
-    .faq-toggle svg { width: 0.875rem; height: 0.875rem; }
-    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    .faq-answer.open { max-height: 400px; }
-    .faq-answer-inner { padding: 0.5rem 1.5rem 1.25rem; background: var(--card); }
-    .faq-answer-inner p { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.7; }
-    .faq-cta { text-align: center; margin-top: 3rem; }
-    .faq-cta p { color: var(--muted-fg); margin-bottom: 1.5rem; }
+/* FAQ */
+.faq-item{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:.625rem}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.125rem 1.5rem;background:var(--card);cursor:pointer;border:none;font-size:.9rem;font-weight:500;text-align:left;color:var(--card-fg);transition:background .2s}
+.faq-q:hover{background:var(--muted)}
+.faq-q.open{color:var(--p)}
+.faq-tog{width:1.625rem;height:1.625rem;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--muted);color:var(--muted-fg);transition:all .3s}
+.faq-q.open .faq-tog{background:var(--s);color:var(--s-fg)}
+.faq-tog svg{width:.8rem;height:.8rem}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-ans.open{max-height:400px}
+.faq-ans-inner{padding:.5rem 1.5rem 1.125rem;background:var(--card)}
+.faq-ans-inner p{font-size:.875rem;color:var(--muted-fg);line-height:1.7}
 
-    /* ── CONTACT ── */
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
-    .contact-info-items { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
-    .contact-info-item { display: flex; align-items: center; gap: 1rem; }
-    .contact-icon {
-      width: 3rem; height: 3rem; border-radius: 0.75rem; flex-shrink: 0;
-      background: rgba(201,169,110,0.1);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--secondary);
-    }
-    .contact-icon svg { width: 1.25rem; height: 1.25rem; }
-    .contact-info-item strong { font-weight: 500; color: var(--foreground); display: block; }
-    .contact-info-item span { font-size: 0.875rem; color: var(--muted-fg); }
-    .contact-form-card {
-      padding: 2rem; background: var(--card);
-      border-radius: 1.25rem; border: 1px solid var(--border);
-      box-shadow: 0 4px 24px rgba(10,22,40,0.06);
-    }
-    .contact-form-card h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--card-fg); }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem; }
-    .form-group label { font-size: 0.875rem; font-weight: 500; color: var(--foreground); }
-    .form-group input, .form-group select, .form-group textarea {
-      height: 3rem; padding: 0 0.875rem;
-      border: 1px solid var(--border); border-radius: 0.5rem;
-      background: var(--background); color: var(--foreground);
-      font-family: var(--font-sans); font-size: 0.875rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-    }
-    .form-group textarea { height: 7.5rem; padding: 0.75rem 0.875rem; resize: none; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      border-color: var(--secondary);
-      box-shadow: 0 0 0 3px rgba(201,169,110,0.15);
-    }
-    .btn-submit {
-      width: 100%; height: 3.5rem; border-radius: 0.75rem;
-      background: var(--primary); color: var(--primary-fg);
-      font-family: var(--font-sans); font-size: 1rem; font-weight: 500;
-      border: none; cursor: pointer; transition: background 0.3s;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    .btn-submit:hover { background: #162040; }
-    .btn-submit svg { width: 1rem; height: 1rem; }
-    .form-success {
-      display: none; text-align: center; padding: 3rem 1rem;
-    }
-    .form-success.show { display: block; }
-    .success-icon {
-      width: 4rem; height: 4rem; border-radius: 50%;
-      background: rgba(201,169,110,0.1);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1rem;
-      color: var(--secondary);
-    }
-    .success-icon svg { width: 2rem; height: 2rem; }
-    .form-success h4 { font-family: var(--font-serif); font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; }
-    .form-success p { color: var(--muted-fg); }
-    .form-error { display: none; padding: 0.75rem; background: rgba(220,38,38,0.06); color: #dc2626; font-size: 0.875rem; border-radius: 0.5rem; margin-bottom: 1rem; }
-    .form-error.show { display: block; }
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+.ci-item{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem}
+.ci-icon{width:2.75rem;height:2.75rem;border-radius:.625rem;flex-shrink:0;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;color:var(--s)}
+.ci-icon svg{width:1.1rem;height:1.1rem}
+.ci-item strong{display:block;font-weight:500;font-size:.9rem;color:var(--fg)}
+.ci-item span{font-size:.8rem;color:var(--muted-fg)}
+.form-card{padding:2rem;background:var(--card);border-radius:1.25rem;border:1px solid var(--border);box-shadow:0 4px 24px rgba(10,22,40,.06)}
+.form-card h3{font-family:var(--serif);font-size:1.2rem;font-weight:600;margin-bottom:1.5rem;color:var(--card-fg)}
+.fg{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
+.fg label{font-size:.85rem;font-weight:500;color:var(--fg)}
+.fg input,.fg select,.fg textarea{padding:.75rem .875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:.875rem;outline:none;transition:border-color .2s,box-shadow .2s}
+.fg textarea{height:7rem;resize:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--s);box-shadow:0 0 0 3px rgba(201,169,110,.15)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-submit{width:100%;height:3.25rem;border-radius:.75rem;background:var(--p);color:var(--p-fg);font-size:.95rem;font-weight:500;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:background .3s;margin-top:.5rem}
+.form-submit:hover{background:#162040}
+.form-success{display:none;text-align:center;padding:3rem 1rem}
+.form-success.show{display:block}
+.success-ico{width:3.5rem;height:3.5rem;border-radius:50%;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;color:var(--s);margin:0 auto .875rem}
+.success-ico svg{width:1.75rem;height:1.75rem}
+.form-success h4{font-family:var(--serif);font-size:1.2rem;color:var(--p);margin-bottom:.5rem}
+.form-success p{font-size:.9rem;color:var(--muted-fg)}
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--primary); color: var(--primary-fg);
-      padding: 5rem 2rem 2rem;
-    }
-    .footer-inner { max-width: 1280px; margin: 0 auto; }
-    .footer-grid {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem;
-      padding-bottom: 4rem;
-    }
-    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-    .footer-brand { grid-column: span 1; }
-    @media (max-width: 768px) { .footer-brand { grid-column: span 2; } }
-    .footer-logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; text-decoration: none; color: var(--primary-fg); }
-    .footer-logo span { color: var(--secondary); }
-    .footer-tagline { margin-top: 1rem; font-size: 0.875rem; color: rgba(245,240,232,0.6); line-height: 1.6; }
-    .social-links { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-    .social-link {
-      width: 2.5rem; height: 2.5rem; border-radius: 50%;
-      background: rgba(245,240,232,0.08);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--primary-fg); transition: background 0.3s;
-      text-decoration: none;
-    }
-    .social-link:hover { background: rgba(201,169,110,0.2); }
-    .social-link svg { width: 1.125rem; height: 1.125rem; }
-    .footer-col h3 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--primary-fg); }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-    .footer-col a { text-decoration: none; font-size: 0.875rem; color: rgba(245,240,232,0.6); transition: color 0.3s; }
-    .footer-col a:hover { color: var(--primary-fg); }
-    .footer-bottom {
-      padding-top: 2rem; border-top: 1px solid rgba(245,240,232,0.1);
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    }
-    .footer-bottom p { font-size: 0.875rem; color: rgba(245,240,232,0.45); }
+/* FOOTER */
+footer{background:var(--p);color:var(--p-fg);padding:4rem 2rem 2rem}
+.foot-inner{max-width:1200px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;padding-bottom:3rem}
+@media(max-width:768px){.foot-grid{grid-template-columns:1fr 1fr}}
+.foot-logo{font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p-fg)}
+.foot-logo span{color:var(--s)}
+.foot-tagline{margin-top:.875rem;font-size:.85rem;color:rgba(245,240,232,.6);line-height:1.6}
+.social-links{display:flex;gap:.625rem;margin-top:1.25rem}
+.soc-link{width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(245,240,232,.08);display:flex;align-items:center;justify-content:center;color:var(--p-fg);transition:background .3s}
+.soc-link:hover{background:rgba(201,169,110,.2)}
+.soc-link svg{width:1rem;height:1rem}
+.foot-col h3{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;color:var(--p-fg)}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.foot-col a{font-size:.85rem;color:rgba(245,240,232,.6);transition:color .3s}
+.foot-col a:hover{color:var(--p-fg)}
+.foot-bottom{padding-top:2rem;border-top:1px solid rgba(245,240,232,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.foot-bottom p{font-size:.8rem;color:rgba(245,240,232,.4)}
 
-    /* ── ANIMATIONS ── */
-    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
-    .fade-in-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .fade-in-left.visible { opacity: 1; transform: none; }
-    .fade-in-right { opacity: 0; transform: translateX(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .fade-in-right.visible { opacity: 1; transform: none; }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
-  </style>
+/* ─────────── ADMIN PANEL ─────────── */
+#admin-view{display:none;min-height:100vh;background:#F8F9FB}
+#admin-view.active{display:block}
+.admin-layout{display:flex;min-height:100vh}
+.admin-sidebar{width:260px;background:var(--p);flex-shrink:0;display:flex;flex-direction:column}
+@media(max-width:768px){.admin-sidebar{display:none}}
+.admin-sidebar-logo{padding:1.75rem 1.5rem;border-bottom:1px solid rgba(245,240,232,.1)}
+.admin-sidebar-logo span{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--p-fg)}
+.admin-sidebar-logo span.g{color:var(--s)}
+.admin-nav{padding:1.25rem .875rem;flex:1}
+.admin-nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem .875rem;border-radius:.625rem;color:rgba(245,240,232,.65);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;margin-bottom:.25rem;border:none;background:none;width:100%;text-align:left}
+.admin-nav-item:hover{background:rgba(245,240,232,.08);color:var(--p-fg)}
+.admin-nav-item.active{background:rgba(201,169,110,.15);color:var(--s)}
+.admin-nav-item svg{width:1.1rem;height:1.1rem;flex-shrink:0}
+.admin-main{flex:1;overflow-y:auto}
+.admin-topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.admin-topbar h1{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--p)}
+.admin-topbar-actions{display:flex;align-items:center;gap:1rem}
+.admin-content{padding:2rem}
+
+/* Admin tabs */
+.admin-tab{display:none}
+.admin-tab.active{display:block}
+
+/* Admin stat cards */
+.stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem}
+@media(max-width:1100px){.stat-cards{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:#fff;border-radius:.875rem;padding:1.5rem;border:1px solid #E5E7EB}
+.stat-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.stat-card-ico{width:2.5rem;height:2.5rem;border-radius:.5rem;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;color:var(--s)}
+.stat-card-ico svg{width:1.2rem;height:1.2rem}
+.stat-badge{font-size:.72rem;font-weight:600;padding:.2rem .5rem;border-radius:999px}
+.stat-badge.up{background:#DCFCE7;color:#16A34A}
+.stat-badge.dn{background:#FEE2E2;color:#DC2626}
+.stat-val{font-family:var(--serif);font-size:1.75rem;font-weight:700;color:var(--p)}
+.stat-label{font-size:.8rem;color:#6B7280;margin-top:.25rem}
+
+/* Admin table */
+.admin-card{background:#fff;border-radius:.875rem;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:1.5rem}
+.admin-card-head{padding:1.25rem 1.5rem;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between}
+.admin-card-head h2{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--p)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:.875rem 1.5rem;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #E5E7EB}
+td{padding:.875rem 1.5rem;font-size:.875rem;color:#374151;border-bottom:1px solid #F3F4F6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAFA}
+.pill{display:inline-block;padding:.2rem .625rem;border-radius:999px;font-size:.72rem;font-weight:600}
+.pill.green{background:#DCFCE7;color:#16A34A}
+.pill.amber{background:#FEF3C7;color:#D97706}
+.pill.blue{background:#DBEAFE;color:#2563EB}
+.pill.gray{background:#F3F4F6;color:#6B7280}
+
+/* PHOTO UPLOAD */
+.upload-zone{border:2px dashed #D1D5DB;border-radius:.875rem;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .2s;background:#FAFAFA}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--s);background:rgba(201,169,110,.05)}
+.upload-zone svg{width:3rem;height:3rem;color:#9CA3AF;margin:0 auto .875rem}
+.upload-zone h3{font-weight:600;color:#374151;margin-bottom:.375rem}
+.upload-zone p{font-size:.875rem;color:#6B7280}
+.upload-preview{border-radius:.875rem;overflow:hidden;position:relative}
+.upload-preview img{width:100%;height:320px;object-fit:cover;object-position:top}
+.upload-preview-actions{position:absolute;bottom:1rem;right:1rem;display:flex;gap:.5rem}
+
+/* TEXT EDITOR */
+.editor-section{background:#fff;border-radius:.875rem;border:1px solid #E5E7EB;margin-bottom:1.25rem;overflow:hidden}
+.editor-section-head{padding:1rem 1.5rem;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.editor-section-head h3{font-weight:600;font-size:.9rem;color:#374151;display:flex;align-items:center;gap:.5rem}
+.editor-section-head h3 svg{width:1rem;height:1rem;color:var(--s)}
+.editor-section-body{padding:1.5rem;display:none}
+.editor-section-body.open{display:block}
+.editor-field{margin-bottom:1.25rem}
+.editor-field label{display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.375rem;text-transform:uppercase;letter-spacing:.04em}
+.editor-field input,.editor-field textarea{width:100%;padding:.75rem .875rem;border:1px solid #E5E7EB;border-radius:.5rem;font-family:var(--sans);font-size:.875rem;color:#374151;outline:none;transition:border-color .2s}
+.editor-field textarea{height:5rem;resize:vertical}
+.editor-field input:focus,.editor-field textarea:focus{border-color:var(--s);box-shadow:0 0 0 3px rgba(201,169,110,.12)}
+.editor-save{display:inline-flex;align-items:center;gap:.5rem;padding:.625rem 1.25rem;border-radius:999px;background:var(--p);color:var(--p-fg);font-size:.85rem;font-weight:500;border:none;cursor:pointer;transition:background .2s;margin-top:.75rem}
+.editor-save:hover{background:#162040}
+.editor-saved{display:none;align-items:center;gap:.375rem;color:#16A34A;font-size:.85rem;font-weight:500;margin-top:.75rem}
+.editor-saved.show{display:inline-flex}
+
+/* ─────────── CLIENT PORTAL ─────────── */
+#portal-view{display:none;min-height:100vh;background:#F8F9FB}
+#portal-view.active{display:block}
+.portal-layout{display:flex;min-height:100vh}
+.portal-sidebar{width:260px;background:var(--p);flex-shrink:0;display:flex;flex-direction:column}
+@media(max-width:768px){.portal-sidebar{display:none}}
+.portal-sidebar-logo{padding:1.75rem 1.5rem;border-bottom:1px solid rgba(245,240,232,.1)}
+.portal-welcome{padding:1.5rem;border-bottom:1px solid rgba(245,240,232,.1)}
+.portal-avatar{width:3.25rem;height:3.25rem;border-radius:50%;background:rgba(201,169,110,.25);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.25rem;color:var(--s);margin-bottom:.75rem}
+.portal-welcome-name{font-weight:600;color:var(--p-fg);font-size:.95rem}
+.portal-welcome-pkg{font-size:.78rem;color:rgba(245,240,232,.5);margin-top:.2rem}
+.portal-nav{padding:1rem .875rem;flex:1}
+.portal-nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem .875rem;border-radius:.625rem;color:rgba(245,240,232,.65);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;margin-bottom:.2rem;border:none;background:none;width:100%;text-align:left}
+.portal-nav-item:hover{background:rgba(245,240,232,.08);color:var(--p-fg)}
+.portal-nav-item.active{background:rgba(201,169,110,.15);color:var(--s)}
+.portal-nav-item svg{width:1.1rem;height:1.1rem;flex-shrink:0}
+.portal-main{flex:1;overflow-y:auto}
+.portal-topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.portal-topbar h1{font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--p)}
+.portal-content{padding:2rem}
+.portal-tab{display:none}
+.portal-tab.active{display:block}
+
+/* Portal progress */
+.prog-bar-wrap{background:#E5E7EB;border-radius:999px;height:8px;overflow:hidden;margin:.5rem 0 .25rem}
+.prog-bar{height:100%;border-radius:999px;background:var(--s);transition:width .6s ease}
+
+/* Timeline */
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:.4rem;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:1.5rem}
+.tl-dot{position:absolute;left:-1.625rem;top:.25rem;width:.875rem;height:.875rem;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--border)}
+.tl-dot.done{background:var(--s);box-shadow:0 0 0 2px rgba(201,169,110,.3)}
+.tl-dot.next{background:var(--p);box-shadow:0 0 0 2px rgba(10,22,40,.3)}
+.tl-dot.future{background:#E5E7EB;box-shadow:0 0 0 2px #E5E7EB}
+.tl-card{background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid #E5E7EB}
+.tl-card.highlight{border-color:var(--s);background:rgba(201,169,110,.04)}
+.tl-date{font-size:.75rem;color:#9CA3AF;margin-bottom:.375rem}
+.tl-title{font-weight:600;color:#1F2937;font-size:.9rem}
+.tl-sub{font-size:.825rem;color:#6B7280;margin-top:.25rem}
+.tl-notes{font-size:.825rem;color:#374151;margin-top:.625rem;padding-top:.625rem;border-top:1px solid #F3F4F6;line-height:1.6}
+.tl-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.72rem;font-weight:600;padding:.2rem .5rem;border-radius:999px;margin-top:.5rem}
+.tl-badge.done{background:#DCFCE7;color:#16A34A}
+.tl-badge.next{background:#DBEAFE;color:#2563EB}
+.tl-badge.future{background:#F3F4F6;color:#9CA3AF}
+
+/* Tasks */
+.task-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:#fff;border-radius:.75rem;border:1px solid #E5E7EB;margin-bottom:.625rem}
+.task-check{width:1.25rem;height:1.25rem;border-radius:.3rem;border:2px solid #D1D5DB;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.task-check.checked{background:var(--s);border-color:var(--s)}
+.task-check.checked svg{display:block}
+.task-check svg{display:none;width:.75rem;height:.75rem;color:#fff}
+.task-title{flex:1;font-size:.875rem;color:#374151;font-weight:500}
+.task-title.done{text-decoration:line-through;color:#9CA3AF}
+.task-due{font-size:.75rem;color:#9CA3AF}
+.task-due.urgent{color:#DC2626;font-weight:600}
+
+/* Resources */
+.resource-card{background:#fff;border-radius:.875rem;border:1px solid #E5E7EB;padding:1.5rem;display:flex;gap:1.25rem;align-items:center;transition:all .2s;margin-bottom:.875rem;cursor:pointer}
+.resource-card:hover{border-color:var(--s);box-shadow:0 4px 16px rgba(10,22,40,.08)}
+.resource-ico{width:3rem;height:3rem;border-radius:.625rem;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s)}
+.resource-ico svg{width:1.4rem;height:1.4rem}
+.resource-title{font-weight:600;font-size:.9rem;color:#1F2937}
+.resource-desc{font-size:.8rem;color:#6B7280;margin-top:.2rem}
+.resource-type{font-size:.72rem;color:var(--s);font-weight:600;margin-top:.375rem}
+
+/* ─── MODAL ─── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:1.25rem;width:100%;max-width:540px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.modal-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--p)}
+.modal-close{background:none;border:none;font-size:1.5rem;color:var(--muted-fg);cursor:pointer;line-height:1;padding:.25rem}
+.modal-close:hover{color:var(--p)}
+.modal-body{padding:1.5rem}
+.calendly-inline{min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;color:var(--muted-fg)}
+.calendly-inline svg{width:3rem;height:3rem;color:var(--s)}
+.calendly-inline h4{font-family:var(--serif);font-size:1.1rem;color:var(--p)}
+.calendly-inline p{font-size:.875rem;max-width:320px}
+.calendly-inline a{display:inline-flex;align-items:center;gap:.5rem;margin-top:.5rem}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:#1F2937;color:#fff;padding:.875rem 1.25rem;border-radius:.75rem;font-size:.875rem;display:flex;align-items:center;gap:.625rem;box-shadow:0 8px 32px rgba(0,0,0,.2);transform:translateY(100px);opacity:0;transition:all .35s;pointer-events:none}
+.toast.show{transform:none;opacity:1}
+.toast svg{width:1.1rem;height:1.1rem;color:#4ADE80;flex-shrink:0}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav id="navbar">
+<!-- ═══════════════════════════════════════
+     LANDING PAGE
+═══════════════════════════════════════ -->
+<div id="landing-view" class="view active">
+
+<!-- NAV -->
+<nav id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo">Floriana <span>Martinez</span></a>
     <ul class="nav-links">
@@ -524,499 +424,236 @@
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="#contato" class="btn-primary">Agendar Sessão</a>
+    <div class="nav-actions">
+      <div class="nav-demo-btns">
+        <button class="nav-demo-btn" onclick="showView('admin-view')">⚙️ Admin</button>
+        <button class="nav-demo-btn" onclick="showView('portal-view')">👤 Portal Cliente</button>
+      </div>
+      <button class="btn btn-p btn-sm" onclick="openCalendly()">Agendar Sessão</button>
     </div>
-    <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
-      <svg id="hamburger-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M3 12h18M3 6h18M3 18h18"/>
-      </svg>
+    <button class="hamburger" onclick="document.getElementById('mobile-nav').classList.toggle('open')" aria-label="Menu">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
   </div>
 </nav>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobile-menu">
-  <a href="#sobre" onclick="closeMobile()">Sobre</a>
-  <a href="#servicos" onclick="closeMobile()">Serviços</a>
-  <a href="#pacotes" onclick="closeMobile()">Pacotes</a>
-  <a href="#depoimentos" onclick="closeMobile()">Depoimentos</a>
-  <a href="#faq" onclick="closeMobile()">FAQ</a>
-  <a href="#contato" onclick="closeMobile()">Contato</a>
-  <a href="#contato" class="btn-primary" onclick="closeMobile()">Agendar Sessão</a>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#sobre" onclick="this.closest('.mobile-nav').classList.remove('open')">Sobre</a>
+  <a href="#servicos" onclick="this.closest('.mobile-nav').classList.remove('open')">Serviços</a>
+  <a href="#pacotes" onclick="this.closest('.mobile-nav').classList.remove('open')">Pacotes</a>
+  <a href="#depoimentos" onclick="this.closest('.mobile-nav').classList.remove('open')">Depoimentos</a>
+  <a href="#contato" onclick="this.closest('.mobile-nav').classList.remove('open')">Contato</a>
+  <button class="btn btn-p" onclick="openCalendly()">Agendar Sessão Gratuita</button>
 </div>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-blob1"></div>
-  <div class="hero-blob2"></div>
+  <div class="hero-blob hero-blob1"></div>
+  <div class="hero-blob hero-blob2"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        <span>Coaching Premium para Brasileiros nos EUA</span>
-      </div>
-      <h1 class="hero-title">
-        Transforme sua
-        <span class="gold">Carreira Internacional</span>
-      </h1>
-      <p class="hero-sub">
-        Estratégia, clareza e propósito para brasileiros que buscam alcançar o próximo nível em suas carreiras nos Estados Unidos. Sua jornada de transformação começa aqui.
-      </p>
+      <div class="hero-badge"><span class="badge-dot"></span><span>Coaching Premium para Brasileiros nos EUA</span></div>
+      <h1 class="hero-title">Transforme sua<span class="gold">Carreira Internacional</span></h1>
+      <p class="hero-sub">Estratégia, clareza e propósito para brasileiros que buscam alcançar o próximo nível em suas carreiras nos Estados Unidos. Sua jornada de transformação começa aqui.</p>
       <div class="hero-btns">
-        <a href="#contato" class="btn-lg primary">
+        <button class="btn btn-p btn-lg" onclick="openCalendly()">
           Agendar Sessão Gratuita
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="#sobre" class="btn-lg ghost">
+        </button>
+        <a href="#sobre" class="btn btn-ghost btn-lg">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           Conheça Minha História
         </a>
       </div>
       <div class="hero-stats">
-        <div>
-          <div class="hero-stat-val">500+</div>
-          <div class="hero-stat-lbl">Clientes Transformados</div>
-        </div>
-        <div>
-          <div class="hero-stat-val">15+</div>
-          <div class="hero-stat-lbl">Anos de Experiência</div>
-        </div>
-        <div>
-          <div class="hero-stat-val">98%</div>
-          <div class="hero-stat-lbl">Taxa de Satisfação</div>
-        </div>
+        <div><div class="stat-val">500+</div><div class="stat-lbl">Clientes Transformados</div></div>
+        <div><div class="stat-val">15+</div><div class="stat-lbl">Anos de Experiência</div></div>
+        <div><div class="stat-val">98%</div><div class="stat-lbl">Taxa de Satisfação</div></div>
       </div>
     </div>
     <div class="hero-photo-col">
-      <div class="hero-photo-frame">
-        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-        <p>Coloque a foto da Floriana aqui<br/><small>(substitua esta div por uma tag &lt;img&gt;)</small></p>
+      <div class="photo-frame" id="hero-photo-frame">
+        <img id="hero-photo-img" src="" alt="Floriana Martinez"/>
+        <div class="placeholder" id="hero-placeholder">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+          <p>Foto da Floriana<br/><small>Faça upload no painel Admin</small></p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="scroll-indicator">
-    <div class="scroll-dot-wrap"><div class="scroll-dot"></div></div>
-  </div>
+  <div class="scroll-anim"><div class="scroll-wrap"><div class="scroll-d"></div></div></div>
 </section>
 
 <!-- ABOUT -->
-<section id="sobre" class="section bg-muted">
-  <div class="section-inner">
+<section id="sobre" class="sec bg-m">
+  <div class="sec-inner">
     <div class="about-grid">
-      <div class="about-text fade-in-left">
-        <span class="section-label">Sobre Mim</span>
-        <h2 class="section-title">Uma jornada de transformação começa com clareza</h2>
-        <p style="margin-top:1.5rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75;">
-          Sou Floriana Martinez, Life &amp; Career Coach especializada em ajudar brasileiros a navegarem suas carreiras nos Estados Unidos. Minha trajetória única — da aviação ao marketing, do Brasil ao mundo — me deu as ferramentas para entender profundamente os desafios que você enfrenta.
-        </p>
-        <p style="margin-top:1rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75;">
-          Acredito que cada pessoa tem um potencial extraordinário. Meu papel é ajudá-lo a descobrir esse potencial e criar um plano estratégico para alcançar seus objetivos mais ambiciosos.
-        </p>
-        <blockquote>
-          <p>"Seu maior crescimento acontece quando você decide que suas circunstâncias não definem seu destino."</p>
-        </blockquote>
+      <div class="fi-l" id="about-text-block">
+        <span class="sec-label">Sobre Mim</span>
+        <h2 class="sec-title" id="about-titulo">Uma jornada de transformação começa com clareza</h2>
+        <p style="margin-top:1.25rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75" id="about-p1">Sou Floriana Martinez, Life &amp; Career Coach especializada em ajudar brasileiros a navegarem suas carreiras nos Estados Unidos. Minha trajetória única — da aviação ao marketing, do Brasil ao mundo — me deu as ferramentas para entender profundamente os desafios que você enfrenta.</p>
+        <p style="margin-top:.875rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75" id="about-p2">Acredito que cada pessoa tem um potencial extraordinário. Meu papel é ajudá-lo a descobrir esse potencial e criar um plano estratégico para alcançar seus objetivos mais ambiciosos.</p>
+        <div class="about-quote"><p id="about-citacao">"Seu maior crescimento acontece quando você decide que suas circunstâncias não definem seu destino."</p></div>
       </div>
-      <div class="credentials-grid fade-in-right">
-        <div class="credential-card delay-1">
-          <div class="credential-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-          </div>
-          <h3>Certificada ICF</h3>
-          <p>International Coach Federation</p>
-        </div>
-        <div class="credential-card delay-2">
-          <div class="credential-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
-          </div>
-          <h3>Marketing Estratégico</h3>
-          <p>Formação ESPM — São Paulo</p>
-        </div>
-        <div class="credential-card delay-3">
-          <div class="credential-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
-          </div>
-          <h3>Vivência Global</h3>
-          <p>Experiência em companhias aéreas internacionais</p>
-        </div>
-        <div class="credential-card delay-4">
-          <div class="credential-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
-          </div>
-          <h3>Aviação Internacional</h3>
-          <p>Soft skills e visão multicultural</p>
-        </div>
+      <div class="cred-grid fi-r">
+        <div class="cred-card d1"><div class="cred-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><h3>Certificada ICF</h3><p>International Coach Federation</p></div>
+        <div class="cred-card d2"><div class="cred-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg></div><h3>Marketing Estratégico</h3><p>Formação ESPM — São Paulo</p></div>
+        <div class="cred-card d3"><div class="cred-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg></div><h3>Vivência Global</h3><p>Companhias aéreas internacionais</p></div>
+        <div class="cred-card d4"><div class="cred-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg></div><h3>Aviação Internacional</h3><p>Soft skills e visão multicultural</p></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SERVICES -->
-<section id="servicos" class="section">
-  <div class="section-inner">
-    <div class="services-header fade-in">
-      <span class="section-label">Serviços</span>
-      <h2 class="section-title">Programas desenhados para sua transformação</h2>
-      <p class="section-sub">Cada jornada é única. Por isso, ofereço programas flexíveis que se adaptam aos seus objetivos específicos e ao seu momento de carreira.</p>
+<section id="servicos" class="sec">
+  <div class="sec-inner">
+    <div class="fi" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <span class="sec-label">Serviços</span>
+      <h2 class="sec-title">Programas desenhados para sua transformação</h2>
+      <p class="sec-sub" style="max-width:none">Cada jornada é única. Por isso, ofereço programas flexíveis que se adaptam aos seus objetivos específicos e ao seu momento de carreira.</p>
     </div>
-    <div class="services-grid">
-      <div class="service-card fade-in delay-1">
-        <div class="service-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg>
-        </div>
-        <div>
-          <h3>Descoberta de Propósito</h3>
-          <p>Identifique seus valores, paixões e forças únicas para construir uma carreira alinhada com quem você realmente é.</p>
-          <div class="tags">
-            <span class="tag">Assessment de Valores</span>
-            <span class="tag">Mapeamento de Forças</span>
-            <span class="tag">Visão de Futuro</span>
-          </div>
-        </div>
-      </div>
-      <div class="service-card fade-in delay-2">
-        <div class="service-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
-        </div>
-        <div>
-          <h3>Transição de Carreira</h3>
-          <p>Estratégias personalizadas para navegar mudanças de carreira com confiança, seja em uma nova indústria ou país.</p>
-          <div class="tags">
-            <span class="tag">Planejamento Estratégico</span>
-            <span class="tag">Networking Internacional</span>
-            <span class="tag">Posicionamento de Marca</span>
-          </div>
-        </div>
-      </div>
-      <div class="service-card fade-in delay-2">
-        <div class="service-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
-        </div>
-        <div>
-          <h3>Aceleração Profissional</h3>
-          <p>Desenvolva as habilidades e mindset necessários para alcançar promoções e oportunidades de liderança.</p>
-          <div class="tags">
-            <span class="tag">Executive Presence</span>
-            <span class="tag">Comunicação de Impacto</span>
-            <span class="tag">Gestão de Stakeholders</span>
-          </div>
-        </div>
-      </div>
-      <div class="service-card fade-in delay-3">
-        <div class="service-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
-        </div>
-        <div>
-          <h3>Coaching Executivo</h3>
-          <p>Suporte contínuo para líderes que buscam maximizar seu impacto e desenvolver equipes de alta performance.</p>
-          <div class="tags">
-            <span class="tag">Liderança Situacional</span>
-            <span class="tag">Inteligência Emocional</span>
-            <span class="tag">Tomada de Decisão</span>
-          </div>
-        </div>
-      </div>
+    <div class="grid2">
+      <div class="svc-card fi d1"><div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg></div><div><h3>Descoberta de Propósito</h3><p>Identifique seus valores, paixões e forças únicas para construir uma carreira alinhada com quem você realmente é.</p><div class="tags"><span class="tag">Assessment de Valores</span><span class="tag">Mapeamento de Forças</span><span class="tag">Visão de Futuro</span></div></div></div>
+      <div class="svc-card fi d2"><div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg></div><div><h3>Transição de Carreira</h3><p>Estratégias personalizadas para navegar mudanças de carreira com confiança, seja em uma nova indústria ou país.</p><div class="tags"><span class="tag">Planejamento Estratégico</span><span class="tag">Networking Internacional</span><span class="tag">Posicionamento de Marca</span></div></div></div>
+      <div class="svc-card fi d2"><div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div><div><h3>Aceleração Profissional</h3><p>Desenvolva as habilidades e mindset necessários para alcançar promoções e oportunidades de liderança.</p><div class="tags"><span class="tag">Executive Presence</span><span class="tag">Comunicação de Impacto</span><span class="tag">Gestão de Stakeholders</span></div></div></div>
+      <div class="svc-card fi d3"><div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg></div><div><h3>Coaching Executivo</h3><p>Suporte contínuo para líderes que buscam maximizar seu impacto e desenvolver equipes de alta performance.</p><div class="tags"><span class="tag">Liderança Situacional</span><span class="tag">Inteligência Emocional</span><span class="tag">Tomada de Decisão</span></div></div></div>
     </div>
-    <div class="services-cta fade-in">
-      <a href="#pacotes" class="btn-lg primary">
-        Ver Pacotes e Preços
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
+    <div class="fi" style="text-align:center;margin-top:3rem"><a href="#pacotes" class="btn btn-p btn-lg">Ver Pacotes e Preços <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="pacotes" class="section bg-muted">
-  <div class="section-inner">
-    <div class="pricing-header fade-in">
-      <span class="section-label">Investimento</span>
-      <h2 class="section-title">Escolha o programa certo para você</h2>
-      <p class="section-sub">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Sem compromisso.</p>
+<section id="pacotes" class="sec bg-m">
+  <div class="sec-inner">
+    <div class="fi" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <span class="sec-label">Investimento</span>
+      <h2 class="sec-title">Escolha o programa certo para você</h2>
+      <p class="sec-sub" style="max-width:none">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Sem compromisso.</p>
     </div>
     <div class="pricing-grid">
-      <!-- Essencial -->
-      <div class="pricing-card normal fade-in delay-1">
-        <div class="pricing-name">Essencial</div>
-        <div class="pricing-desc">Para quem quer dar o primeiro passo com clareza e direção.</div>
-        <div class="pricing-price">
-          <span class="price-currency">$</span>
-          <span class="price-amount">997</span>
-        </div>
-        <div class="price-period" style="color:var(--muted-fg);font-size:0.875rem;margin-top:0.25rem;">por programa</div>
-        <hr class="pricing-divider"/>
-        <ul class="pricing-benefits">
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>4 sessões individuais (60 min cada)</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment de valores e forças</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Plano de ação personalizado</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte por mensagem entre sessões</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso ao portal do cliente</li>
+      <div class="pc normal fi d1">
+        <div class="pc-name">Essencial</div>
+        <div class="pc-desc">Para quem quer dar o primeiro passo com clareza e direção.</div>
+        <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">997</span></div>
+        <div class="pc-per">por programa</div>
+        <hr class="pc-divider"/>
+        <ul class="pc-benefits">
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>4 sessões individuais (60 min)</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment de valores e forças</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Plano de ação personalizado</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte por mensagem</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso ao portal do cliente</li>
         </ul>
-        <a href="#contato" class="btn-pricing">
-          Começar Agora
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <button class="pc-btn" onclick="openCalendly()">Começar Agora <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       </div>
-      <!-- Transformação (featured) -->
-      <div class="pricing-card featured fade-in delay-2">
-        <div class="pricing-badge">
-          <svg viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-          Mais Popular
-        </div>
-        <div class="pricing-name">Transformação</div>
-        <div class="pricing-desc">O programa mais completo para uma mudança real e duradoura.</div>
-        <div class="pricing-price">
-          <span class="price-currency">$</span>
-          <span class="price-amount">2.497</span>
-        </div>
-        <div class="price-period">por programa</div>
-        <hr class="pricing-divider"/>
-        <ul class="pricing-benefits">
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>12 sessões individuais (60 min cada)</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment completo de carreira</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão e otimização do LinkedIn</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão do currículo em inglês</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Estratégia de networking internacional</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte ilimitado por mensagem</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso VIP ao portal do cliente</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>2 sessões bônus de follow-up</li>
+      <div class="pc feat fi d2">
+        <div class="pc-badge"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg> Mais Popular</div>
+        <div class="pc-name">Transformação</div>
+        <div class="pc-desc">O programa mais completo para uma mudança real e duradoura.</div>
+        <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">2.497</span></div>
+        <div class="pc-per">por programa</div>
+        <hr class="pc-divider"/>
+        <ul class="pc-benefits">
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>12 sessões individuais (60 min)</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment completo de carreira</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão e otimização do LinkedIn</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão do currículo em inglês</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Networking internacional</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte ilimitado por mensagem</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso VIP ao portal</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>2 sessões bônus de follow-up</li>
         </ul>
-        <a href="#contato" class="btn-pricing">
-          Quero me Transformar
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <button class="pc-btn" onclick="openCalendly()">Quero me Transformar <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       </div>
-      <!-- Executivo VIP -->
-      <div class="pricing-card normal fade-in delay-3">
-        <div class="pricing-name">Executivo VIP</div>
-        <div class="pricing-desc">Para líderes que buscam o próximo nível com suporte dedicado.</div>
-        <div class="pricing-price">
-          <span class="price-currency">$</span>
-          <span class="price-amount">4.997</span>
-        </div>
-        <div class="price-period" style="color:var(--muted-fg);font-size:0.875rem;margin-top:0.25rem;">por programa</div>
-        <hr class="pricing-divider"/>
-        <ul class="pricing-benefits">
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>24 sessões individuais (90 min cada)</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Coaching de liderança e presença executiva</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Estratégia de marca pessoal 360°</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Introduções à rede de contatos da Floriana</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão de currículo e LinkedIn</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Disponibilidade de emergência (WhatsApp)</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso vitalício ao portal</li>
-          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Sessões mensais de manutenção</li>
+      <div class="pc normal fi d3">
+        <div class="pc-name">Executivo VIP</div>
+        <div class="pc-desc">Para líderes que buscam o próximo nível com suporte dedicado.</div>
+        <div class="pc-price"><span class="pc-cur">$</span><span class="pc-amt">4.997</span></div>
+        <div class="pc-per">por programa</div>
+        <hr class="pc-divider"/>
+        <ul class="pc-benefits">
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>24 sessões individuais (90 min)</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Coaching de liderança executiva</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Estratégia de marca pessoal 360°</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Rede de contatos da Floriana</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Disponibilidade WhatsApp</li>
+          <li><span class="chk"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso vitalício ao portal</li>
         </ul>
-        <a href="#contato" class="btn-pricing">
-          Falar com a Floriana
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <button class="pc-btn" onclick="openWhatsapp()">Falar com a Floriana <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
-    <p class="pricing-note">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Pagamento parcelado disponível.</p>
+    <p style="text-align:center;margin-top:2rem;font-size:.85rem;color:var(--muted-fg)">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Pagamento parcelado disponível.</p>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<section id="depoimentos" class="section bg-primary-section">
-  <div class="section-inner">
-    <div class="testimonials-header fade-in">
-      <span class="section-label">Depoimentos</span>
-      <h2 class="section-title">Histórias de transformação real</h2>
-      <p class="section-sub">Cada cliente traz uma história única. Aqui estão algumas das transformações que tenho o privilégio de testemunhar.</p>
+<section id="depoimentos" class="sec bg-p">
+  <div class="sec-inner">
+    <div class="fi" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <span class="sec-label">Depoimentos</span>
+      <h2 class="sec-title" style="color:var(--p-fg)">Histórias de transformação real</h2>
+      <p class="sec-sub" style="color:rgba(245,240,232,.65);max-width:none">Cada cliente traz uma história única. Aqui estão algumas das transformações que tenho o privilégio de testemunhar.</p>
     </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card fade-in delay-1">
-        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-        <p class="testimonial-text">Floriana me ajudou a enxergar possibilidades que eu nem imaginava. Em 6 meses, consegui a promoção que buscava há anos e, mais importante, encontrei propósito no que faço.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">C</div>
-          <div>
-            <div class="author-name">Carolina S.</div>
-            <div class="author-role">Senior Product Manager</div>
-            <div class="author-role">Tech Company, San Francisco</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in delay-2">
-        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-        <p class="testimonial-text">O processo de coaching foi transformador. Aprendi a me posicionar com confiança em reuniões executivas e desenvolvi uma presença de liderança que mudou completamente minha trajetória.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">R</div>
-          <div>
-            <div class="author-name">Ricardo M.</div>
-            <div class="author-role">Engineering Director</div>
-            <div class="author-role">Fortune 500, New York</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in delay-3">
-        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-        <p class="testimonial-text">Cheguei nos EUA perdida profissionalmente. Com a Floriana, não só encontrei minha direção, mas também aprendi a valorizar minha bagagem cultural como diferencial competitivo.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">A</div>
-          <div>
-            <div class="author-name">Amanda P.</div>
-            <div class="author-role">Marketing Manager</div>
-            <div class="author-role">Startup, Miami</div>
-          </div>
-        </div>
-      </div>
+    <div class="grid3">
+      <div class="testi-card fi d1"><svg class="q-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg><p class="testi-text">Floriana me ajudou a enxergar possibilidades que eu nem imaginava. Em 6 meses, consegui a promoção que buscava há anos e, mais importante, encontrei propósito no que faço.</p><div class="testi-author"><div class="author-av">C</div><div><div class="author-name">Carolina S.</div><div class="author-role">Senior PM · San Francisco</div></div></div></div>
+      <div class="testi-card fi d2"><svg class="q-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg><p class="testi-text">O processo de coaching foi transformador. Aprendi a me posicionar com confiança em reuniões executivas e desenvolvi uma presença de liderança que mudou completamente minha trajetória.</p><div class="testi-author"><div class="author-av">R</div><div><div class="author-name">Ricardo M.</div><div class="author-role">Engineering Director · New York</div></div></div></div>
+      <div class="testi-card fi d3"><svg class="q-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg><p class="testi-text">Cheguei nos EUA perdida profissionalmente. Com a Floriana, não só encontrei minha direção, mas também aprendi a valorizar minha bagagem cultural como diferencial competitivo.</p><div class="testi-author"><div class="author-av">A</div><div><div class="author-name">Amanda P.</div><div class="author-role">Marketing Manager · Miami</div></div></div></div>
     </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section id="faq" class="section">
-  <div class="section-inner">
-    <div class="faq-inner">
-      <div class="faq-header fade-in">
-        <span class="section-label">Dúvidas Frequentes</span>
-        <h2 class="section-title" style="max-width:none;text-align:center;">Tudo que você precisa saber antes de começar</h2>
-        <p class="section-sub" style="max-width:none;text-align:center;">Não encontrou sua resposta? Entre em contato — respondo em até 24 horas.</p>
-      </div>
-      <div class="faq-list fade-in">
-        <div class="faq-item">
-          <button class="faq-question open" onclick="toggleFaq(this)">
-            Como funciona a sessão de descoberta gratuita?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg></span>
-          </button>
-          <div class="faq-answer open">
-            <div class="faq-answer-inner"><p>É uma conversa de 30 minutos pelo Zoom onde você me conta sua situação atual, seus objetivos e desafios. Ao final, te apresento o programa mais adequado para você. Sem compromisso de contratação.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            O atendimento é presencial ou online?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>100% online, via Zoom. Atendo clientes em todos os estados dos EUA e também no Brasil. A flexibilidade do formato online permite que você faça as sessões de onde estiver, no horário que melhor funciona.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Em quanto tempo vejo resultados?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>Os primeiros insights geralmente aparecem já nas primeiras 2 sessões. Mudanças concretas de carreira — promoções, transições, novos empregos — costumam acontecer entre 3 e 6 meses do início do programa, dependendo dos seus objetivos.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Você atende apenas brasileiros nos EUA?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>Meu foco principal são profissionais brasileiros navegando o mercado americano, mas atendo qualquer profissional que busque transformação de carreira e se comunique em português. A vivência bicultural é meu diferencial.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Como funciona o pagamento?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>Aceitamos cartão de crédito internacional, transferência bancária (Zelle, Wise) e PIX para clientes no Brasil. O pagamento pode ser feito à vista com desconto ou parcelado. Discutimos as condições na sessão de descoberta.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Posso cancelar ou pausar o programa?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>Sim. Temos uma política de cancelamento flexível. Sessões podem ser reagendadas com até 24h de antecedência sem custo. Em casos de imprevisto maior, avaliamos juntos a melhor solução.</p></div>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Você tem experiência com minha área de atuação?
-            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
-          </button>
-          <div class="faq-answer">
-            <div class="faq-answer-inner"><p>Já trabalhei com profissionais de tecnologia, finanças, marketing, saúde, aviação, engenharia e muitas outras áreas. O coaching não exige expertise técnica na sua área — trabalho com sua mentalidade, estratégia e comunicação.</p></div>
-          </div>
-        </div>
-      </div>
-      <div class="faq-cta fade-in">
-        <p>Ainda tem dúvidas? Fale diretamente comigo.</p>
-        <a href="#contato" class="btn-lg primary">
-          Entrar em Contato
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+<section id="faq" class="sec">
+  <div class="sec-inner" style="max-width:780px">
+    <div class="fi" style="text-align:center;margin-bottom:3rem">
+      <span class="sec-label">Dúvidas Frequentes</span>
+      <h2 class="sec-title" style="text-align:center">Tudo que você precisa saber antes de começar</h2>
+    </div>
+    <div id="faq-list">
+      <div class="faq-item"><button class="faq-q open" onclick="toggleFaq(this)">Como funciona a sessão de descoberta gratuita?<span class="faq-tog"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg></span></button><div class="faq-ans open"><div class="faq-ans-inner"><p>É uma conversa de 30 minutos pelo Zoom onde você me conta sua situação atual, seus objetivos e desafios. Ao final, te apresento o programa mais adequado para você. Sem compromisso de contratação.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">O atendimento é presencial ou online?<span class="faq-tog"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner"><p>100% online, via Zoom. Atendo clientes em todos os estados dos EUA e também no Brasil. A flexibilidade do formato online permite que você faça as sessões de onde estiver, no horário que melhor funciona.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Em quanto tempo vejo resultados?<span class="faq-tog"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner"><p>Os primeiros insights geralmente aparecem já nas primeiras 2 sessões. Mudanças concretas de carreira — promoções, transições, novos empregos — costumam acontecer entre 3 e 6 meses do início do programa.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Como funciona o pagamento?<span class="faq-tog"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner"><p>Aceitamos cartão de crédito internacional, transferência bancária (Zelle, Wise) e PIX para clientes no Brasil. O pagamento pode ser feito à vista com desconto ou parcelado. Discutimos as condições na sessão de descoberta.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Posso cancelar ou pausar o programa?<span class="faq-tog"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner"><p>Sim. Temos uma política de cancelamento flexível. Sessões podem ser reagendadas com até 24h de antecedência sem custo. Em casos de imprevisto maior, avaliamos juntos a melhor solução.</p></div></div></div>
+    </div>
+    <div class="fi" style="text-align:center;margin-top:2.5rem">
+      <p style="color:var(--muted-fg);margin-bottom:1.25rem">Ainda tem dúvidas? Fale diretamente comigo.</p>
+      <button class="btn btn-p btn-lg" onclick="openEmail()">Entrar em Contato <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contato" class="section bg-muted">
-  <div class="section-inner">
+<section id="contato" class="sec bg-m">
+  <div class="sec-inner">
     <div class="contact-grid">
-      <div class="fade-in-left">
-        <span class="section-label">Contato</span>
-        <h2 class="section-title">Pronto para transformar sua carreira?</h2>
-        <p class="section-sub">O primeiro passo é sempre o mais importante. Agende uma sessão de descoberta gratuita e vamos conversar sobre seus objetivos e como posso ajudá-lo a alcançá-los.</p>
-        <div class="contact-info-items">
-          <div class="contact-info-item">
-            <div class="contact-icon">
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
-            </div>
-            <div>
-              <strong>Sessão de Descoberta</strong>
-              <span>30 minutos gratuitos</span>
-            </div>
-          </div>
-          <div class="contact-info-item">
-            <div class="contact-icon">
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-            </div>
-            <div>
-              <strong>contato@florianamartinez.com</strong>
-              <span>Resposta em até 24 horas</span>
-            </div>
-          </div>
-          <div class="contact-info-item">
-            <div class="contact-icon">
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
-            </div>
-            <div>
-              <strong>Miami, Florida</strong>
-              <span>Atendimento 100% online</span>
-            </div>
-          </div>
+      <div class="fi-l">
+        <span class="sec-label">Contato</span>
+        <h2 class="sec-title">Pronto para transformar sua carreira?</h2>
+        <p class="sec-sub">O primeiro passo é sempre o mais importante. Agende uma sessão de descoberta gratuita e vamos conversar sobre seus objetivos.</p>
+        <div style="margin-top:2rem">
+          <div class="ci-item"><div class="ci-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div><div><strong>Sessão de Descoberta</strong><span>30 minutos gratuitos via Zoom</span></div></div>
+          <div class="ci-item" style="cursor:pointer" onclick="openEmail()"><div class="ci-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></div><div><strong>contato@florianamartinez.com</strong><span>Clique para enviar e-mail · Resposta em 24h</span></div></div>
+          <div class="ci-item" style="cursor:pointer" onclick="openWhatsapp()"><div class="ci-icon"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div><div><strong>WhatsApp</strong><span>Clique para abrir conversa</span></div></div>
+          <div class="ci-item"><div class="ci-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg></div><div><strong>Miami, Florida</strong><span>Atendimento 100% online</span></div></div>
         </div>
       </div>
-      <div class="fade-in-right">
-        <div class="contact-form-card">
+      <div class="fi-r">
+        <div class="form-card">
           <h3>Agende sua sessão gratuita</h3>
-          <div id="form-error" class="form-error">Algo deu errado. Tente novamente ou envie um e-mail diretamente.</div>
           <div id="form-success" class="form-success">
-            <div class="success-icon">
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <h4>Mensagem recebida!</h4>
+            <div class="success-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <h4>Mensagem enviada!</h4>
             <p>Entrarei em contato em até 24 horas. Obrigada!</p>
           </div>
-          <form id="contact-form" onsubmit="handleSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" placeholder="Seu nome" required />
-              </div>
-              <div class="form-group">
-                <label for="sobrenome">Sobrenome</label>
-                <input type="text" id="sobrenome" placeholder="Seu sobrenome" required />
-              </div>
+          <form id="contact-form" onsubmit="submitForm(event)">
+            <div class="fg2">
+              <div class="fg"><label>Nome</label><input type="text" id="f-nome" placeholder="Seu nome" required/></div>
+              <div class="fg"><label>Sobrenome</label><input type="text" id="f-sob" placeholder="Sobrenome" required/></div>
             </div>
-            <div class="form-group">
-              <label for="email">E-mail</label>
-              <input type="email" id="email" placeholder="seu@email.com" required />
-            </div>
-            <div class="form-group">
-              <label for="interesse">Área de Interesse</label>
-              <select id="interesse" required>
+            <div class="fg"><label>E-mail</label><input type="email" id="f-email" placeholder="seu@email.com" required/></div>
+            <div class="fg"><label>Área de Interesse</label>
+              <select id="f-int" required>
                 <option value="">Selecione uma opção</option>
                 <option>Transição de Carreira</option>
                 <option>Descoberta de Propósito</option>
@@ -1024,13 +661,10 @@
                 <option>Coaching Executivo</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="mensagem">Mensagem</label>
-              <textarea id="mensagem" placeholder="Conte um pouco sobre seus objetivos..." required></textarea>
-            </div>
-            <button type="submit" class="btn-submit" id="submit-btn">
+            <div class="fg"><label>Mensagem</label><textarea id="f-msg" placeholder="Conte um pouco sobre seus objetivos..." required></textarea></div>
+            <button type="submit" class="form-submit" id="submit-btn">
               Enviar Mensagem
-              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
             </button>
           </form>
         </div>
@@ -1041,105 +675,573 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="#" class="footer-logo">Floriana <span>Martinez</span></a>
-        <p class="footer-tagline">Transformando carreiras com estratégia, clareza e propósito.</p>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div>
+        <a href="#" class="foot-logo">Floriana <span>Martinez</span></a>
+        <p class="foot-tagline">Transformando carreiras com estratégia, clareza e propósito.</p>
         <div class="social-links">
-          <a href="https://linkedin.com/in/florianamartinez" target="_blank" class="social-link" aria-label="LinkedIn">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a href="https://instagram.com/florianamartinez" target="_blank" class="social-link" aria-label="Instagram">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="https://wa.me/13051234567" target="_blank" class="social-link" aria-label="WhatsApp">
-            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
+          <a href="https://linkedin.com/in/florianamartinez" target="_blank" class="soc-link" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="https://instagram.com/florianamartinez" target="_blank" class="soc-link" aria-label="Instagram"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="https://wa.me/13051234567" target="_blank" class="soc-link" aria-label="WhatsApp"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
         </div>
       </div>
-      <div class="footer-col">
-        <h3>Navegação</h3>
-        <ul>
-          <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#servicos">Serviços</a></li>
-          <li><a href="#pacotes">Pacotes</a></li>
-          <li><a href="#depoimentos">Depoimentos</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contato">Contato</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="#">Política de Privacidade</a></li>
-          <li><a href="#">Termos de Uso</a></li>
-        </ul>
-      </div>
+      <div class="foot-col"><h3>Navegação</h3><ul><li><a href="#sobre">Sobre</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#pacotes">Pacotes</a></li><li><a href="#depoimentos">Depoimentos</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contato">Contato</a></li></ul></div>
+      <div class="foot-col"><h3>Legal</h3><ul><li><a href="#">Política de Privacidade</a></li><li><a href="#">Termos de Uso</a></li></ul><h3 style="margin-top:1.5rem">Demo</h3><ul><li><a href="#" onclick="showView('admin-view');return false">⚙️ Painel Admin</a></li><li><a href="#" onclick="showView('portal-view');return false">👤 Portal Cliente</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; <span id="year"></span> Floriana Martinez Coaching. Todos os direitos reservados.</p>
-      <p>Feito com dedicação para brasileiros no mundo.</p>
-    </div>
+    <div class="foot-bottom"><p>&copy; <span id="yr"></span> Floriana Martinez Coaching. Todos os direitos reservados.</p><p>Feito com dedicação para brasileiros no mundo.</p></div>
   </div>
 </footer>
+</div><!-- /landing-view -->
+
+<!-- ═══════════════════════════════════════
+     ADMIN PANEL
+═══════════════════════════════════════ -->
+<div id="admin-view" class="view">
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-logo"><span>Floriana <span class="g">Martinez</span></span><div style="font-size:.72rem;color:rgba(245,240,232,.4);margin-top:.25rem">Painel Administrativo</div></div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item active" onclick="switchAdminTab('tab-dashboard',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+          Dashboard
+        </button>
+        <button class="admin-nav-item" onclick="switchAdminTab('tab-foto',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+          Foto &amp; Imagens
+        </button>
+        <button class="admin-nav-item" onclick="switchAdminTab('tab-textos',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
+          Editar Textos
+        </button>
+        <button class="admin-nav-item" onclick="switchAdminTab('tab-clientes',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+          Clientes
+        </button>
+        <button class="admin-nav-item" onclick="switchAdminTab('tab-sessoes-admin',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+          Sessões
+        </button>
+      </nav>
+      <div style="padding:1.25rem;border-top:1px solid rgba(245,240,232,.1)">
+        <button onclick="showView('landing-view')" style="display:flex;align-items:center;gap:.625rem;color:rgba(245,240,232,.5);background:none;border:none;cursor:pointer;font-size:.8rem;font-family:var(--sans)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Voltar ao Site
+        </button>
+      </div>
+    </aside>
+    <!-- Main -->
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <h1 id="admin-page-title">Dashboard</h1>
+        <div class="admin-topbar-actions">
+          <span style="font-size:.8rem;color:#6B7280">Floriana Martinez</span>
+          <div style="width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(201,169,110,.15);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.9rem;color:var(--s)">FM</div>
+        </div>
+      </div>
+      <div class="admin-content">
+
+        <!-- DASHBOARD TAB -->
+        <div class="admin-tab active" id="tab-dashboard">
+          <div class="stat-cards">
+            <div class="stat-card"><div class="stat-card-head"><div class="stat-card-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><span class="stat-badge up">+3</span></div><div class="stat-val">24</div><div class="stat-label">Total de Coachees</div></div>
+            <div class="stat-card"><div class="stat-card-head"><div class="stat-card-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div><span class="stat-badge up">+12</span></div><div class="stat-val">48</div><div class="stat-label">Sessões este Mês</div></div>
+            <div class="stat-card"><div class="stat-card-head"><div class="stat-card-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="stat-badge up">+18%</span></div><div class="stat-val">$42.5k</div><div class="stat-label">Receita Mensal</div></div>
+            <div class="stat-card"><div class="stat-card-head"><div class="stat-card-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg></div><span class="stat-badge dn">-2%</span></div><div class="stat-val">94%</div><div class="stat-label">Taxa de Retenção</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div class="admin-card">
+              <div class="admin-card-head"><h2>Sessões de Hoje</h2><span class="pill blue">Quinta, 16 Abr</span></div>
+              <table><thead><tr><th>Cliente</th><th>Horário</th><th>Tipo</th><th>Status</th></tr></thead><tbody>
+                <tr><td><strong>Carolina Silva</strong></td><td>14:00</td><td>Coaching de Carreira</td><td><span class="pill green">Confirmada</span></td></tr>
+                <tr><td><strong>Ricardo Mendes</strong></td><td>16:00</td><td>Follow-up</td><td><span class="pill amber">Pendente</span></td></tr>
+                <tr><td><strong>Amanda Pereira</strong></td><td>18:00</td><td>Descoberta de Propósito</td><td><span class="pill green">Confirmada</span></td></tr>
+              </tbody></table>
+            </div>
+            <div class="admin-card">
+              <div class="admin-card-head"><h2>Atividade Recente</h2></div>
+              <div style="padding:1rem 1.5rem">
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                  <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="width:2rem;height:2rem;border-radius:50%;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s);font-family:var(--serif);font-size:.8rem">J</div><div><div style="font-size:.85rem;font-weight:500;color:#374151">Nova coachee registrada: <strong>Juliana Costa</strong></div><div style="font-size:.75rem;color:#9CA3AF">2 horas atrás</div></div></div>
+                  <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="width:2rem;height:2rem;border-radius:50%;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s);font-family:var(--serif);font-size:.8rem">R</div><div><div style="font-size:.85rem;font-weight:500;color:#374151">Tarefa completada: <strong>Ricardo Mendes</strong></div><div style="font-size:.75rem;color:#9CA3AF">4 horas atrás</div></div></div>
+                  <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="width:2rem;height:2rem;border-radius:50%;background:rgba(201,169,110,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s);font-family:var(--serif);font-size:.8rem">C</div><div><div style="font-size:.85rem;font-weight:500;color:#374151">Pagamento recebido: <strong>Carolina Silva</strong></div><div style="font-size:.75rem;color:#9CA3AF">Ontem</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOTO TAB -->
+        <div class="admin-tab" id="tab-foto">
+          <div style="max-width:680px">
+            <h2 style="font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--p);margin-bottom:.5rem">Foto Principal</h2>
+            <p style="font-size:.875rem;color:#6B7280;margin-bottom:1.5rem">Esta foto aparece na seção Hero da landing page. Recomendado: retrato vertical, mínimo 800×1000px.</p>
+            <div id="upload-zone" class="upload-zone" onclick="document.getElementById('photo-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropPhoto(event)">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+              <h3>Arraste a foto aqui</h3>
+              <p>ou clique para selecionar · JPG, PNG, WEBP · max 5MB</p>
+            </div>
+            <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)"/>
+            <div id="upload-preview" class="upload-preview" style="display:none">
+              <img id="preview-img" src="" alt="Preview" style="width:100%;height:320px;object-fit:cover;object-position:top"/>
+              <div class="upload-preview-actions">
+                <button class="btn btn-p btn-sm" onclick="applyPhoto()">✓ Aplicar ao Site</button>
+                <button class="btn btn-outline btn-sm" onclick="removePhoto()">✕ Remover</button>
+              </div>
+            </div>
+            <div id="photo-applied" style="display:none;margin-top:1rem;padding:.875rem 1.25rem;background:#DCFCE7;border-radius:.625rem;color:#16A34A;font-size:.875rem;font-weight:500">
+              ✓ Foto aplicada com sucesso! Visível na landing page.
+            </div>
+          </div>
+        </div>
+
+        <!-- TEXTOS TAB -->
+        <div class="admin-tab" id="tab-textos">
+          <p style="font-size:.875rem;color:#6B7280;margin-bottom:1.5rem">Edite os textos diretamente. As alterações são aplicadas em tempo real na landing page.</p>
+
+          <div class="editor-section">
+            <div class="editor-section-head" onclick="toggleEditor(this)"><h3><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" width="16" height="16"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg> Hero — Seção Principal</h3><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path d="M19 9l-7 7-7-7"/></svg></div>
+            <div class="editor-section-body open">
+              <div class="editor-field"><label>Badge (texto pequeno)</label><input type="text" value="Coaching Premium para Brasileiros nos EUA" oninput="liveEdit('hero-badge-text',this.value)"/></div>
+              <div class="editor-field"><label>Título linha 1</label><input type="text" value="Transforme sua" oninput="liveEdit('hero-t1',this.value)"/></div>
+              <div class="editor-field"><label>Título linha 2 (dourado)</label><input type="text" value="Carreira Internacional" oninput="liveEdit('hero-t2',this.value)"/></div>
+              <div class="editor-field"><label>Subtítulo</label><textarea oninput="liveEdit('hero-sub-text',this.value)">Estratégia, clareza e propósito para brasileiros que buscam alcançar o próximo nível em suas carreiras nos Estados Unidos. Sua jornada de transformação começa aqui.</textarea></div>
+              <button class="editor-save" onclick="saveSection(this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvar</button>
+              <span class="editor-saved"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvo!</span>
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <div class="editor-section-head" onclick="toggleEditor(this)"><h3><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" width="16" height="16"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg> Sobre Mim</h3><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path d="M19 9l-7 7-7-7"/></svg></div>
+            <div class="editor-section-body">
+              <div class="editor-field"><label>Título</label><input type="text" value="Uma jornada de transformação começa com clareza" oninput="liveEditId('about-titulo',this.value)"/></div>
+              <div class="editor-field"><label>Parágrafo 1</label><textarea oninput="liveEditId('about-p1',this.value)">Sou Floriana Martinez, Life & Career Coach especializada em ajudar brasileiros a navegarem suas carreiras nos Estados Unidos. Minha trajetória única — da aviação ao marketing, do Brasil ao mundo — me deu as ferramentas para entender profundamente os desafios que você enfrenta.</textarea></div>
+              <div class="editor-field"><label>Parágrafo 2</label><textarea oninput="liveEditId('about-p2',this.value)">Acredito que cada pessoa tem um potencial extraordinário. Meu papel é ajudá-lo a descobrir esse potencial e criar um plano estratégico para alcançar seus objetivos mais ambiciosos.</textarea></div>
+              <div class="editor-field"><label>Citação</label><input type="text" value="Seu maior crescimento acontece quando você decide que suas circunstâncias não definem seu destino." oninput="liveEditId('about-citacao',this.value)"/></div>
+              <button class="editor-save" onclick="saveSection(this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvar</button>
+              <span class="editor-saved"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvo!</span>
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <div class="editor-section-head" onclick="toggleEditor(this)"><h3><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" width="16" height="16"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg> Contato</h3><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path d="M19 9l-7 7-7-7"/></svg></div>
+            <div class="editor-section-body">
+              <div class="editor-field"><label>E-mail de contato</label><input type="email" value="contato@florianamartinez.com"/></div>
+              <div class="editor-field"><label>WhatsApp (formato internacional)</label><input type="text" value="13051234567"/></div>
+              <div class="editor-field"><label>Link do Calendly</label><input type="url" value="https://calendly.com/floriana-martinez/sessao-coaching" id="calendly-url-input"/></div>
+              <div class="editor-field"><label>Cidade / Localização</label><input type="text" value="Miami, Florida"/></div>
+              <button class="editor-save" onclick="saveSection(this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvar</button>
+              <span class="editor-saved"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M5 13l4 4L19 7"/></svg> Salvo!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIENTES TAB -->
+        <div class="admin-tab" id="tab-clientes">
+          <div class="admin-card">
+            <div class="admin-card-head"><h2>Clientes Ativos</h2><button class="btn btn-p btn-sm">+ Novo Cliente</button></div>
+            <table><thead><tr><th>Nome</th><th>Pacote</th><th>Sessões</th><th>Próxima Sessão</th><th>Status</th></tr></thead><tbody>
+              <tr><td><strong>Carolina Silva</strong><div style="font-size:.75rem;color:#9CA3AF">carolina@email.com</div></td><td>Transformação</td><td>8 / 12</td><td>25 Abr · 14:00</td><td><span class="pill green">Ativo</span></td></tr>
+              <tr><td><strong>Ricardo Mendes</strong><div style="font-size:.75rem;color:#9CA3AF">ricardo@email.com</div></td><td>Executivo VIP</td><td>16 / 24</td><td>26 Abr · 10:00</td><td><span class="pill green">Ativo</span></td></tr>
+              <tr><td><strong>Amanda Pereira</strong><div style="font-size:.75rem;color:#9CA3AF">amanda@email.com</div></td><td>Essencial</td><td>2 / 4</td><td>28 Abr · 16:00</td><td><span class="pill green">Ativo</span></td></tr>
+              <tr><td><strong>Juliana Costa</strong><div style="font-size:.75rem;color:#9CA3AF">juliana@email.com</div></td><td>Transformação</td><td>0 / 12</td><td>30 Abr · 14:00</td><td><span class="pill amber">Novo</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        <!-- SESSOES TAB -->
+        <div class="admin-tab" id="tab-sessoes-admin">
+          <div class="admin-card">
+            <div class="admin-card-head"><h2>Agenda — Próximas Sessões</h2><button class="btn btn-p btn-sm" onclick="openCalendly()">+ Agendar</button></div>
+            <table><thead><tr><th>Cliente</th><th>Data</th><th>Hora</th><th>Tipo</th><th>Status</th><th>Zoom</th></tr></thead><tbody>
+              <tr><td><strong>Carolina Silva</strong></td><td>25 Abr 2024</td><td>14:00</td><td>Revisão do Plano de Ação</td><td><span class="pill green">Confirmada</span></td><td><a href="#" style="font-size:.8rem;color:var(--s)">Entrar</a></td></tr>
+              <tr><td><strong>Ricardo Mendes</strong></td><td>26 Abr 2024</td><td>10:00</td><td>Coaching Executivo</td><td><span class="pill green">Confirmada</span></td><td><a href="#" style="font-size:.8rem;color:var(--s)">Entrar</a></td></tr>
+              <tr><td><strong>Amanda Pereira</strong></td><td>28 Abr 2024</td><td>16:00</td><td>Check-in de Progresso</td><td><span class="pill amber">Pendente</span></td><td><a href="#" style="font-size:.8rem;color:var(--s)">Entrar</a></td></tr>
+              <tr><td><strong>Juliana Costa</strong></td><td>30 Abr 2024</td><td>14:00</td><td>Sessão Inicial</td><td><span class="pill blue">Agendada</span></td><td><a href="#" style="font-size:.8rem;color:var(--s)">Entrar</a></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CLIENT PORTAL
+═══════════════════════════════════════ -->
+<div id="portal-view" class="view">
+  <div class="portal-layout">
+    <aside class="portal-sidebar">
+      <div class="portal-sidebar-logo"><span style="font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--p-fg)">Floriana <span style="color:var(--s)">Martinez</span></span></div>
+      <div class="portal-welcome">
+        <div class="portal-avatar">C</div>
+        <div class="portal-welcome-name">Carolina Silva</div>
+        <div class="portal-welcome-pkg">Programa Transformação · Sessão 8/12</div>
+      </div>
+      <nav class="portal-nav">
+        <button class="portal-nav-item active" onclick="switchPortalTab('ptab-inicio',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+          Início
+        </button>
+        <button class="portal-nav-item" onclick="switchPortalTab('ptab-agenda',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+          Minha Agenda
+        </button>
+        <button class="portal-nav-item" onclick="switchPortalTab('ptab-timeline',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
+          Linha do Tempo
+        </button>
+        <button class="portal-nav-item" onclick="switchPortalTab('ptab-tarefas',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Tarefas
+        </button>
+        <button class="portal-nav-item" onclick="switchPortalTab('ptab-recursos',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+          Recursos
+        </button>
+      </nav>
+      <div style="padding:1.25rem;border-top:1px solid rgba(245,240,232,.1)">
+        <button onclick="showView('landing-view')" style="display:flex;align-items:center;gap:.625rem;color:rgba(245,240,232,.5);background:none;border:none;cursor:pointer;font-size:.8rem;font-family:var(--sans)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Sair do Portal
+        </button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <div class="portal-topbar">
+        <h1 id="portal-page-title">Início</h1>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <button class="btn btn-p btn-sm" onclick="openCalendly()">+ Agendar Sessão</button>
+          <div style="width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(201,169,110,.15);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.9rem;color:var(--s)">C</div>
+        </div>
+      </div>
+      <div class="portal-content">
+
+        <!-- INÍCIO TAB -->
+        <div class="portal-tab active" id="ptab-inicio">
+          <div style="margin-bottom:2rem">
+            <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--p)">Olá, Carolina! 👋</h2>
+            <p style="color:#6B7280;margin-top:.375rem">Você está na sessão 8 de 12. Continue assim!</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:2rem">
+            <div style="background:#fff;border-radius:.875rem;padding:1.5rem;border:1px solid #E5E7EB">
+              <div style="font-size:.78rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;margin-bottom:.75rem">Progresso do Programa</div>
+              <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--p)">67%</div>
+              <div class="prog-bar-wrap"><div class="prog-bar" style="width:67%"></div></div>
+              <div style="font-size:.78rem;color:#9CA3AF">8 de 12 sessões</div>
+            </div>
+            <div style="background:#fff;border-radius:.875rem;padding:1.5rem;border:1px solid #E5E7EB">
+              <div style="font-size:.78rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;margin-bottom:.75rem">Próxima Sessão</div>
+              <div style="font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--p)">25 Abr · 14:00</div>
+              <div style="font-size:.85rem;color:#6B7280;margin:.375rem 0 .875rem">Revisão do Plano de Ação</div>
+              <a href="#" class="btn btn-p btn-sm" style="font-size:.78rem">Entrar no Zoom</a>
+            </div>
+            <div style="background:#fff;border-radius:.875rem;padding:1.5rem;border:1px solid #E5E7EB">
+              <div style="font-size:.78rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;margin-bottom:.75rem">Tarefas Pendentes</div>
+              <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--p)">3</div>
+              <div style="font-size:.85rem;color:#6B7280;margin:.375rem 0 .875rem">tarefas para completar</div>
+              <button class="btn btn-outline btn-sm" style="font-size:.78rem" onclick="switchPortalTab('ptab-tarefas',null)">Ver Tarefas</button>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:.875rem;border:1px solid var(--s);background:rgba(201,169,110,.04);padding:1.5rem">
+            <div style="font-size:.78rem;font-weight:600;color:var(--s);text-transform:uppercase;margin-bottom:.75rem">📌 Nota da Floriana</div>
+            <p style="font-size:.9rem;color:#374151;line-height:1.7">Carolina, você está progredindo muito bem! Na nossa última sessão identificamos seus 5 pontos fortes. Para a próxima sessão, por favor complete os exercícios de comunicação executiva e traga 3 situações recentes onde precisou influenciar stakeholders.</p>
+            <div style="font-size:.78rem;color:#9CA3AF;margin-top:.75rem">Floriana Martinez · 11 Abr 2024</div>
+          </div>
+        </div>
+
+        <!-- AGENDA TAB -->
+        <div class="portal-tab" id="ptab-agenda">
+          <h2 style="font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p);margin-bottom:1.5rem">Minha Agenda</h2>
+          <div style="margin-bottom:2rem">
+            <h3 style="font-size:.9rem;font-weight:600;color:#374151;margin-bottom:.875rem;text-transform:uppercase;letter-spacing:.04em">Próximas Sessões</h3>
+            <div style="display:flex;flex-direction:column;gap:.75rem">
+              <div style="background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid rgba(201,169,110,.3);background:rgba(201,169,110,.04);display:flex;align-items:center;gap:1.25rem">
+                <div style="width:3rem;height:3rem;border-radius:.75rem;background:rgba(201,169,110,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div>
+                <div style="flex:1"><div style="font-weight:600;color:#1F2937">Revisão do Plano de Ação <span class="pill green" style="margin-left:.5rem">Confirmada</span></div><div style="font-size:.85rem;color:#6B7280;margin-top:.2rem">25 Abr 2024 · 14:00 · 60 min</div></div>
+                <a href="#" class="btn btn-p btn-sm">📹 Entrar no Zoom</a>
+              </div>
+              <div style="background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid #E5E7EB;display:flex;align-items:center;gap:1.25rem">
+                <div style="width:3rem;height:3rem;border-radius:.75rem;background:#F3F4F6;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#9CA3AF"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div>
+                <div style="flex:1"><div style="font-weight:600;color:#1F2937">Follow-up Quinzenal <span class="pill amber" style="margin-left:.5rem">Agendada</span></div><div style="font-size:.85rem;color:#6B7280;margin-top:.2rem">08 Mai 2024 · 15:00 · 30 min</div></div>
+                <a href="#" class="btn btn-outline btn-sm">📹 Zoom Link</a>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-size:.9rem;font-weight:600;color:#374151;margin-bottom:.875rem;text-transform:uppercase;letter-spacing:.04em">Histórico de Sessões</h3>
+            <div style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid #E5E7EB;cursor:pointer" onclick="toggleDetails(this)">
+                <div style="display:flex;align-items:center;gap:1rem"><div style="width:2.25rem;height:2.25rem;border-radius:.5rem;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div style="flex:1"><div style="font-weight:600;font-size:.875rem;color:#1F2937">Mapeamento de Forças</div><div style="font-size:.8rem;color:#9CA3AF">11 Mar 2024 · 14:00 · 60 min</div></div><span style="font-size:.78rem;color:#9CA3AF">Ver resumo ▼</span></div>
+                <div class="details-body" style="display:none;margin-top:.875rem;padding-top:.875rem;border-top:1px solid #F3F4F6"><p style="font-size:.85rem;color:#374151;line-height:1.6">Identificamos seus 5 pontos fortes principais e como comunicá-los em entrevistas. Exercício: Escreva 3 histórias profissionais usando o método STAR.</p></div>
+              </div>
+              <div style="background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid #E5E7EB;cursor:pointer" onclick="toggleDetails(this)">
+                <div style="display:flex;align-items:center;gap:1rem"><div style="width:2.25rem;height:2.25rem;border-radius:.5rem;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div style="flex:1"><div style="font-weight:600;font-size:.875rem;color:#1F2937">Assessment de Valores</div><div style="font-size:.8rem;color:#9CA3AF">26 Fev 2024 · 14:00 · 60 min</div></div><span style="font-size:.78rem;color:#9CA3AF">Ver resumo ▼</span></div>
+                <div class="details-body" style="display:none;margin-top:.875rem;padding-top:.875rem;border-top:1px solid #F3F4F6"><p style="font-size:.85rem;color:#374151;line-height:1.6">Valores centrais definidos: autonomia, impacto, aprendizado contínuo e família. Estes são os pilares para avaliar oportunidades de carreira.</p></div>
+              </div>
+              <div style="background:#fff;border-radius:.875rem;padding:1.25rem 1.5rem;border:1px solid #E5E7EB;cursor:pointer" onclick="toggleDetails(this)">
+                <div style="display:flex;align-items:center;gap:1rem"><div style="width:2.25rem;height:2.25rem;border-radius:.5rem;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div style="flex:1"><div style="font-weight:600;font-size:.875rem;color:#1F2937">Sessão Inicial — Descoberta e Objetivos</div><div style="font-size:.8rem;color:#9CA3AF">12 Fev 2024 · 10:00 · 90 min</div></div><span style="font-size:.78rem;color:#9CA3AF">Ver resumo ▼</span></div>
+                <div class="details-body" style="display:none;margin-top:.875rem;padding-top:.875rem;border-top:1px solid #F3F4F6"><p style="font-size:.85rem;color:#374151;line-height:1.6">Definimos os 3 objetivos principais do programa e o plano de 12 semanas: promoção para Senior PM, clareza de carreira a longo prazo e comunicação executiva.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIMELINE TAB -->
+        <div class="portal-tab" id="ptab-timeline">
+          <h2 style="font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p);margin-bottom:1.5rem">Linha do Tempo do Programa</h2>
+          <div class="timeline">
+            <div class="tl-item"><div class="tl-dot done"></div><div class="tl-card"><div class="tl-date">12 Fev 2024</div><div class="tl-title">Sessão 1 — Descoberta e Objetivos</div><div class="tl-sub">90 min · Sessão Inicial</div><div class="tl-notes">Definimos os 3 objetivos do programa. Foco em: promoção SP, clareza de carreira e comunicação executiva.</div><span class="tl-badge done">✓ Realizada</span></div></div>
+            <div class="tl-item"><div class="tl-dot done"></div><div class="tl-card"><div class="tl-date">26 Fev 2024</div><div class="tl-title">Sessão 2 — Assessment de Valores</div><div class="tl-sub">60 min</div><div class="tl-notes">Valores centrais: autonomia, impacto, aprendizado e família.</div><span class="tl-badge done">✓ Realizada</span></div></div>
+            <div class="tl-item"><div class="tl-dot done"></div><div class="tl-card"><div class="tl-date">11 Mar 2024</div><div class="tl-title">Sessão 3 — Mapeamento de Forças</div><div class="tl-sub">60 min</div><div class="tl-notes">Top 5 forças identificadas. Exercício STAR para entrevistas.</div><span class="tl-badge done">✓ Realizada</span></div></div>
+            <div class="tl-item"><div class="tl-dot done"></div><div class="tl-card"><div class="tl-date">25 Mar 2024</div><div class="tl-title">Sessões 4–7 — Plano de Ação e Execução</div><div class="tl-sub">60 min cada</div><div class="tl-notes">LinkedIn otimizado, currículo revisado, networking strategy definida.</div><span class="tl-badge done">✓ Realizadas</span></div></div>
+            <div class="tl-item"><div class="tl-dot next"></div><div class="tl-card highlight"><div class="tl-date">25 Abr 2024 · 14:00</div><div class="tl-title">Sessão 8 — Revisão do Plano de Ação</div><div class="tl-sub">60 min · PRÓXIMA SESSÃO</div><div class="tl-notes">Revisar progresso, ajustar estratégia, preparar para entrevistas executivas.</div><span class="tl-badge next">→ Próxima</span></div></div>
+            <div class="tl-item"><div class="tl-dot future"></div><div class="tl-card"><div class="tl-date">Mai — Jun 2024</div><div class="tl-title">Sessões 9–12 — Aceleração Final</div><div class="tl-sub">60 min cada</div><div class="tl-notes">Foco em executive presence, negociação de oferta e preparação para liderança.</div><span class="tl-badge future">⏳ Planejada</span></div></div>
+          </div>
+        </div>
+
+        <!-- TAREFAS TAB -->
+        <div class="portal-tab" id="ptab-tarefas">
+          <h2 style="font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p);margin-bottom:1.5rem">Minhas Tarefas</h2>
+          <div style="margin-bottom:1.5rem">
+            <h3 style="font-size:.8rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Para esta semana</h3>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title">Escrever 3 histórias profissionais (método STAR)</div><div class="task-due urgent">Hoje</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title">Exercícios de comunicação executiva — módulo 2</div><div class="task-due urgent">Amanhã</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title">Atualizar seção "Sobre" do LinkedIn com novos highlights</div><div class="task-due">Em 3 dias</div></div>
+          </div>
+          <div>
+            <h3 style="font-size:.8rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Concluídas</h3>
+            <div class="task-item" style="opacity:.65"><div class="task-check checked" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title done">Assessment de valores — formulário online</div><div class="task-due">Concluída</div></div>
+            <div class="task-item" style="opacity:.65"><div class="task-check checked" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title done">Revisão do currículo em inglês</div><div class="task-due">Concluída</div></div>
+            <div class="task-item" style="opacity:.65"><div class="task-check checked" onclick="toggleTask(this)"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div><div class="task-title done">Otimização do perfil LinkedIn</div><div class="task-due">Concluída</div></div>
+          </div>
+        </div>
+
+        <!-- RECURSOS TAB -->
+        <div class="portal-tab" id="ptab-recursos">
+          <h2 style="font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--p);margin-bottom:1.5rem">Recursos &amp; Materiais</h2>
+          <div class="resource-card"><div class="resource-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg></div><div><div class="resource-title">Plano de Ação — Programa Transformação</div><div class="resource-desc">Seu plano personalizado de 12 semanas com objetivos e marcos.</div><div class="resource-type">📄 PDF · Atualizado 25 Mar</div></div></div>
+          <div class="resource-card"><div class="resource-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"/></svg></div><div><div class="resource-title">Exercícios de Comunicação Executiva</div><div class="resource-desc">Módulos práticos para desenvolver sua presença de liderança.</div><div class="resource-type">📋 Exercícios · Módulos 1–3</div></div></div>
+          <div class="resource-card"><div class="resource-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg></div><div><div class="resource-title">Guia de Networking Internacional</div><div class="resource-desc">Estratégias práticas para construir sua rede nos EUA.</div><div class="resource-type">📘 Guia · Exclusivo do Programa</div></div></div>
+          <div class="resource-card"><div class="resource-ico"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></div><div><div class="resource-title">LinkedIn Checklist — Perfil Otimizado</div><div class="resource-desc">50 pontos para maximizar seu perfil para o mercado americano.</div><div class="resource-type">✅ Checklist · Versão em Inglês</div></div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDLY MODAL -->
+<div class="modal-overlay" id="calendly-modal">
+  <div class="modal">
+    <div class="modal-head"><h3>Agendar Sessão Gratuita</h3><button class="modal-close" onclick="closeCalendly()">×</button></div>
+    <div class="modal-body">
+      <div class="calendly-inline">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+        <h4>Calendly</h4>
+        <p>Configure seu link do Calendly no painel Admin → Editar Textos → Contato.</p>
+        <p style="font-size:.78rem;margin-top:.25rem">Link atual: <code style="background:#F3F4F6;padding:.1rem .4rem;border-radius:.25rem;font-size:.75rem" id="calendly-display">calendly.com/floriana-martinez/sessao-coaching</code></p>
+        <a href="https://calendly.com/floriana-martinez/sessao-coaching" target="_blank" class="btn btn-p">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+          Abrir Calendly
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg>
+  <span id="toast-msg">Mensagem enviada!</span>
+</div>
 
 <script>
-  // Year
-  document.getElementById('year').textContent = new Date().getFullYear();
+// ── CONFIG ──
+const CONFIG = {
+  email: 'contato@florianamartinez.com',
+  whatsapp: '13051234567',
+  calendlyUrl: 'https://calendly.com/floriana-martinez/sessao-coaching'
+};
 
-  // Navbar scroll
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+// ── YEAR ──
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── VIEWS ──
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── SCROLL ANIMATIONS ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('v'); });
+}, {threshold:.1,rootMargin:'-40px'});
+document.querySelectorAll('.fi,.fi-l,.fi-r').forEach(el => observer.observe(el));
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const ans = btn.nextElementSibling;
+  const open = ans.classList.contains('open');
+  document.querySelectorAll('.faq-ans').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.classList.remove('open');
+    q.querySelector('.faq-tog').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>';
   });
-
-  // Mobile menu
-  function toggleMobile() {
-    document.getElementById('mobile-menu').classList.toggle('open');
+  if(!open) {
+    ans.classList.add('open');
+    btn.classList.add('open');
+    btn.querySelector('.faq-tog').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg>';
   }
-  function closeMobile() {
-    document.getElementById('mobile-menu').classList.remove('open');
+}
+
+// ── CONTACT FORM ──
+function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Enviando...'; btn.disabled = true;
+  const nome = document.getElementById('f-nome').value;
+  const sob = document.getElementById('f-sob').value;
+  const email = document.getElementById('f-email').value;
+  const int = document.getElementById('f-int').value;
+  const msg = document.getElementById('f-msg').value;
+  const subject = encodeURIComponent(`[Floriana Martinez] Contato de ${nome} ${sob} — ${int}`);
+  const body = encodeURIComponent(`Nome: ${nome} ${sob}\nEmail: ${email}\nInteresse: ${int}\n\nMensagem:\n${msg}`);
+  setTimeout(() => {
+    window.open(`mailto:${CONFIG.email}?subject=${subject}&body=${body}`, '_blank');
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').classList.add('show');
+  }, 800);
+}
+
+// ── EXTERNAL LINKS ──
+function openCalendly() {
+  document.getElementById('calendly-modal').classList.add('open');
+  // If Calendly widget lib loaded, initialize inline
+  if(window.Calendly) {
+    // could embed inline; for now use popup
+    window.Calendly.initPopupWidget({url: CONFIG.calendlyUrl});
+    closeCalendly();
   }
+}
+function closeCalendly() { document.getElementById('calendly-modal').classList.remove('open'); }
+function openWhatsapp() { window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('Olá Floriana! Vi seu site e gostaria de saber mais sobre o coaching.')}`, '_blank'); }
+function openEmail() { window.open(`mailto:${CONFIG.email}?subject=${encodeURIComponent('Dúvida sobre o Coaching')}`, '_blank'); }
 
-  // FAQ accordion
-  function toggleFaq(btn) {
-    const answer = btn.nextElementSibling;
-    const isOpen = answer.classList.contains('open');
-    // close all
-    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
-    document.querySelectorAll('.faq-question').forEach(q => {
-      q.classList.remove('open');
-      q.querySelector('.faq-toggle').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>';
-    });
-    if (!isOpen) {
-      answer.classList.add('open');
-      btn.classList.add('open');
-      btn.querySelector('.faq-toggle').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg>';
-    }
-  }
+// Close modal on overlay click
+document.getElementById('calendly-modal').addEventListener('click', function(e) { if(e.target===this) closeCalendly(); });
 
-  // Form submit (visual only — no backend)
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submit-btn');
-    btn.textContent = 'Enviando...';
-    btn.disabled = true;
-    setTimeout(() => {
-      document.getElementById('contact-form').style.display = 'none';
-      document.getElementById('form-success').classList.add('show');
-    }, 1200);
-  }
+// ── ADMIN ──
+function switchAdminTab(tabId, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const titles = {'tab-dashboard':'Dashboard','tab-foto':'Foto & Imagens','tab-textos':'Editar Textos','tab-clientes':'Clientes','tab-sessoes-admin':'Sessões'};
+  document.getElementById('admin-page-title').textContent = titles[tabId]||'Admin';
+}
 
-  // Scroll animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '-50px' });
+function toggleEditor(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
 
-  document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => observer.observe(el));
+function saveSection(btn) {
+  btn.style.display = 'none';
+  const saved = btn.nextElementSibling;
+  saved.classList.add('show');
+  showToast('Alterações salvas com sucesso!');
+  setTimeout(() => { saved.classList.remove('show'); btn.style.display = ''; }, 2500);
+}
+
+function liveEdit(key, val) {
+  const map = {
+    'hero-badge-text': () => { const b = document.querySelector('.hero-badge span:last-child'); if(b) b.textContent = val; },
+    'hero-t1': () => { const t = document.querySelector('.hero-title'); if(t) t.childNodes[0].textContent = val; },
+    'hero-t2': () => { const s = document.querySelector('.hero-title .gold'); if(s) s.textContent = val; },
+    'hero-sub-text': () => { const s = document.querySelector('.hero-sub'); if(s) s.textContent = val; },
+  };
+  if(map[key]) map[key]();
+}
+function liveEditId(id, val) { const el = document.getElementById(id); if(el) el.textContent = val; }
+
+// ── PHOTO UPLOAD ──
+function dragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
+function dragLeave() { document.getElementById('upload-zone').classList.remove('drag'); }
+function dropPhoto(e) { e.preventDefault(); dragLeave(); const f = e.dataTransfer.files[0]; if(f && f.type.startsWith('image/')) processPhoto(f); }
+function handlePhotoUpload(e) { const f = e.target.files[0]; if(f) processPhoto(f); }
+
+function processPhoto(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('preview-img').src = e.target.result;
+    document.getElementById('upload-zone').style.display = 'none';
+    document.getElementById('upload-preview').style.display = 'block';
+    document.getElementById('photo-applied').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function applyPhoto() {
+  const src = document.getElementById('preview-img').src;
+  // Apply to landing page hero
+  const heroImg = document.getElementById('hero-photo-img');
+  const placeholder = document.getElementById('hero-placeholder');
+  heroImg.src = src;
+  heroImg.classList.add('loaded');
+  placeholder.style.display = 'none';
+  document.getElementById('photo-applied').style.display = 'block';
+  showToast('Foto aplicada à landing page!');
+}
+
+function removePhoto() {
+  document.getElementById('upload-zone').style.display = 'block';
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('photo-applied').style.display = 'none';
+  document.getElementById('photo-input').value = '';
+}
+
+// ── PORTAL ──
+function switchPortalTab(tabId, btn) {
+  document.querySelectorAll('.portal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.portal-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const titles = {'ptab-inicio':'Início','ptab-agenda':'Minha Agenda','ptab-timeline':'Linha do Tempo','ptab-tarefas':'Tarefas','ptab-recursos':'Recursos'};
+  document.getElementById('portal-page-title').textContent = titles[tabId]||'Portal';
+}
+
+function toggleTask(chk) {
+  chk.classList.toggle('checked');
+  const title = chk.nextElementSibling;
+  title.classList.toggle('done');
+  const item = chk.closest('.task-item');
+  item.style.opacity = chk.classList.contains('checked') ? '0.65' : '1';
+}
+
+function toggleDetails(card) {
+  const body = card.querySelector('.details-body');
+  const arrow = card.querySelector('span:last-child');
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  arrow.textContent = open ? 'Ver resumo ▼' : 'Fechar ▲';
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 </script>
 </body>
 </html>
