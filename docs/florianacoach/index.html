@@ -1,0 +1,1145 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floriana Martinez | Life & Career Coach</title>
+  <meta name="description" content="Coaching de carreira especializado para brasileiros nos EUA. Transforme sua trajetória profissional com estratégia e clareza." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0A1628;
+      --primary-fg: #F5F0E8;
+      --secondary: #C9A96E;
+      --secondary-fg: #0A1628;
+      --background: #FAFAF8;
+      --foreground: #0A1628;
+      --muted: #F0EDE6;
+      --muted-fg: #6B6560;
+      --card: #FFFFFF;
+      --card-fg: #0A1628;
+      --border: #E8E3DB;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'DM Sans', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAVBAR ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: all 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(250,250,248,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 20px rgba(10,22,40,0.06);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 80px;
+    }
+    .nav-logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; text-decoration: none; color: var(--primary); }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--muted-fg); transition: color 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cta {
+      display: flex; gap: 1rem; align-items: center;
+    }
+    .btn-ghost {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500;
+      color: var(--muted-fg); padding: 0.5rem 1rem; border-radius: 999px;
+      text-decoration: none; transition: color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--primary); }
+    .btn-primary {
+      background: var(--primary); color: var(--primary-fg);
+      border: none; border-radius: 999px;
+      padding: 0.625rem 1.5rem;
+      font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn-primary:hover { background: #162040; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--primary); padding: 0.5rem; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 90;
+      background: var(--background); padding-top: 6rem;
+      flex-direction: column; align-items: center; gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: block; }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--background);
+      position: relative; overflow: hidden;
+    }
+    .hero-blob1 {
+      position: absolute; top: 25%; right: 25%;
+      width: 384px; height: 384px;
+      background: rgba(201,169,110,0.08);
+      border-radius: 50%; filter: blur(60px);
+      pointer-events: none;
+    }
+    .hero-blob2 {
+      position: absolute; bottom: 25%; left: 25%;
+      width: 320px; height: 320px;
+      background: rgba(10,22,40,0.04);
+      border-radius: 50%; filter: blur(60px);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1280px; margin: 0 auto;
+      padding: 8rem 2rem 5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-photo-col { display: none; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1rem; border-radius: 999px;
+      background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);
+      margin-bottom: 2rem;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--secondary);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+    .hero-badge span { font-size: 0.875rem; font-weight: 500; color: var(--secondary); }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: -0.02em; color: var(--primary);
+    }
+    .hero-title .gold { display: block; color: var(--secondary); }
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.125rem; color: var(--muted-fg);
+      line-height: 1.7; max-width: 540px;
+    }
+    @media (max-width: 1024px) { .hero-sub { margin: 1.5rem auto 0; } }
+    .hero-btns {
+      margin-top: 2.5rem;
+      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    }
+    @media (max-width: 1024px) { .hero-btns { justify-content: center; } }
+    .btn-lg {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2rem; border-radius: 999px;
+      font-family: var(--font-sans); font-size: 1rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.3s;
+    }
+    .btn-lg.primary { background: var(--primary); color: var(--primary-fg); }
+    .btn-lg.primary:hover { background: #162040; transform: translateY(-1px); }
+    .btn-lg.ghost { background: none; color: var(--muted-fg); }
+    .btn-lg.ghost:hover { color: var(--primary); }
+    .hero-stats {
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .hero-stat-val { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 600; color: var(--primary); }
+    .hero-stat-lbl { font-size: 0.8rem; color: var(--muted-fg); margin-top: 0.25rem; }
+    .hero-photo-col { position: relative; }
+    .hero-photo-frame {
+      aspect-ratio: 4/5; border-radius: 1rem; overflow: hidden;
+      background: var(--muted);
+      border: 2px dashed var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.75rem; color: rgba(10,22,40,0.25);
+    }
+    .hero-photo-frame svg { width: 2.5rem; height: 2.5rem; }
+    .hero-photo-frame p { font-size: 0.875rem; text-align: center; padding: 0 2rem; line-height: 1.6; }
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .scroll-dot-wrap {
+      width: 24px; height: 40px; border-radius: 12px;
+      border: 2px solid rgba(10,22,40,0.2);
+      display: flex; align-items: flex-start; justify-content: center; padding: 6px;
+    }
+    .scroll-dot {
+      width: 4px; height: 8px; border-radius: 2px;
+      background: rgba(10,22,40,0.3);
+      animation: scrollBounce 2s infinite ease-in-out;
+    }
+    @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+    /* ── SECTIONS SHARED ── */
+    .section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label {
+      display: block; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--secondary); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      font-weight: 600; line-height: 1.15;
+      color: var(--primary); max-width: 680px;
+    }
+    .section-sub {
+      margin-top: 1.25rem; font-size: 1.125rem;
+      color: var(--muted-fg); max-width: 620px; line-height: 1.7;
+    }
+    .bg-muted { background: rgba(240,237,230,0.4); }
+    .bg-primary-section { background: var(--primary); color: var(--primary-fg); }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text blockquote {
+      margin-top: 2rem; padding-left: 1.5rem;
+      border-left: 4px solid var(--secondary);
+    }
+    .about-text blockquote p {
+      font-family: var(--font-serif); font-size: 1.25rem;
+      font-style: italic; color: var(--primary); line-height: 1.5;
+    }
+    .credentials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .credential-card {
+      padding: 1.5rem; background: var(--card);
+      border-radius: 0.75rem; border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .credential-card:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 4px 20px rgba(10,22,40,0.08); }
+    .credential-icon {
+      width: 3rem; height: 3rem; border-radius: 0.5rem;
+      background: rgba(201,169,110,0.1);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+    }
+    .credential-icon svg { width: 1.5rem; height: 1.5rem; }
+    .credential-card h3 { font-weight: 600; font-size: 0.9rem; color: var(--card-fg); }
+    .credential-card p { font-size: 0.8rem; color: var(--muted-fg); margin-top: 0.25rem; }
+
+    /* ── SERVICES ── */
+    .services-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
+    .services-header .section-title, .services-header .section-sub { max-width: none; }
+    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
+    .service-card {
+      padding: 2rem; background: var(--card);
+      border-radius: 1.25rem; border: 1px solid var(--border);
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      transition: all 0.4s; position: relative; overflow: hidden;
+    }
+    .service-card:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 8px 32px rgba(10,22,40,0.1); }
+    .service-icon {
+      width: 3.5rem; height: 3.5rem; border-radius: 0.75rem; flex-shrink: 0;
+      background: rgba(201,169,110,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--secondary);
+    }
+    .service-icon svg { width: 1.75rem; height: 1.75rem; }
+    .service-card h3 { font-family: var(--font-serif); font-size: 1.125rem; font-weight: 600; color: var(--card-fg); margin-bottom: 0.5rem; }
+    .service-card p { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.6; margin-bottom: 1rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { padding: 0.25rem 0.75rem; background: var(--muted); color: var(--muted-fg); font-size: 0.75rem; border-radius: 999px; }
+    .services-cta { text-align: center; margin-top: 4rem; }
+
+    /* ── PRICING ── */
+    .pricing-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
+    .pricing-header .section-title, .pricing-header .section-sub { max-width: none; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; }
+    @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+    .pricing-card {
+      border-radius: 1.25rem; padding: 2rem;
+      display: flex; flex-direction: column;
+      position: relative; transition: all 0.3s;
+    }
+    .pricing-card.normal {
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .pricing-card.normal:hover { border-color: rgba(201,169,110,0.4); box-shadow: 0 8px 32px rgba(10,22,40,0.1); }
+    .pricing-card.featured {
+      background: var(--primary); border: 1px solid var(--primary);
+      transform: scale(1.04);
+      box-shadow: 0 20px 60px rgba(10,22,40,0.25);
+    }
+    @media (max-width: 900px) { .pricing-card.featured { transform: none; } }
+    .pricing-badge {
+      position: absolute; top: -1rem; left: 50%; transform: translateX(-50%);
+      display: inline-flex; align-items: center; gap: 0.375rem;
+      padding: 0.375rem 1rem; border-radius: 999px;
+      background: var(--secondary); color: var(--secondary-fg);
+      font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+    }
+    .pricing-badge svg { width: 0.75rem; height: 0.75rem; fill: currentColor; }
+    .pricing-name { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .pricing-card.normal .pricing-name { color: var(--card-fg); }
+    .pricing-card.featured .pricing-name { color: var(--primary-fg); }
+    .pricing-desc { font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.5rem; }
+    .pricing-card.normal .pricing-desc { color: var(--muted-fg); }
+    .pricing-card.featured .pricing-desc { color: rgba(245,240,232,0.65); }
+    .pricing-price { display: flex; align-items: baseline; gap: 0.25rem; }
+    .price-currency { font-size: 0.875rem; font-weight: 500; }
+    .pricing-card.normal .price-currency { color: var(--muted-fg); }
+    .pricing-card.featured .price-currency { color: rgba(245,240,232,0.65); }
+    .price-amount { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 600; }
+    .pricing-card.normal .price-amount { color: var(--primary); }
+    .pricing-card.featured .price-amount { color: var(--primary-fg); }
+    .price-period { font-size: 0.875rem; margin-top: 0.25rem; }
+    .pricing-card.normal .price-period { color: var(--muted-fg); }
+    .pricing-card.featured .price-period { color: rgba(245,240,232,0.55); }
+    .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .pricing-card.featured .pricing-divider { border-color: rgba(245,240,232,0.15); }
+    .pricing-benefits { list-style: none; flex: 1; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .pricing-benefits li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; line-height: 1.5; }
+    .pricing-card.normal .pricing-benefits li { color: var(--muted-fg); }
+    .pricing-card.featured .pricing-benefits li { color: rgba(245,240,232,0.8); }
+    .check-wrap {
+      width: 1.25rem; height: 1.25rem; border-radius: 50%; flex-shrink: 0; margin-top: 0.1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pricing-card.normal .check-wrap { background: rgba(201,169,110,0.1); }
+    .pricing-card.featured .check-wrap { background: rgba(201,169,110,0.25); }
+    .check-wrap svg { width: 0.75rem; height: 0.75rem; color: var(--secondary); }
+    .btn-pricing {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.875rem; border-radius: 999px; width: 100%;
+      font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none; transition: all 0.3s;
+    }
+    .pricing-card.normal .btn-pricing { background: var(--primary); color: var(--primary-fg); }
+    .pricing-card.normal .btn-pricing:hover { background: #162040; }
+    .pricing-card.featured .btn-pricing { background: var(--secondary); color: var(--secondary-fg); }
+    .pricing-card.featured .btn-pricing:hover { background: #b8914f; }
+    .pricing-note { text-align: center; margin-top: 2.5rem; font-size: 0.875rem; color: var(--muted-fg); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
+    .testimonials-header .section-title { color: var(--primary-fg); max-width: none; }
+    .testimonials-header .section-sub { color: rgba(245,240,232,0.65); max-width: none; }
+    .testimonials-header .section-label { color: var(--secondary); }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr; } }
+    .testimonial-card {
+      padding: 2rem; border-radius: 1.25rem;
+      background: rgba(245,240,232,0.05);
+      border: 1px solid rgba(245,240,232,0.1);
+    }
+    .testimonial-card svg.quote { width: 2.5rem; height: 2.5rem; color: var(--secondary); margin-bottom: 1.5rem; }
+    .testimonial-text { font-size: 0.95rem; color: rgba(245,240,232,0.85); line-height: 1.7; margin-bottom: 2rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+    .author-avatar {
+      width: 3rem; height: 3rem; border-radius: 50%; flex-shrink: 0;
+      background: rgba(201,169,110,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 1.125rem; color: var(--secondary);
+    }
+    .author-name { font-weight: 600; color: var(--primary-fg); }
+    .author-role { font-size: 0.8rem; color: rgba(245,240,232,0.55); }
+
+    /* ── FAQ ── */
+    .faq-header { text-align: center; margin-bottom: 4rem; }
+    .faq-inner { max-width: 800px; margin: 0 auto; }
+    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item { border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; }
+    .faq-question {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 1.25rem 1.5rem; background: var(--card); cursor: pointer; border: none;
+      font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
+      text-align: left; color: var(--card-fg); transition: background 0.2s;
+    }
+    .faq-question:hover { background: var(--muted); }
+    .faq-question.open { color: var(--primary); }
+    .faq-toggle {
+      width: 1.75rem; height: 1.75rem; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--muted); color: var(--muted-fg); transition: all 0.3s;
+    }
+    .faq-question.open .faq-toggle { background: var(--secondary); color: var(--secondary-fg); }
+    .faq-toggle svg { width: 0.875rem; height: 0.875rem; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-answer.open { max-height: 400px; }
+    .faq-answer-inner { padding: 0.5rem 1.5rem 1.25rem; background: var(--card); }
+    .faq-answer-inner p { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.7; }
+    .faq-cta { text-align: center; margin-top: 3rem; }
+    .faq-cta p { color: var(--muted-fg); margin-bottom: 1.5rem; }
+
+    /* ── CONTACT ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-info-items { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-info-item { display: flex; align-items: center; gap: 1rem; }
+    .contact-icon {
+      width: 3rem; height: 3rem; border-radius: 0.75rem; flex-shrink: 0;
+      background: rgba(201,169,110,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--secondary);
+    }
+    .contact-icon svg { width: 1.25rem; height: 1.25rem; }
+    .contact-info-item strong { font-weight: 500; color: var(--foreground); display: block; }
+    .contact-info-item span { font-size: 0.875rem; color: var(--muted-fg); }
+    .contact-form-card {
+      padding: 2rem; background: var(--card);
+      border-radius: 1.25rem; border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(10,22,40,0.06);
+    }
+    .contact-form-card h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--card-fg); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.875rem; font-weight: 500; color: var(--foreground); }
+    .form-group input, .form-group select, .form-group textarea {
+      height: 3rem; padding: 0 0.875rem;
+      border: 1px solid var(--border); border-radius: 0.5rem;
+      background: var(--background); color: var(--foreground);
+      font-family: var(--font-sans); font-size: 0.875rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-group textarea { height: 7.5rem; padding: 0.75rem 0.875rem; resize: none; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.15);
+    }
+    .btn-submit {
+      width: 100%; height: 3.5rem; border-radius: 0.75rem;
+      background: var(--primary); color: var(--primary-fg);
+      font-family: var(--font-sans); font-size: 1rem; font-weight: 500;
+      border: none; cursor: pointer; transition: background 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover { background: #162040; }
+    .btn-submit svg { width: 1rem; height: 1rem; }
+    .form-success {
+      display: none; text-align: center; padding: 3rem 1rem;
+    }
+    .form-success.show { display: block; }
+    .success-icon {
+      width: 4rem; height: 4rem; border-radius: 50%;
+      background: rgba(201,169,110,0.1);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      color: var(--secondary);
+    }
+    .success-icon svg { width: 2rem; height: 2rem; }
+    .form-success h4 { font-family: var(--font-serif); font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .form-success p { color: var(--muted-fg); }
+    .form-error { display: none; padding: 0.75rem; background: rgba(220,38,38,0.06); color: #dc2626; font-size: 0.875rem; border-radius: 0.5rem; margin-bottom: 1rem; }
+    .form-error.show { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--primary); color: var(--primary-fg);
+      padding: 5rem 2rem 2rem;
+    }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem;
+      padding-bottom: 4rem;
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    .footer-brand { grid-column: span 1; }
+    @media (max-width: 768px) { .footer-brand { grid-column: span 2; } }
+    .footer-logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; text-decoration: none; color: var(--primary-fg); }
+    .footer-logo span { color: var(--secondary); }
+    .footer-tagline { margin-top: 1rem; font-size: 0.875rem; color: rgba(245,240,232,0.6); line-height: 1.6; }
+    .social-links { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+    .social-link {
+      width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      background: rgba(245,240,232,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary-fg); transition: background 0.3s;
+      text-decoration: none;
+    }
+    .social-link:hover { background: rgba(201,169,110,0.2); }
+    .social-link svg { width: 1.125rem; height: 1.125rem; }
+    .footer-col h3 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--primary-fg); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-col a { text-decoration: none; font-size: 0.875rem; color: rgba(245,240,232,0.6); transition: color 0.3s; }
+    .footer-col a:hover { color: var(--primary-fg); }
+    .footer-bottom {
+      padding-top: 2rem; border-top: 1px solid rgba(245,240,232,0.1);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { font-size: 0.875rem; color: rgba(245,240,232,0.45); }
+
+    /* ── ANIMATIONS ── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+    .fade-in-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in-left.visible { opacity: 1; transform: none; }
+    .fade-in-right { opacity: 0; transform: translateX(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in-right.visible { opacity: 1; transform: none; }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Floriana <span>Martinez</span></a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#pacotes">Pacotes</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#contato" class="btn-primary">Agendar Sessão</a>
+    </div>
+    <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <svg id="hamburger-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#sobre" onclick="closeMobile()">Sobre</a>
+  <a href="#servicos" onclick="closeMobile()">Serviços</a>
+  <a href="#pacotes" onclick="closeMobile()">Pacotes</a>
+  <a href="#depoimentos" onclick="closeMobile()">Depoimentos</a>
+  <a href="#faq" onclick="closeMobile()">FAQ</a>
+  <a href="#contato" onclick="closeMobile()">Contato</a>
+  <a href="#contato" class="btn-primary" onclick="closeMobile()">Agendar Sessão</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-blob1"></div>
+  <div class="hero-blob2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>Coaching Premium para Brasileiros nos EUA</span>
+      </div>
+      <h1 class="hero-title">
+        Transforme sua
+        <span class="gold">Carreira Internacional</span>
+      </h1>
+      <p class="hero-sub">
+        Estratégia, clareza e propósito para brasileiros que buscam alcançar o próximo nível em suas carreiras nos Estados Unidos. Sua jornada de transformação começa aqui.
+      </p>
+      <div class="hero-btns">
+        <a href="#contato" class="btn-lg primary">
+          Agendar Sessão Gratuita
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#sobre" class="btn-lg ghost">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          Conheça Minha História
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">500+</div>
+          <div class="hero-stat-lbl">Clientes Transformados</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">15+</div>
+          <div class="hero-stat-lbl">Anos de Experiência</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">98%</div>
+          <div class="hero-stat-lbl">Taxa de Satisfação</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-photo-col">
+      <div class="hero-photo-frame">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        <p>Coloque a foto da Floriana aqui<br/><small>(substitua esta div por uma tag &lt;img&gt;)</small></p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-dot-wrap"><div class="scroll-dot"></div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="sobre" class="section bg-muted">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text fade-in-left">
+        <span class="section-label">Sobre Mim</span>
+        <h2 class="section-title">Uma jornada de transformação começa com clareza</h2>
+        <p style="margin-top:1.5rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75;">
+          Sou Floriana Martinez, Life &amp; Career Coach especializada em ajudar brasileiros a navegarem suas carreiras nos Estados Unidos. Minha trajetória única — da aviação ao marketing, do Brasil ao mundo — me deu as ferramentas para entender profundamente os desafios que você enfrenta.
+        </p>
+        <p style="margin-top:1rem;font-size:1.05rem;color:var(--muted-fg);line-height:1.75;">
+          Acredito que cada pessoa tem um potencial extraordinário. Meu papel é ajudá-lo a descobrir esse potencial e criar um plano estratégico para alcançar seus objetivos mais ambiciosos.
+        </p>
+        <blockquote>
+          <p>"Seu maior crescimento acontece quando você decide que suas circunstâncias não definem seu destino."</p>
+        </blockquote>
+      </div>
+      <div class="credentials-grid fade-in-right">
+        <div class="credential-card delay-1">
+          <div class="credential-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+          </div>
+          <h3>Certificada ICF</h3>
+          <p>International Coach Federation</p>
+        </div>
+        <div class="credential-card delay-2">
+          <div class="credential-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+          </div>
+          <h3>Marketing Estratégico</h3>
+          <p>Formação ESPM — São Paulo</p>
+        </div>
+        <div class="credential-card delay-3">
+          <div class="credential-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+          </div>
+          <h3>Vivência Global</h3>
+          <p>Experiência em companhias aéreas internacionais</p>
+        </div>
+        <div class="credential-card delay-4">
+          <div class="credential-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          </div>
+          <h3>Aviação Internacional</h3>
+          <p>Soft skills e visão multicultural</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicos" class="section">
+  <div class="section-inner">
+    <div class="services-header fade-in">
+      <span class="section-label">Serviços</span>
+      <h2 class="section-title">Programas desenhados para sua transformação</h2>
+      <p class="section-sub">Cada jornada é única. Por isso, ofereço programas flexíveis que se adaptam aos seus objetivos específicos e ao seu momento de carreira.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-in delay-1">
+        <div class="service-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg>
+        </div>
+        <div>
+          <h3>Descoberta de Propósito</h3>
+          <p>Identifique seus valores, paixões e forças únicas para construir uma carreira alinhada com quem você realmente é.</p>
+          <div class="tags">
+            <span class="tag">Assessment de Valores</span>
+            <span class="tag">Mapeamento de Forças</span>
+            <span class="tag">Visão de Futuro</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-card fade-in delay-2">
+        <div class="service-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+        </div>
+        <div>
+          <h3>Transição de Carreira</h3>
+          <p>Estratégias personalizadas para navegar mudanças de carreira com confiança, seja em uma nova indústria ou país.</p>
+          <div class="tags">
+            <span class="tag">Planejamento Estratégico</span>
+            <span class="tag">Networking Internacional</span>
+            <span class="tag">Posicionamento de Marca</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-card fade-in delay-2">
+        <div class="service-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+        </div>
+        <div>
+          <h3>Aceleração Profissional</h3>
+          <p>Desenvolva as habilidades e mindset necessários para alcançar promoções e oportunidades de liderança.</p>
+          <div class="tags">
+            <span class="tag">Executive Presence</span>
+            <span class="tag">Comunicação de Impacto</span>
+            <span class="tag">Gestão de Stakeholders</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-card fade-in delay-3">
+        <div class="service-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+        </div>
+        <div>
+          <h3>Coaching Executivo</h3>
+          <p>Suporte contínuo para líderes que buscam maximizar seu impacto e desenvolver equipes de alta performance.</p>
+          <div class="tags">
+            <span class="tag">Liderança Situacional</span>
+            <span class="tag">Inteligência Emocional</span>
+            <span class="tag">Tomada de Decisão</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="services-cta fade-in">
+      <a href="#pacotes" class="btn-lg primary">
+        Ver Pacotes e Preços
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pacotes" class="section bg-muted">
+  <div class="section-inner">
+    <div class="pricing-header fade-in">
+      <span class="section-label">Investimento</span>
+      <h2 class="section-title">Escolha o programa certo para você</h2>
+      <p class="section-sub">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Sem compromisso.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Essencial -->
+      <div class="pricing-card normal fade-in delay-1">
+        <div class="pricing-name">Essencial</div>
+        <div class="pricing-desc">Para quem quer dar o primeiro passo com clareza e direção.</div>
+        <div class="pricing-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">997</span>
+        </div>
+        <div class="price-period" style="color:var(--muted-fg);font-size:0.875rem;margin-top:0.25rem;">por programa</div>
+        <hr class="pricing-divider"/>
+        <ul class="pricing-benefits">
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>4 sessões individuais (60 min cada)</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment de valores e forças</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Plano de ação personalizado</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte por mensagem entre sessões</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso ao portal do cliente</li>
+        </ul>
+        <a href="#contato" class="btn-pricing">
+          Começar Agora
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <!-- Transformação (featured) -->
+      <div class="pricing-card featured fade-in delay-2">
+        <div class="pricing-badge">
+          <svg viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+          Mais Popular
+        </div>
+        <div class="pricing-name">Transformação</div>
+        <div class="pricing-desc">O programa mais completo para uma mudança real e duradoura.</div>
+        <div class="pricing-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">2.497</span>
+        </div>
+        <div class="price-period">por programa</div>
+        <hr class="pricing-divider"/>
+        <ul class="pricing-benefits">
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>12 sessões individuais (60 min cada)</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Assessment completo de carreira</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão e otimização do LinkedIn</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão do currículo em inglês</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Estratégia de networking internacional</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Suporte ilimitado por mensagem</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso VIP ao portal do cliente</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>2 sessões bônus de follow-up</li>
+        </ul>
+        <a href="#contato" class="btn-pricing">
+          Quero me Transformar
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <!-- Executivo VIP -->
+      <div class="pricing-card normal fade-in delay-3">
+        <div class="pricing-name">Executivo VIP</div>
+        <div class="pricing-desc">Para líderes que buscam o próximo nível com suporte dedicado.</div>
+        <div class="pricing-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">4.997</span>
+        </div>
+        <div class="price-period" style="color:var(--muted-fg);font-size:0.875rem;margin-top:0.25rem;">por programa</div>
+        <hr class="pricing-divider"/>
+        <ul class="pricing-benefits">
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>24 sessões individuais (90 min cada)</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Coaching de liderança e presença executiva</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Estratégia de marca pessoal 360°</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Introduções à rede de contatos da Floriana</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Revisão de currículo e LinkedIn</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Disponibilidade de emergência (WhatsApp)</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Acesso vitalício ao portal</li>
+          <li><span class="check-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></span>Sessões mensais de manutenção</li>
+        </ul>
+        <a href="#contato" class="btn-pricing">
+          Falar com a Floriana
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <p class="pricing-note">Todos os pacotes incluem sessão de descoberta gratuita de 30 minutos. Pagamento parcelado disponível.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="depoimentos" class="section bg-primary-section">
+  <div class="section-inner">
+    <div class="testimonials-header fade-in">
+      <span class="section-label">Depoimentos</span>
+      <h2 class="section-title">Histórias de transformação real</h2>
+      <p class="section-sub">Cada cliente traz uma história única. Aqui estão algumas das transformações que tenho o privilégio de testemunhar.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in delay-1">
+        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+        <p class="testimonial-text">Floriana me ajudou a enxergar possibilidades que eu nem imaginava. Em 6 meses, consegui a promoção que buscava há anos e, mais importante, encontrei propósito no que faço.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">C</div>
+          <div>
+            <div class="author-name">Carolina S.</div>
+            <div class="author-role">Senior Product Manager</div>
+            <div class="author-role">Tech Company, San Francisco</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in delay-2">
+        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+        <p class="testimonial-text">O processo de coaching foi transformador. Aprendi a me posicionar com confiança em reuniões executivas e desenvolvi uma presença de liderança que mudou completamente minha trajetória.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div>
+            <div class="author-name">Ricardo M.</div>
+            <div class="author-role">Engineering Director</div>
+            <div class="author-role">Fortune 500, New York</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in delay-3">
+        <svg class="quote" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+        <p class="testimonial-text">Cheguei nos EUA perdida profissionalmente. Com a Floriana, não só encontrei minha direção, mas também aprendi a valorizar minha bagagem cultural como diferencial competitivo.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">Amanda P.</div>
+            <div class="author-role">Marketing Manager</div>
+            <div class="author-role">Startup, Miami</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section">
+  <div class="section-inner">
+    <div class="faq-inner">
+      <div class="faq-header fade-in">
+        <span class="section-label">Dúvidas Frequentes</span>
+        <h2 class="section-title" style="max-width:none;text-align:center;">Tudo que você precisa saber antes de começar</h2>
+        <p class="section-sub" style="max-width:none;text-align:center;">Não encontrou sua resposta? Entre em contato — respondo em até 24 horas.</p>
+      </div>
+      <div class="faq-list fade-in">
+        <div class="faq-item">
+          <button class="faq-question open" onclick="toggleFaq(this)">
+            Como funciona a sessão de descoberta gratuita?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg></span>
+          </button>
+          <div class="faq-answer open">
+            <div class="faq-answer-inner"><p>É uma conversa de 30 minutos pelo Zoom onde você me conta sua situação atual, seus objetivos e desafios. Ao final, te apresento o programa mais adequado para você. Sem compromisso de contratação.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            O atendimento é presencial ou online?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>100% online, via Zoom. Atendo clientes em todos os estados dos EUA e também no Brasil. A flexibilidade do formato online permite que você faça as sessões de onde estiver, no horário que melhor funciona.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Em quanto tempo vejo resultados?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>Os primeiros insights geralmente aparecem já nas primeiras 2 sessões. Mudanças concretas de carreira — promoções, transições, novos empregos — costumam acontecer entre 3 e 6 meses do início do programa, dependendo dos seus objetivos.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Você atende apenas brasileiros nos EUA?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>Meu foco principal são profissionais brasileiros navegando o mercado americano, mas atendo qualquer profissional que busque transformação de carreira e se comunique em português. A vivência bicultural é meu diferencial.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Como funciona o pagamento?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>Aceitamos cartão de crédito internacional, transferência bancária (Zelle, Wise) e PIX para clientes no Brasil. O pagamento pode ser feito à vista com desconto ou parcelado. Discutimos as condições na sessão de descoberta.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Posso cancelar ou pausar o programa?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>Sim. Temos uma política de cancelamento flexível. Sessões podem ser reagendadas com até 24h de antecedência sem custo. Em casos de imprevisto maior, avaliamos juntos a melhor solução.</p></div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Você tem experiência com minha área de atuação?
+            <span class="faq-toggle"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner"><p>Já trabalhei com profissionais de tecnologia, finanças, marketing, saúde, aviação, engenharia e muitas outras áreas. O coaching não exige expertise técnica na sua área — trabalho com sua mentalidade, estratégia e comunicação.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="faq-cta fade-in">
+        <p>Ainda tem dúvidas? Fale diretamente comigo.</p>
+        <a href="#contato" class="btn-lg primary">
+          Entrar em Contato
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contato" class="section bg-muted">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="fade-in-left">
+        <span class="section-label">Contato</span>
+        <h2 class="section-title">Pronto para transformar sua carreira?</h2>
+        <p class="section-sub">O primeiro passo é sempre o mais importante. Agende uma sessão de descoberta gratuita e vamos conversar sobre seus objetivos e como posso ajudá-lo a alcançá-los.</p>
+        <div class="contact-info-items">
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+            </div>
+            <div>
+              <strong>Sessão de Descoberta</strong>
+              <span>30 minutos gratuitos</span>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            </div>
+            <div>
+              <strong>contato@florianamartinez.com</strong>
+              <span>Resposta em até 24 horas</span>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            </div>
+            <div>
+              <strong>Miami, Florida</strong>
+              <span>Atendimento 100% online</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fade-in-right">
+        <div class="contact-form-card">
+          <h3>Agende sua sessão gratuita</h3>
+          <div id="form-error" class="form-error">Algo deu errado. Tente novamente ou envie um e-mail diretamente.</div>
+          <div id="form-success" class="form-success">
+            <div class="success-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h4>Mensagem recebida!</h4>
+            <p>Entrarei em contato em até 24 horas. Obrigada!</p>
+          </div>
+          <form id="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Seu nome" required />
+              </div>
+              <div class="form-group">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" placeholder="Seu sobrenome" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" placeholder="seu@email.com" required />
+            </div>
+            <div class="form-group">
+              <label for="interesse">Área de Interesse</label>
+              <select id="interesse" required>
+                <option value="">Selecione uma opção</option>
+                <option>Transição de Carreira</option>
+                <option>Descoberta de Propósito</option>
+                <option>Aceleração Profissional</option>
+                <option>Coaching Executivo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mensagem">Mensagem</label>
+              <textarea id="mensagem" placeholder="Conte um pouco sobre seus objetivos..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="submit-btn">
+              Enviar Mensagem
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="footer-logo">Floriana <span>Martinez</span></a>
+        <p class="footer-tagline">Transformando carreiras com estratégia, clareza e propósito.</p>
+        <div class="social-links">
+          <a href="https://linkedin.com/in/florianamartinez" target="_blank" class="social-link" aria-label="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="https://instagram.com/florianamartinez" target="_blank" class="social-link" aria-label="Instagram">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://wa.me/13051234567" target="_blank" class="social-link" aria-label="WhatsApp">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#pacotes">Pacotes</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Floriana Martinez Coaching. Todos os direitos reservados.</p>
+      <p>Feito com dedicação para brasileiros no mundo.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Mobile menu
+  function toggleMobile() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+  function closeMobile() {
+    document.getElementById('mobile-menu').classList.remove('open');
+  }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.classList.remove('open');
+      q.querySelector('.faq-toggle').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>';
+    });
+    if (!isOpen) {
+      answer.classList.add('open');
+      btn.classList.add('open');
+      btn.querySelector('.faq-toggle').innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 12H6"/></svg>';
+    }
+  }
+
+  // Form submit (visual only — no backend)
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('form-success').classList.add('show');
+    }, 1200);
+  }
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '-50px' });
+
+  document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
