@@ -1,18 +1,16 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
 
-  // 🔐 só protege essa página específica
-  const isProtectedPage =
-    url.pathname === "/florianacoach" ||
-    url.pathname.startsWith("/florianacoach/");
+  // 🔐 protege SOMENTE o site florianacoach inteiro
+  const isFlorianaCoachSite =
+    url.hostname === "florianacoach.pages.dev";
 
-  // se NÃO for essa página, deixa passar
-  if (!isProtectedPage) {
+  // se não for esse site, deixa passar (caso use monorepo depois)
+  if (!isFlorianaCoachSite) {
     return context.next();
   }
 
-  // 👇 proteção só para florianacoach
-  const USER = "FLORIANA";
+  const USER = "Floriana";
   const PASS = "COACHDOANO";
 
   const auth = context.request.headers.get("Authorization");
