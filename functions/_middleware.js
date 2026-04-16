@@ -1,15 +1,17 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
 
-  // 🔒 só protege a pasta /fifa2026
-  const isProtectedRoute = url.pathname.startsWith("/florianacoach");
+  // 🔐 só protege essa página específica
+  const isProtectedPage =
+    url.pathname === "/florianacoach" ||
+    url.pathname.startsWith("/florianacoach/");
 
-  // se NÃO for essa pasta, deixa passar direto
-  if (!isProtectedRoute) {
+  // se NÃO for essa página, deixa passar
+  if (!isProtectedPage) {
     return context.next();
   }
 
-  // 👇 proteção só para /florianacoach
+  // 👇 proteção só para florianacoach
   const USER = "FLORIANA";
   const PASS = "COACHDOANO";
 
