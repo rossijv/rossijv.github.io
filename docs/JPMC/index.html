@@ -706,18 +706,29 @@ body.sort-active .sort-handle{display:flex;}
   .p-hero-mono-wrap{align-items:center;flex-direction:row;gap:1rem;}
   .p-hero-eyebrow{justify-content:center;}
   .p-hero-langs{justify-content:center;}
-  #chat-window{width:calc(100vw - 2.5rem);right:1.25rem;}
-  #edit-panel{width:100vw;}
+  .p-hero-stats{flex-wrap:wrap;gap:1.25rem 1.75rem;}
+  #chat-window{width:calc(100vw - 2.5rem);right:1.25rem;bottom:4.5rem;max-height:75vh;}
+  #edit-panel{width:100vw;padding-bottom:env(safe-area-inset-bottom,0);}
+  #edit-panel .ep-section{padding:.85rem .9rem;}
   .cta-row{flex-direction:column;}
   .sched-band{padding:3.5rem 1.5rem;}
   .sb-btn{padding:13px 36px;}
+  /* Comp hub mobile: hub-box first (sticky), anchor card second */
+  .comp-top-row{grid-template-columns:1fr;display:flex;flex-direction:column-reverse;}
+  .comp-hub-box{position:sticky;top:84px;z-index:10;margin-bottom:.75rem;}
+  .comp-wires{display:none;}
   .comp-grid{grid-template-columns:1fr;}
   .comp-grid .comp-card:last-child:nth-child(3n+1){grid-column:1;}
+  /* Edit panel fields: prevent side-by-side overflow on narrow screens */
+  #edit-panel .ep-fw{min-width:0;}
 }
 @media(max-width:500px){
   .p-hero-name{font-size:2rem;}
   .section,.p-footer{padding-left:1.25rem;padding-right:1.25rem;}
   .section-divider{margin:0 1.25rem;}
+  .p-hero-stats{gap:1rem 1.5rem;}
+  .p-hero-stat-n{font-size:1.35rem;}
+  #chat-window{width:calc(100vw - 2rem);right:1rem;}
 }
 </style>
 </head>
@@ -1216,16 +1227,18 @@ body.sort-active .sort-handle{display:flex;}
 <div id="chat-window" aria-label="Professional assistant">
   <div class="chat-header">
     <div class="chat-avatar">JR</div>
-    <div>
+    <div style="flex:1;min-width:0;">
       <div class="chat-title" id="chat-title-display">Professional Assistant</div>
-      <div class="chat-sub">Ask me about Joao's experience</div>
+      <div class="chat-sub" id="chat-sub-display">Ask me about Joao's experience</div>
     </div>
+    <button id="chat-end-btn" onclick="endChatSession()" style="display:none;font-size:.58rem;font-weight:600;letter-spacing:.06em;color:var(--text3);background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:2rem;padding:.18rem .55rem;margin-right:.3rem;font-family:var(--ff-b);">End</button>
     <button class="chat-close-btn" onclick="toggleChat()">✕</button>
   </div>
   <!-- VISITOR IDENTIFICATION — shown before conversation starts -->
   <div class="chat-intro" id="chat-intro">
-    <div class="chat-intro-msg">Hello. Before we start — may I have your name?</div>
-    <input id="chat-visitor-name" class="chat-intro-field" type="text" placeholder="Your name" maxlength="60" onkeydown="if(event.key==='Enter')startChatConversation()">
+    <div class="chat-intro-msg">Hello. Before we start — may I have your name and email?</div>
+    <input id="chat-visitor-name" class="chat-intro-field" type="text" placeholder="Your name" maxlength="60" onkeydown="if(event.key==='Enter')document.getElementById('chat-visitor-email').focus()">
+    <input id="chat-visitor-email" class="chat-intro-field" type="email" placeholder="Your email (optional)" maxlength="120" onkeydown="if(event.key==='Enter')startChatConversation()">
     <button class="chat-intro-submit" onclick="startChatConversation()">Start conversation →</button>
     <button class="chat-intro-skip" onclick="startChatConversation()">Skip</button>
   </div>
@@ -1692,6 +1705,7 @@ body.sort-active .sort-handle{display:flex;}
       </div>
       <div class="ep-gh-status" id="ep-gh-status"><div class="ep-gh-dot" id="ep-gh-dot"></div><span id="ep-gh-status-text">Not configured</span></div>
       <p class="ep-note">Token is encrypted with your admin password and stored locally. Never sent anywhere except the GitHub API. Admin password is the encryption key — never synced.</p>
+      <p class="ep-note" style="margin-top:.5rem;color:var(--gold);opacity:.7;">📎 Share URL tip: add <strong>?cfg=owner/repo</strong> to your portal URL so any device automatically fetches your saved config without needing localStorage. Example: <em>portal.html?cfg=jvrossi/jvr-config</em></p>
     </div>
 
     <!-- PASSWORDS -->
@@ -1893,14 +1907,40 @@ function buildFullBundle() {
 }
 
 async function fetchGHConfig() {
+  // URL parameter ?cfg=owner/repo or ?cfg=owner/repo/path.json
+  // lets new devices discover the GitHub config without any localStorage.
+  // Admin shares the URL with ?cfg= appended and all visitors get live config.
+  (function(){
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var cfgParam = params.get('cfg');
+      if (cfgParam) {
+        var parts = cfgParam.split('/');
+        if (parts.length >= 2) {
+          // owner/repo — optional trailing /path.json
+          var repoFromUrl = parts[0] + '/' + parts[1];
+          var pathFromUrl = parts.slice(2).join('/') || 'config.json';
+          // Only write to localStorage if not already set (don't overwrite admin's own settings)
+          if (!localStorage.getItem('vr_gh_repo')) localStorage.setItem('vr_gh_repo', repoFromUrl);
+          if (!localStorage.getItem('vr_gh_path')) localStorage.setItem('vr_gh_path', pathFromUrl);
+        }
+      }
+    } catch(e){}
+  })();
+
   var repo = localStorage.getItem('vr_gh_repo') || CONFIG.ghRepo;
   var path = localStorage.getItem('vr_gh_path') || CONFIG.ghPath || 'config.json';
   if (!repo) return;
   try {
-    var url = 'https://raw.githubusercontent.com/' + repo + '/main/' + path + '?t=' + Date.now();
-    var r = await fetch(url);
-    if (!r.ok) return;
-    var json = await r.json();
+    // Try main branch first, fall back to master
+    var branches = ['main', 'master'];
+    var json = null;
+    for (var bi = 0; bi < branches.length; bi++) {
+      var rawUrl = 'https://raw.githubusercontent.com/' + repo + '/' + branches[bi] + '/' + path + '?t=' + Date.now();
+      var r = await fetch(rawUrl);
+      if (r.ok) { json = await r.json(); break; }
+    }
+    if (!json) return;
 
     if (json._v === 2 && json.config) {
       // ── New bundle format (v2) ────────────────────────────────
@@ -3199,15 +3239,45 @@ function initWordReveal() {
     });
   }
 
-  spans.forEach(function(s) {
-    s.addEventListener('mouseover', function(e) {
-      e.stopPropagation();
-      if (s.classList.contains('lit')) return; // already revealed, skip expensive calc
-      var lineSpans = getLineGroup(s);
-      lineSpans.forEach(function(ls) { ls.classList.add('lit'); });
+  var isMobile = window.matchMedia('(hover: none)').matches || window.innerWidth < 700;
+
+  if (isMobile) {
+    // On touch/mobile: use IntersectionObserver to reveal line-by-line as text scrolls in
+    // Group spans by approximate vertical position (line groups)
+    var lineMap = {};
+    spans.forEach(function(s) {
+      var rect = s.getBoundingClientRect();
+      // Round to nearest 4px bucket to group same-line spans robustly
+      var lineKey = Math.round(rect.top / 4) * 4;
+      if (!lineMap[lineKey]) lineMap[lineKey] = [];
+      lineMap[lineKey].push(s);
     });
-    // mouseout intentionally omitted — once lit, stays lit
-  });
+    var lineKeys = Object.keys(lineMap).sort(function(a,b){return a-b;});
+
+    // Stagger-reveal each line when para enters viewport
+    var paraObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        lineKeys.forEach(function(key, i){
+          setTimeout(function(){
+            lineMap[key].forEach(function(s){ s.classList.add('lit'); });
+          }, i * 55); // 55ms stagger per line — fast, satisfying
+        });
+        paraObserver.unobserve(entry.target);
+      });
+    }, {threshold: 0.1});
+    paraObserver.observe(para);
+  } else {
+    // Desktop: hover-based line reveal
+    spans.forEach(function(s) {
+      s.addEventListener('mouseover', function(e) {
+        e.stopPropagation();
+        if (s.classList.contains('lit')) return;
+        var lineSpans = getLineGroup(s);
+        lineSpans.forEach(function(ls) { ls.classList.add('lit'); });
+      });
+    });
+  }
 
   para._wrInited = true;
 }
@@ -3905,7 +3975,10 @@ async function saveEdits() {
       expDate1: g('ep-exp-date1'), expOrg1: g('ep-exp-org1'), expRole1: g('ep-exp-role1'), expBullets1: g('ep-exp-bullets1'),
       expDate2: g('ep-exp-date2'), expOrg2: g('ep-exp-org2'), expRole2: g('ep-exp-role2'), expBullets2: g('ep-exp-bullets2'),
       expDate3: g('ep-exp-date3'), expOrg3: g('ep-exp-org3'), expRole3: g('ep-exp-role3'), expBullets3: g('ep-exp-bullets3'),
-      expDate4: g('ep-exp-date4'), expEarlier: g('ep-exp-earlier')
+      expDate4: g('ep-exp-date4'), expEarlier: g('ep-exp-earlier'),
+      // Timeline body text — save here too so _getLangOverlay() picks them up
+      yr1Body: g('ep-yr1body'), yr2Body: g('ep-yr2body'),
+      yr3Body: g('ep-yr3body'), yr4Body: g('ep-yr4body')
     };
     // Merge with existing lang content overrides
     var allContent = {};
@@ -3987,8 +4060,13 @@ var KB = [
    CHATBOT ENGINE
 ═══════════════════════════════════════════════════════ */
 var chatOpen = false;
-var _visitorName = '';
-var _fallbackIdx = -1;
+var _visitorName  = '';
+var _visitorEmail = '';
+var _fallbackIdx  = -1;
+var _chatMsgCount = 0;        // visitor question count
+var _chatEnded    = false;    // prevent further messages after end
+var _chatLog      = [];       // [{role:'bot'|'user', text:'...'}]
+var CHAT_LIMIT    = 5;        // max visitor questions
 
 var FALLBACKS = [
   "That's one for Joao to answer directly. Use the contact button at the bottom of the page.",
@@ -4017,31 +4095,39 @@ function toggleChat() {
 }
 
 function initChat() {
+  // Reset state
+  _chatMsgCount = 0; _chatEnded = false; _chatLog = [];
   // Show visitor intro, hide conversation until name is entered
   var intro  = document.getElementById('chat-intro');
   var msgs   = document.getElementById('chat-messages');
   var suggs  = document.getElementById('chat-suggestions');
   var inpRow = document.getElementById('chat-input-row');
+  var endBtn = document.getElementById('chat-end-btn');
   if (intro)  intro.style.display  = 'flex';
-  if (msgs)   msgs.style.display   = 'none';
+  if (msgs)   { msgs.style.display = 'none'; msgs.innerHTML = ''; }
   if (suggs)  suggs.style.display  = 'none';
   if (inpRow) inpRow.style.display = 'none';
+  if (endBtn) endBtn.style.display = 'none';
   // Update avatar initials from CONFIG
   var avatar = document.querySelector('.chat-avatar');
   if (avatar && CONFIG.candidateInitials) avatar.textContent = CONFIG.candidateInitials;
 }
 
 function startChatConversation() {
-  var nameField = document.getElementById('chat-visitor-name');
-  _visitorName  = nameField ? nameField.value.trim() : '';
+  var nameField  = document.getElementById('chat-visitor-name');
+  var emailField = document.getElementById('chat-visitor-email');
+  _visitorName  = nameField  ? nameField.value.trim()  : '';
+  _visitorEmail = emailField ? emailField.value.trim() : '';
   var intro  = document.getElementById('chat-intro');
   var msgs   = document.getElementById('chat-messages');
   var suggs  = document.getElementById('chat-suggestions');
   var inpRow = document.getElementById('chat-input-row');
+  var endBtn = document.getElementById('chat-end-btn');
   if (intro)  intro.style.display  = 'none';
   if (msgs)   msgs.style.display   = 'flex';
   if (suggs)  suggs.style.display  = 'flex';
   if (inpRow) inpRow.style.display = 'flex';
+  if (endBtn) endBtn.style.display = 'block';
   // Use language-specific greeting
   var L = _getLangOverlay(_currentLang);
   var greeting;
@@ -4051,21 +4137,24 @@ function startChatConversation() {
   } else {
     greeting = L.botGreeting || 'Ask me anything about Joao\'s background, experience, or fit for this role.';
   }
+  _chatLog.push({role:'bot', text: greeting});
   addBotMsg(greeting);
   setTimeout(function(){ document.getElementById('chat-input').focus(); }, 80);
 }
 
-function addBotMsg(text) {
+function addBotMsg(text, noLog) {
   var msgs = document.getElementById('chat-messages');
   var w = document.createElement('div'); w.className = 'chat-msg bot';
   w.innerHTML = '<div class="chat-bubble">' + text + '</div>';
   msgs.appendChild(w); msgs.scrollTop = msgs.scrollHeight;
+  if (!noLog) _chatLog.push({role:'bot', text: text});
 }
 function addUserMsg(text) {
   var msgs = document.getElementById('chat-messages');
   var w = document.createElement('div'); w.className = 'chat-msg user';
   w.innerHTML = '<div class="chat-bubble">' + text + '</div>';
   msgs.appendChild(w); msgs.scrollTop = msgs.scrollHeight;
+  _chatLog.push({role:'user', text: text});
 }
 function addTyping() {
   var msgs = document.getElementById('chat-messages');
@@ -4086,19 +4175,99 @@ function getAnswer(q) {
   if (bestScore >= 4) return best.a;
   return getFallback();
 }
+function _doSend(q) {
+  if (_chatEnded) return;
+  document.getElementById('chat-suggestions').style.display = 'none';
+  addUserMsg(q);
+  _chatMsgCount++;
+
+  // Update counter display
+  var counter = document.getElementById('chat-sub-display');
+  if (counter) counter.textContent = 'Questions: ' + _chatMsgCount + ' / ' + CHAT_LIMIT;
+
+  // Warn on 4th question
+  if (_chatMsgCount === CHAT_LIMIT - 1) {
+    addTyping();
+    setTimeout(function(){
+      removeTyping();
+      addBotMsg(getAnswer(q));
+      setTimeout(function(){
+        addBotMsg('One more question available — ask it well. Or click <strong>End</strong> to close the conversation.', true);
+      }, 400);
+    }, 700 + Math.random() * 400);
+    return;
+  }
+
+  // 5th question — answer it, then auto-end
+  if (_chatMsgCount >= CHAT_LIMIT) {
+    addTyping();
+    setTimeout(function(){
+      removeTyping();
+      addBotMsg(getAnswer(q));
+      setTimeout(function(){ endChatSession(true); }, 1200);
+    }, 700 + Math.random() * 400);
+    return;
+  }
+
+  addTyping();
+  setTimeout(function(){ removeTyping(); addBotMsg(getAnswer(q)); }, 700 + Math.random() * 400);
+}
+
 function sendMessage() {
   var input = document.getElementById('chat-input');
   var q = input.value.trim(); if (!q) return;
   input.value = '';
-  document.getElementById('chat-suggestions').style.display = 'none';
-  addUserMsg(q); addTyping();
-  setTimeout(function(){ removeTyping(); addBotMsg(getAnswer(q)); }, 700 + Math.random() * 400);
+  _doSend(q);
 }
 function sendSuggestion(btn) {
-  var q = btn.textContent;
-  document.getElementById('chat-suggestions').style.display = 'none';
-  addUserMsg(q); addTyping();
-  setTimeout(function(){ removeTyping(); addBotMsg(getAnswer(q)); }, 700 + Math.random() * 400);
+  _doSend(btn.textContent);
+}
+
+function endChatSession(auto) {
+  if (_chatEnded) return;
+  _chatEnded = true;
+  // Disable input
+  var inp = document.getElementById('chat-input');
+  var sendBtn = document.querySelector('.chat-send');
+  var endBtn  = document.getElementById('chat-end-btn');
+  if (inp)    { inp.disabled = true; inp.placeholder = 'Conversation ended.'; }
+  if (sendBtn) sendBtn.disabled = true;
+  if (endBtn)  endBtn.style.display = 'none';
+
+  var L = _getLangOverlay(_currentLang);
+  var closeMsg = L.botEndMsg || (auto
+    ? 'Question limit reached. Thank you' + (_visitorName ? ', ' + _visitorName : '') + '. To speak directly with Joao, use the contact button below.'
+    : 'Thank you' + (_visitorName ? ', ' + _visitorName : '') + ' — conversation closed. Feel free to reach out to Joao directly using the contact button below.');
+  addBotMsg(closeMsg, true);
+
+  // Send transcript to admin
+  _sendTranscriptToAdmin();
+}
+
+async function _sendTranscriptToAdmin() {
+  if (!CONFIG.ejsService || !CONFIG.ejsTemplate || !CONFIG.ejsKey) return;
+  var transcript = _chatLog.map(function(m){
+    return '[' + m.role.toUpperCase() + '] ' + m.text;
+  }).join('\n\n');
+  var visitorInfo = (_visitorName || 'Anonymous') + (_visitorEmail ? ' <' + _visitorEmail + '>' : '');
+  try {
+    await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        service_id:  CONFIG.ejsService,
+        template_id: CONFIG.ejsTemplate,
+        user_id:     CONFIG.ejsKey,
+        template_params: {
+          event:     'chat_ended',
+          portal:    'JVR Portal',
+          time:      new Date().toISOString(),
+          visitor:   visitorInfo,
+          transcript: transcript
+        }
+      })
+    });
+  } catch(e) {}
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -4131,27 +4300,42 @@ var _countersRan = false;
 function runCounters() {
   if (_countersRan) return;
   _countersRan = true;
-  var TARGETS = [
-    {id:'ns-stat0n', target:9, suffix:'+', dur:1200},
-    {id:'ns-stat1n', target:4, suffix:'', dur:900},
-    {id:'ns-stat2n', target:3, suffix:'+', dur:800},
-    {id:'ns-stat3n', text:'Miami', dur:0}   // text, no count
-  ];
-  TARGETS.forEach(function(t){
-    var el = document.getElementById(t.id);
+  // Build targets from CONFIG so admin edits persist
+  function parseStatN(raw) {
+    if (!raw) return null;
+    var str = String(raw).trim();
+    // Extract numeric prefix + suffix (e.g. "9+" → target:9, suffix:"+")
+    var m = str.match(/^([\d.]+)(.*)$/);
+    if (m) return {target: parseFloat(m[1]), suffix: m[2] || '', isNum: true};
+    // Non-numeric (e.g. "Miami") — just display as-is
+    return {text: str};
+  }
+  var statIds = ['ns-stat0n','ns-stat1n','ns-stat2n','ns-stat3n'];
+  var statKeys = ['stat0n','stat1n','stat2n','stat3n'];
+  var durations = [1200, 900, 800, 0];
+  statIds.forEach(function(id, i){
+    var el = document.getElementById(id);
     if (!el) return;
-    if (t.text) { el.textContent = t.text; return; }
-    var start = 0;
-    var startTime = null;
-    function step(ts) {
-      if (!startTime) startTime = ts;
-      var pct = Math.min((ts - startTime) / t.dur, 1);
-      var eased = 1 - Math.pow(1 - pct, 3);
-      var val = Math.round(eased * t.target);
-      el.textContent = val + t.suffix;
-      if (pct < 1) requestAnimationFrame(step);
+    var raw = CONFIG[statKeys[i]];
+    var parsed = raw ? parseStatN(raw) : null;
+    if (!parsed || parsed.text !== undefined) {
+      // Text stat — no animation, just set
+      if (raw) el.textContent = raw;
+      return;
     }
-    requestAnimationFrame(step);
+    var dur = durations[i] || 800;
+    var target = parsed.target;
+    var suffix = parsed.suffix;
+    if (dur === 0) { el.textContent = target + suffix; return; }
+    var startTime = null;
+    (function step(ts) {
+      if (!startTime) startTime = ts;
+      var pct = Math.min((ts - startTime) / dur, 1);
+      var eased = 1 - Math.pow(1 - pct, 3);
+      var val = Math.round(eased * target);
+      el.textContent = val + suffix;
+      if (pct < 1) requestAnimationFrame(step);
+    })(performance.now());
   });
 }
 
@@ -4162,28 +4346,28 @@ var _progIdx = 0;
 var _progInited = false;
 
 function buildProgData() {
-  // Resolve body text: language override → CONFIG → built-in default
+  // Resolve body text: admin CONFIG takes priority, then language overlay, then hard default
   var L = _getLangOverlay(_currentLang);
   return [
     { month: CONFIG.yr1Label || 'Month 3',
       phase: 'Phase 1 complete',
       title: CONFIG.yr1Text || 'SIE certified. Full caseload, independent.',
-      body:  L.yr1Body || CONFIG.yr1Body || 'Phase 1 complete: JPMorgan systems mastered, Portuguese-language service running without supervision, first certification earned.',
+      body:  CONFIG.yr1Body || L.yr1Body || 'Phase 1 complete: JPMorgan systems mastered, Portuguese-language service running without supervision, first certification earned.',
       benefit: CONFIG.yr1Benefit || 'Portuguese-language tier-1 cases handled without escalation. No LatAm coverage gap from day one.' },
     { month: CONFIG.yr2Label || 'Month 6',
       phase: 'Phase 2 complete',
       title: CONFIG.yr2Text || 'Series 7 in progress. 3+ LatAm client relationships built.',
-      body:  L.yr2Body || CONFIG.yr2Body || 'Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.',
+      body:  CONFIG.yr2Body || L.yr2Body || 'Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.',
       benefit: CONFIG.yr2Benefit || 'One fewer escalation per week from LatAm segment. Client relationships reduce cold-start time on every case.' },
     { month: CONFIG.yr3Label || 'Month 9',
       phase: 'Phase 3 — mid',
       title: CONFIG.yr3Text || 'Process improvement delivered. Series 63 begins.',
-      body:  L.yr3Body || CONFIG.yr3Body || 'A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.',
+      body:  CONFIG.yr3Body || L.yr3Body || 'A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.',
       benefit: CONFIG.yr3Benefit || 'Documented process improvement — productivity gain measurable before year-end. Portuguese caseload fully owned.' },
     { month: CONFIG.yr4Label || 'Month 12',
       phase: 'Year 1 complete',
       title: CONFIG.yr4Text || 'Series 7 + 63 licensed. Senior track eligible.',
-      body:  L.yr4Body || CONFIG.yr4Body || 'Year one milestone: fully licensed, full ownership of LatAm client segment, qualified for Senior Digital Concierge.',
+      body:  CONFIG.yr4Body || L.yr4Body || 'Year one milestone: fully licensed, full ownership of LatAm client segment, qualified for Senior Digital Concierge.',
       benefit: CONFIG.yr4Benefit || 'Two licensed credentials added from a single hire. Full LatAm ownership. Eligible for Senior track — zero recruiting cost.' }
   ];
 }
