@@ -89,9 +89,9 @@
     "yr1Benefit": "By month three, the team gains a prepared presence. Licensed, oriented, and ready to contribute.",
     "yr2Label": "Phase 2 — Month 6",
     "yr2Text": "Caseload running. Client sessions independent. Patterns being read.",
-    "yr2Benefit": "A team member who knows the workflow, knows the clients, and is making the practice incrementally sharper.",
-    "yr3Label": "Month 9",
-    "yr3Text": " Complexity handled. Connections built. Quietly improving what can be improved.",
+    "yr2Benefit": "LatAm coverage running smoothly. The team has one more reliable presence in the room.\n",
+    "yr3Label": "PHASE 3 — Month 9",
+    "yr3Text": "Full complexity. Relationships active. Refinement ongoing.",
     "yr3Benefit": "Nine months of context — and already making the practice incrementally sharper.\n",
     "yr4Label": "Year 1 — Month 12",
     "yr4Text": "Three licenses. Full ownership. Momentum.",
@@ -111,9 +111,9 @@
     "cred4Name": "SIE — Securities Industry Essentials",
     "cred4Body": "Self-study · Financial markets & instruments · Private Banking regulatory context",
     "yr1Body": "Qualification Exams | FINRA\n",
-    "yr2Body": "Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.",
-    "yr3Body": "A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.",
-    "yr4Body": "Year one milestone: fully licensed, full ownership of LatAm client segment.",
+    "yr2Body": "Client Coverage | LatAm Private Banking",
+    "yr3Body": " Full Integration | Team & Practice",
+    "yr4Body": "1-Year Milestone | Licensed | Embedded | Contributing",
     "nextStepLabel": "Next step",
     "expHeading": "Where the credentials became *instincts.*"
   },
@@ -137,9 +137,9 @@
       "expDate4": "Earlier Experience",
       "expEarlier": "Guest Relations · Disneyland Resort Paris &nbsp;·&nbsp; Financial Advisor / Bank Teller · Brazil &nbsp;·&nbsp; Customer Service · Quebec, Canada",
       "yr1Body": "Qualification Exams | FINRA\n",
-      "yr2Body": "Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.",
-      "yr3Body": "A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.",
-      "yr4Body": "Year one milestone: fully licensed, full ownership of LatAm client segment."
+      "yr2Body": "Client Coverage | LatAm Private Banking",
+      "yr3Body": " Full Integration | Team & Practice",
+      "yr4Body": "1-Year Milestone | Licensed | Embedded | Contributing"
     }
   },
   "tabLabels": {},
