@@ -1705,7 +1705,12 @@ body.sort-active .sort-handle{display:flex;}
       </div>
       <div class="ep-gh-status" id="ep-gh-status"><div class="ep-gh-dot" id="ep-gh-dot"></div><span id="ep-gh-status-text">Not configured</span></div>
       <p class="ep-note">Token is encrypted with your admin password and stored locally. Never sent anywhere except the GitHub API. Admin password is the encryption key — never synced.</p>
-      <p class="ep-note" style="margin-top:.5rem;color:var(--gold);opacity:.7;">📎 Share URL tip: add <strong>?cfg=owner/repo</strong> to your portal URL so any device automatically fetches your saved config without needing localStorage. Example: <em>portal.html?cfg=jvrossi/jvr-config</em></p>
+      <div style="margin-top:.85rem;">
+        <button class="ep-save-btn" onclick="downloadUpdatedPortal()" style="background:linear-gradient(135deg,#1a6636,#22a84e);margin-top:0;">
+          📥 Download portal.html (deploy-ready)
+        </button>
+        <p class="ep-note" style="margin-top:.45rem;">Generates the HTML with your repo URL <strong>baked in</strong>. Push this file to GitHub → any browser/device fetches your config automatically. Do this once after setting up the repo.</p>
+      </div>
     </div>
 
     <!-- PASSWORDS -->
@@ -1990,6 +1995,55 @@ async function saveToGH(token, repo, path, data) {
     });
     return res.ok;
   } catch(e) { return false; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   DOWNLOAD DEPLOY-READY PORTAL.HTML
+   Fetches this page's source and bakes ghRepo + ghPath
+   into CONFIG so any device can fetch the GitHub config.
+═══════════════════════════════════════════════════════ */
+async function downloadUpdatedPortal() {
+  var repo = CONFIG.ghRepo || localStorage.getItem('vr_gh_repo') || '';
+  var path = CONFIG.ghPath || localStorage.getItem('vr_gh_path') || 'config.json';
+  if (!repo) {
+    alert('Configure the GitHub repository first (GitHub Sync section), then save.');
+    return;
+  }
+  var statusEl = document.getElementById('ep-save-status');
+  if (statusEl) { statusEl.textContent = 'Generating…'; statusEl.className = 'ep-status show'; }
+  try {
+    // Fetch the raw HTML source of this page
+    var r = await fetch(window.location.href.split('?')[0], {cache: 'no-store'});
+    if (!r.ok) throw new Error('fetch failed');
+    var html = await r.text();
+
+    // Bake ghRepo and ghPath into the CONFIG block
+    // Handles any amount of whitespace after the key name
+    html = html.replace(/(ghRepo\s*:\s*)('')/,  '$1\'' + repo.replace(/'/g,"\\'") + '\'');
+    html = html.replace(/(ghPath\s*:\s*)'[^']*'/, '$1\'' + path.replace(/'/g,"\\'") + '\'');
+
+    // Trigger download
+    var blob = new Blob([html], {type: 'text/html; charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'portal.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+
+    if (statusEl) {
+      statusEl.textContent = '✓ Downloaded — push this file to GitHub';
+      statusEl.className = 'ep-status show';
+      setTimeout(function(){ statusEl.className = 'ep-status'; }, 4000);
+    }
+  } catch(e) {
+    if (statusEl) {
+      statusEl.textContent = '✗ Could not fetch page source. Try opening the admin panel from the deployed URL, not from a local file.';
+      statusEl.className = 'ep-status show err';
+      setTimeout(function(){ statusEl.className = 'ep-status'; }, 6000);
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
