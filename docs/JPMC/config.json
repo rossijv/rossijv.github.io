@@ -165,7 +165,6 @@
       "nextStepLabel": "Próximo passo",
       "compHeading": "O perfil desejado.",
       "compHeadingEm": "Encontrado.",
-      "expHeading": "De onde vêm as",
       "expHeadingEm": "se tornaram instinto.",
       "eduHeading": "A base",
       "eduHeadingEm": "técnica.",
@@ -241,7 +240,8 @@
         "Prefiro não especular sobre isso. Um clique no botão de contato te dará a resposta certa.",
         "Isso está além do que consigo responder. O Joao pode. Use o botão de contato.",
         "Vale perguntar. Vale uma conversa direta. O botão está no final da página."
-      ]
+      ],
+      "expHeading": "De onde vêm as"
     }
   },
   "tabLabels": {},
