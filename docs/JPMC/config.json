@@ -139,10 +139,7 @@
     }
   },
   "tabLabels": {},
-  "kbOverrides": {
-    "0": "Joao Victor is a client services and operations professional built for high-stakes environments. At the Consulate General of Brazil in Miami, he was the go-to person for citizens navigating complex digital and in-person processes — proactively resolving frustrated client situations, troubleshooting government systems, training staff, and collaborating with IT to build a new internal tool. Before that, he coordinated wire transfers and multi-party financial operations at VR Capital. He speaks Portuguese (native), English, Spanish, and French at professional level, holds CompTIA Network+ and Security+ certifications, and is currently studying for the SIE exam.",
-    "17": "Joao Victor is based in Miami, FL (a walking distance from JPMC building actually) and available to start"
-  },
+  "kbOverrides": {},
   "langOrder": null,
   "langTabs": {
     "en": true,
