@@ -40,12 +40,12 @@
     "recSigneeName": "Fernando Augusto Moreira Costa",
     "recSigneeTitle": "Deputy Consul General · Consulate General of Brazil in Miami",
     "chatEnabled": true,
-    "chatName": "Joao",
+    "chatName": "JV",
     "chatTone": "professional",
     "ejsService": "",
     "ejsTemplate": "",
     "ejsKey": "",
-    "palette": "D",
+    "palette": "B",
     "password": "JPMC2026",
     "adminPassword": "admin2026!",
     "ghRepo": "rossijv/rossijv.github.io",
@@ -143,9 +143,9 @@
   "langOrder": null,
   "langTabs": {
     "en": true,
-    "es": true,
+    "es": false,
     "pt": true,
-    "fr": true
+    "fr": false
   },
   "primaryLang": "en",
   "sectionOrder": null
