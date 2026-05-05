@@ -271,7 +271,7 @@
   "langTabs": {
     "en": true,
     "es": false,
-    "pt": true,
+    "pt": false,
     "fr": false
   },
   "primaryLang": "en",
