@@ -1601,35 +1601,47 @@ body.sort-active .sort-handle{display:flex;}
       </div>
       <div class="ep-fw"><label class="ep-label">Título</label><input id="ep-d3t" class="ep-field" type="text"></div>
       <div class="ep-fw"><label class="ep-label">Bullets (1 por linha)</label><textarea id="ep-d3i" class="ep-field ep-textarea" rows="4"></textarea></div>
+    </div>
 
-      <div style="margin-top:.85rem;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem">Interactive 12-month trajectory</div>
-      <div class="ep-note" style="margin-bottom:.75rem">Each milestone has a label, a headline, and a team benefit. The visitor drags the slider to reveal each quarter.</div>
-      <div class="ep-fw"><label class="ep-label">Section label ("12-month projected trajectory")</label><input id="ep-year-label" class="ep-field" type="text" placeholder="12-month projected trajectory"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">
-        <div class="ep-fw" style="margin:0"><label class="ep-label">Left column header</label><input id="ep-prog-milestone-label" class="ep-field" type="text" placeholder="Milestone achieved"></div>
-        <div class="ep-fw" style="margin:0"><label class="ep-label">Right column header</label><input id="ep-prog-benefit-label" class="ep-field" type="text" placeholder="↑ Value to your team"></div>
+    <!-- 12-MONTH TRAJECTORY — own section for easy discovery -->
+    <div class="ep-section">
+      <div class="ep-section-title">📈 12-Month Trajectory — Cards</div>
+      <p class="ep-note" style="margin-bottom:.85rem">The visitor drags the slider to reveal each milestone. Edit every word here — the phase tag (the gold badge), the two column headers, the headline, the body text, and the team benefit for each of the 4 milestones.</p>
+
+      <div class="ep-fw"><label class="ep-label">Section heading label</label><input id="ep-year-label" class="ep-field" type="text" placeholder="12-month projected trajectory"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;margin-bottom:.85rem">
+        <div class="ep-fw" style="margin:0"><label class="ep-label">Left col header (ex: "Projected milestone")</label><input id="ep-prog-milestone-label" class="ep-field" type="text" placeholder="Milestone achieved"></div>
+        <div class="ep-fw" style="margin:0"><label class="ep-label">Right col header (ex: "Value to your team")</label><input id="ep-prog-benefit-label" class="ep-field" type="text" placeholder="↑ Value to your team"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:.55rem">
-        <div class="ep-fw"><label class="ep-label">Month 3 — phase tag</label><input id="ep-yr1phase" class="ep-field" type="text" placeholder="Phase 1 complete"></div>
-        <div class="ep-fw"><label class="ep-label">Month 3 — milestone headline</label><input id="ep-yr1t" class="ep-field" type="text"></div>
-        <div class="ep-fw"><label class="ep-label">Month 3 — body / footer text</label><textarea id="ep-yr1body" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 3 — team benefit</label><textarea id="ep-yr1b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div style="height:.3rem"></div>
-        <div class="ep-fw"><label class="ep-label">Month 6 — phase tag</label><input id="ep-yr2phase" class="ep-field" type="text" placeholder="Phase 2 complete"></div>
-        <div class="ep-fw"><label class="ep-label">Month 6 — milestone headline</label><input id="ep-yr2t" class="ep-field" type="text"></div>
-        <div class="ep-fw"><label class="ep-label">Month 6 — body / footer text</label><textarea id="ep-yr2body" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 6 — team benefit</label><textarea id="ep-yr2b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div style="height:.3rem"></div>
-        <div class="ep-fw"><label class="ep-label">Month 9 — phase tag</label><input id="ep-yr3phase" class="ep-field" type="text" placeholder="Phase 3 — mid"></div>
-        <div class="ep-fw"><label class="ep-label">Month 9 — milestone headline</label><input id="ep-yr3t" class="ep-field" type="text"></div>
-        <div class="ep-fw"><label class="ep-label">Month 9 — body / footer text</label><textarea id="ep-yr3body" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 9 — team benefit</label><textarea id="ep-yr3b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div style="height:.3rem"></div>
-        <div class="ep-fw"><label class="ep-label">Month 12 — phase tag</label><input id="ep-yr4phase" class="ep-field" type="text" placeholder="Year 1 complete"></div>
-        <div class="ep-fw"><label class="ep-label">Month 12 — milestone headline</label><input id="ep-yr4t" class="ep-field" type="text"></div>
-        <div class="ep-fw"><label class="ep-label">Month 12 — body / footer text</label><textarea id="ep-yr4body" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 12 — team benefit</label><textarea id="ep-yr4b" class="ep-field ep-textarea" rows="2"></textarea></div>
-      </div>
+
+      <!-- Month 3 -->
+      <div style="font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.5rem;">Month 3</div>
+      <div class="ep-fw"><label class="ep-label">Phase tag (gold badge — ex: "Month 3 target")</label><input id="ep-yr1phase" class="ep-field" type="text" placeholder="Phase 1 complete"></div>
+      <div class="ep-fw"><label class="ep-label">Milestone headline</label><input id="ep-yr1t" class="ep-field" type="text"></div>
+      <div class="ep-fw"><label class="ep-label">Body / footer text</label><textarea id="ep-yr1body" class="ep-field ep-textarea" rows="2"></textarea></div>
+      <div class="ep-fw"><label class="ep-label">Team benefit (right column)</label><textarea id="ep-yr1b" class="ep-field ep-textarea" rows="2"></textarea></div>
+
+      <!-- Month 6 -->
+      <div style="font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:.85rem;margin-bottom:.5rem;">Month 6</div>
+      <div class="ep-fw"><label class="ep-label">Phase tag</label><input id="ep-yr2phase" class="ep-field" type="text" placeholder="Phase 2 complete"></div>
+      <div class="ep-fw"><label class="ep-label">Milestone headline</label><input id="ep-yr2t" class="ep-field" type="text"></div>
+      <div class="ep-fw"><label class="ep-label">Body / footer text</label><textarea id="ep-yr2body" class="ep-field ep-textarea" rows="2"></textarea></div>
+      <div class="ep-fw"><label class="ep-label">Team benefit (right column)</label><textarea id="ep-yr2b" class="ep-field ep-textarea" rows="2"></textarea></div>
+
+      <!-- Month 9 -->
+      <div style="font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:.85rem;margin-bottom:.5rem;">Month 9</div>
+      <div class="ep-fw"><label class="ep-label">Phase tag</label><input id="ep-yr3phase" class="ep-field" type="text" placeholder="Phase 3 — mid"></div>
+      <div class="ep-fw"><label class="ep-label">Milestone headline</label><input id="ep-yr3t" class="ep-field" type="text"></div>
+      <div class="ep-fw"><label class="ep-label">Body / footer text</label><textarea id="ep-yr3body" class="ep-field ep-textarea" rows="2"></textarea></div>
+      <div class="ep-fw"><label class="ep-label">Team benefit (right column)</label><textarea id="ep-yr3b" class="ep-field ep-textarea" rows="2"></textarea></div>
+
+      <!-- Month 12 -->
+      <div style="font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:.85rem;margin-bottom:.5rem;">Month 12</div>
+      <div class="ep-fw"><label class="ep-label">Phase tag</label><input id="ep-yr4phase" class="ep-field" type="text" placeholder="Year 1 complete"></div>
+      <div class="ep-fw"><label class="ep-label">Milestone headline</label><input id="ep-yr4t" class="ep-field" type="text"></div>
+      <div class="ep-fw"><label class="ep-label">Body / footer text</label><textarea id="ep-yr4body" class="ep-field ep-textarea" rows="2"></textarea></div>
+      <div class="ep-fw"><label class="ep-label">Team benefit (right column)</label><textarea id="ep-yr4b" class="ep-field ep-textarea" rows="2"></textarea></div>
     </div>
 
     <!-- LANGUAGE -->
