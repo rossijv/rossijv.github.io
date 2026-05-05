@@ -54,10 +54,10 @@
     "c1desc": "Supported citizens through consular service requests across documentation, renewals, and appointments. Brought in on escalated cases requiring calm judgment and individual attention — each situation treated as its own.",
     "c1proof": "Consulate General of Brazil · Escalated cases handled with senior management oversight",
     "c2name": "Digital Support & Troubleshooting",
-    "c2desc": "Called clients who were stuck in the digital process to walk them through it step by step. Handled troubleshooting directly rather than reflexively escalating — and covered IT support responsibilities during absences to keep the service channel running.",
+    "c2desc": "Proactively called clients who were stuck in the digital process to walk them through it step by step. Handled troubleshooting directly rather than reflexively escalating — and stepped in as informal IT support when needed, resolving connectivity issues, resetting servers, and troubleshooting colleagues' computers and printers to keep daily operations running.",
     "c2proof": "Consulate digital platform · Direct client guidance · IT coverage",
     "c3name": "Training & Demo Delivery",
-    "c3desc": "Guided clients step-by-step through digital processes in real time, adapting communication to each person's level. Co-developed a narrated video tutorial that scaled the solution — reducing recurring issues across the service channel.",
+    "c3desc": "Guided clients step-by-step through digital processes, adapting communication to each person's level. Co-developed a narrated video tutorial that scaled the solution — reducing recurring issues across the service channel.",
     "c3proof": "Narrated tutorial · Staff onboarding · Real-time digital guidance",
     "c4name": "Projects & Process Improvement (UAT)",
     "c4desc": "Identified that a shared Excel spreadsheet was creating a real bottleneck — slow load times, impractical data entry, the whole team waiting on the same file. Translated the operational pain into clear requirements for IT, who built a new process documentation system that replaced it.",
@@ -140,7 +140,8 @@
   },
   "tabLabels": {},
   "kbOverrides": {
-    "0": "Joao Victor is a client services and operations professional built for high-stakes environments. At the Consulate General of Brazil in Miami, he was the go-to person for citizens navigating complex digital and in-person processes — proactively resolving frustrated client situations, troubleshooting government systems, training staff, and collaborating with IT to build a new internal tool. Before that, he coordinated wire transfers and multi-party financial operations at VR Capital. He speaks Portuguese (native), English, Spanish, and French at professional level, holds CompTIA Network+ and Security+ certifications, and is currently studying for the SIE exam."
+    "0": "Joao Victor is a client services and operations professional built for high-stakes environments. At the Consulate General of Brazil in Miami, he was the go-to person for citizens navigating complex digital and in-person processes — proactively resolving frustrated client situations, troubleshooting government systems, training staff, and collaborating with IT to build a new internal tool. Before that, he coordinated wire transfers and multi-party financial operations at VR Capital. He speaks Portuguese (native), English, Spanish, and French at professional level, holds CompTIA Network+ and Security+ certifications, and is currently studying for the SIE exam.",
+    "17": "Joao Victor is based in Miami, FL (a walking distance from JPMC building actually) and available to start"
   },
   "langOrder": null,
   "langTabs": {
