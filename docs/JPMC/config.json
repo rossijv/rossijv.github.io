@@ -63,7 +63,7 @@
     "c4desc": "Identified that a shared Excel spreadsheet was creating a real bottleneck — slow load times, impractical data entry, the whole team waiting on the same file. Translated the operational pain into clear requirements for IT, who built a new process documentation system that replaced it.",
     "c4proof": "Excel → IT-built system · Requirements translation · Team adoption",
     "c5name": "Stakeholder Management",
-    "c5desc": "Coordinated advisors, vendors, IT teams, and clients across multi-party engagements simultaneously. Managed communication, timelines, and documentation to keep complex cases moving.",
+    "c5desc": "Acted as the operational hub across clients, vendors, logistics partners, and office administration — negotiating terms, managing timelines, and supporting payment processing and dual-control bank transfers.",
     "c5proof": "VR Capital private clients · Consulate escalation coordination",
     "c6name": "Tickets & Operations",
     "c6desc": "Managed case queues via email and in-person channels, tracking every request through to resolution with complete documentation. Maintained accuracy under high volume — including during a 2-day system outage with a 100+ case backlog.",
