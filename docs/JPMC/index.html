@@ -2212,9 +2212,10 @@ function applyConfig() {
   t('yr2-label', CONFIG.yr2Label); t('yr2-text', CONFIG.yr2Text);
   t('yr3-label', CONFIG.yr3Label); t('yr3-text', CONFIG.yr3Text);
   t('yr4-label', CONFIG.yr4Label); t('yr4-text', CONFIG.yr4Text);
-  // Progress timeline — refresh if already inited
-  if (typeof _progInited !== 'undefined' && _progInited) {
-    _progInited = false; initProgTimeline();
+  // Progress timeline — reset + reinit so new CONFIG values render immediately
+  if (typeof _progInited !== 'undefined') {
+    _progInited = false; // force reinit
+    initProgTimeline();  // reads new CONFIG.yr1Body etc. via buildProgData()
   }
   // LinkedIn label
   var lnLbl = document.getElementById('linkedin-label-text');
@@ -2254,8 +2255,8 @@ function applyConfig() {
   t('sb-eye-label', CONFIG.nextStepLabel || 'Next step');
   // Progress intro text
   t('prog-intro-text', CONFIG.progIntroText || 'Slide to each milestone — see what it means for your team');
-  // Timeline body texts (refreshed via setProgIdx if inited)
-  if (typeof _progInited !== 'undefined' && _progInited) { setProgIdx(_progIdx); }
+  // Timeline body texts — always refresh current card (setProgIdx handles missing elements safely)
+  if (typeof setProgIdx === 'function') setProgIdx(typeof _progIdx !== 'undefined' ? _progIdx : 0);
   // Palette
   applyPalette(CONFIG.palette || 'D');
 }
@@ -2760,8 +2761,8 @@ function setLang(lang) {
   var rn=document.querySelector('.rec-full-note'); if(rn) rn.textContent=L.recNote;
   // Progress timeline intro
   t('prog-intro-text', L.progIntro || 'Slide to each milestone — see what it means for your team');
-  // Refresh timeline card body (language-specific body text)
-  if (typeof _progInited !== 'undefined' && _progInited) { setProgIdx(_progIdx); }
+  // Refresh timeline card body with language-appropriate text
+  if (typeof setProgIdx === 'function') setProgIdx(typeof _progIdx !== 'undefined' ? _progIdx : 0);
   // Persist
   document.documentElement.lang=lang;
   localStorage.setItem('vr_jpmc_lang',lang);
