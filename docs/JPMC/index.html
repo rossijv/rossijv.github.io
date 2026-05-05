@@ -710,17 +710,32 @@ body.sort-active .sort-handle{display:flex;}
   #chat-window{width:calc(100vw - 2.5rem);right:1.25rem;bottom:4.5rem;max-height:75vh;}
   #edit-panel{width:100vw;padding-bottom:env(safe-area-inset-bottom,0);}
   #edit-panel .ep-section{padding:.85rem .9rem;}
+  /* Collapse ALL internal grids/flex-rows in admin panel to single column on mobile */
+  #edit-panel [style*="grid-template-columns:1fr 1fr"],
+  #edit-panel [style*="grid-template-columns: 1fr 1fr"]{
+    grid-template-columns:1fr !important;
+  }
+  #edit-panel [style*="display:grid"]{grid-template-columns:1fr !important;}
+  #edit-panel .ep-fw{min-width:0;}
   .cta-row{flex-direction:column;}
   .sched-band{padding:3.5rem 1.5rem;}
   .sb-btn{padding:13px 36px;}
-  /* Comp hub mobile: hub-box first (sticky), anchor card second */
-  .comp-top-row{grid-template-columns:1fr;display:flex;flex-direction:column-reverse;}
-  .comp-hub-box{position:sticky;top:84px;z-index:10;margin-bottom:.75rem;}
+  /* Comp hub mobile:
+     1. hub-box (Every requirement. Covered.) goes FIRST and is sticky
+     2. anchor card (#7) comes below
+     3. Then the 6-card grid scrolls underneath the sticky hub-box */
+  .comp-hub-layout{overflow:visible;}
+  .comp-top-row{display:flex !important;flex-direction:column-reverse;gap:.75rem;}
+  .comp-hub-box{
+    position:sticky;
+    top:30px; /* below lang-bar */
+    z-index:15;
+    margin-bottom:0;
+    box-shadow:0 8px 32px rgba(0,0,0,.45);
+  }
   .comp-wires{display:none;}
   .comp-grid{grid-template-columns:1fr;}
   .comp-grid .comp-card:last-child:nth-child(3n+1){grid-column:1;}
-  /* Edit panel fields: prevent side-by-side overflow on narrow screens */
-  #edit-panel .ep-fw{min-width:0;}
 }
 @media(max-width:500px){
   .p-hero-name{font-size:2rem;}
@@ -729,6 +744,9 @@ body.sort-active .sort-handle{display:flex;}
   .p-hero-stats{gap:1rem 1.5rem;}
   .p-hero-stat-n{font-size:1.35rem;}
   #chat-window{width:calc(100vw - 2rem);right:1rem;}
+  /* Keep the sticky hub-box readable on very small screens */
+  .comp-hub-box{padding:1.5rem 1.25rem;}
+  .comp-hub-sub{font-size:.67rem;}
 }
 </style>
 </head>
@@ -1128,12 +1146,12 @@ body.sort-active .sort-handle{display:flex;}
           <div class="prog-card-tag" id="pc-phase">Phase 1 complete</div>
           <div class="prog-card-inner">
             <div>
-              <div class="prog-col-label">Milestone achieved</div>
+              <div class="prog-col-label" id="pc-col-label1">Milestone achieved</div>
               <div class="prog-col-title" id="pc-title">SIE certified. Full caseload, independent.</div>
               <div class="prog-col-body" id="pc-body">Phase 1 complete: JPMorgan systems mastered, Portuguese-language service channel running without supervision, first certification earned.</div>
             </div>
             <div>
-              <div class="prog-col-label">↑ Value to your team</div>
+              <div class="prog-col-label" id="pc-col-label2">↑ Value to your team</div>
               <div class="prog-col-body" id="pc-benefit">Portuguese-language tier-1 cases handled without escalation. No LatAm coverage gap from day one. SIE adds a licensed profile to the team at zero cost.</div>
             </div>
           </div>
@@ -1587,20 +1605,27 @@ body.sort-active .sort-handle{display:flex;}
       <div style="margin-top:.85rem;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem">Interactive 12-month trajectory</div>
       <div class="ep-note" style="margin-bottom:.75rem">Each milestone has a label, a headline, and a team benefit. The visitor drags the slider to reveal each quarter.</div>
       <div class="ep-fw"><label class="ep-label">Section label ("12-month projected trajectory")</label><input id="ep-year-label" class="ep-field" type="text" placeholder="12-month projected trajectory"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem">
+        <div class="ep-fw" style="margin:0"><label class="ep-label">Left column header</label><input id="ep-prog-milestone-label" class="ep-field" type="text" placeholder="Milestone achieved"></div>
+        <div class="ep-fw" style="margin:0"><label class="ep-label">Right column header</label><input id="ep-prog-benefit-label" class="ep-field" type="text" placeholder="↑ Value to your team"></div>
+      </div>
       <div style="display:flex;flex-direction:column;gap:.55rem">
-        <div class="ep-fw"><label class="ep-label">Month 3 — label</label><input id="ep-yr1l" class="ep-field" type="text" placeholder="Month 3"></div>
+        <div class="ep-fw"><label class="ep-label">Month 3 — phase tag</label><input id="ep-yr1phase" class="ep-field" type="text" placeholder="Phase 1 complete"></div>
         <div class="ep-fw"><label class="ep-label">Month 3 — milestone headline</label><input id="ep-yr1t" class="ep-field" type="text"></div>
         <div class="ep-fw"><label class="ep-label">Month 3 — body / footer text</label><textarea id="ep-yr1body" class="ep-field ep-textarea" rows="2"></textarea></div>
         <div class="ep-fw"><label class="ep-label">Month 3 — team benefit</label><textarea id="ep-yr1b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 6 — label</label><input id="ep-yr2l" class="ep-field" type="text" placeholder="Month 6"></div>
+        <div style="height:.3rem"></div>
+        <div class="ep-fw"><label class="ep-label">Month 6 — phase tag</label><input id="ep-yr2phase" class="ep-field" type="text" placeholder="Phase 2 complete"></div>
         <div class="ep-fw"><label class="ep-label">Month 6 — milestone headline</label><input id="ep-yr2t" class="ep-field" type="text"></div>
         <div class="ep-fw"><label class="ep-label">Month 6 — body / footer text</label><textarea id="ep-yr2body" class="ep-field ep-textarea" rows="2"></textarea></div>
         <div class="ep-fw"><label class="ep-label">Month 6 — team benefit</label><textarea id="ep-yr2b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 9 — label</label><input id="ep-yr3l" class="ep-field" type="text" placeholder="Month 9"></div>
+        <div style="height:.3rem"></div>
+        <div class="ep-fw"><label class="ep-label">Month 9 — phase tag</label><input id="ep-yr3phase" class="ep-field" type="text" placeholder="Phase 3 — mid"></div>
         <div class="ep-fw"><label class="ep-label">Month 9 — milestone headline</label><input id="ep-yr3t" class="ep-field" type="text"></div>
         <div class="ep-fw"><label class="ep-label">Month 9 — body / footer text</label><textarea id="ep-yr3body" class="ep-field ep-textarea" rows="2"></textarea></div>
         <div class="ep-fw"><label class="ep-label">Month 9 — team benefit</label><textarea id="ep-yr3b" class="ep-field ep-textarea" rows="2"></textarea></div>
-        <div class="ep-fw"><label class="ep-label">Month 12 — label</label><input id="ep-yr4l" class="ep-field" type="text" placeholder="Month 12"></div>
+        <div style="height:.3rem"></div>
+        <div class="ep-fw"><label class="ep-label">Month 12 — phase tag</label><input id="ep-yr4phase" class="ep-field" type="text" placeholder="Year 1 complete"></div>
         <div class="ep-fw"><label class="ep-label">Month 12 — milestone headline</label><input id="ep-yr4t" class="ep-field" type="text"></div>
         <div class="ep-fw"><label class="ep-label">Month 12 — body / footer text</label><textarea id="ep-yr4body" class="ep-field ep-textarea" rows="2"></textarea></div>
         <div class="ep-fw"><label class="ep-label">Month 12 — team benefit</label><textarea id="ep-yr4b" class="ep-field ep-textarea" rows="2"></textarea></div>
@@ -1800,8 +1825,8 @@ var CONFIG = {
   // Palette
   palette:           'D',
   // GitHub
-  ghRepo:            'rossijv/rossijv.github.io',
-  ghPath:            'docs/JPMC/config.json',
+  ghRepo:            '',
+  ghPath:            'config.json',
   // First 90 Days
   daysHeading:  'The first *90 days.*',
   daysSub:      'A structured plan — not theory. What this hire looks like in practice.',
@@ -1838,6 +1863,14 @@ var CONFIG = {
   nextStepLabel:'Next step',
   // Progress timeline intro instruction
   progIntroText:'Slide to each milestone — see what it means for your team',
+  // Timeline card column headers (shared across all 4 milestones)
+  progMilestoneLabel:'Milestone achieved',
+  progBenefitLabel:'↑ Value to your team',
+  // Timeline card phase tags (one per milestone)
+  yr1Phase:'Phase 1 complete',
+  yr2Phase:'Phase 2 complete',
+  yr3Phase:'Phase 3 — mid',
+  yr4Phase:'Year 1 complete',
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -2017,10 +2050,12 @@ async function downloadUpdatedPortal() {
     if (!r.ok) throw new Error('fetch failed');
     var html = await r.text();
 
-    // Bake ghRepo and ghPath into the CONFIG block
-    // Handles any amount of whitespace after the key name
+    // Bake ghRepo, ghPath and palette into the CONFIG block
+    // All visitors get the correct repo + palette immediately, without needing localStorage
     html = html.replace(/(ghRepo\s*:\s*)('')/,  '$1\'' + repo.replace(/'/g,"\\'") + '\'');
     html = html.replace(/(ghPath\s*:\s*)'[^']*'/, '$1\'' + path.replace(/'/g,"\\'") + '\'');
+    var pal = CONFIG.palette || 'D';
+    html = html.replace(/(palette\s*:\s*)'[A-Z]'/, '$1\'' + pal + '\'');
 
     // Trigger download
     var blob = new Blob([html], {type: 'text/html; charset=utf-8'});
@@ -3839,6 +3874,12 @@ function populateEditPanel() {
   s('ep-yr3l', CONFIG.yr3Label); s('ep-yr3t', CONFIG.yr3Text); s('ep-yr3b', CONFIG.yr3Benefit||'');
   s('ep-yr4l', CONFIG.yr4Label); s('ep-yr4t', CONFIG.yr4Text); s('ep-yr4b', CONFIG.yr4Benefit||'');
   s('ep-year-label', CONFIG.yearLabel || '12-month projected trajectory');
+  s('ep-prog-milestone-label', CONFIG.progMilestoneLabel || 'Milestone achieved');
+  s('ep-prog-benefit-label',   CONFIG.progBenefitLabel   || '↑ Value to your team');
+  s('ep-yr1phase', CONFIG.yr1Phase || 'Phase 1 complete');
+  s('ep-yr2phase', CONFIG.yr2Phase || 'Phase 2 complete');
+  s('ep-yr3phase', CONFIG.yr3Phase || 'Phase 3 — mid');
+  s('ep-yr4phase', CONFIG.yr4Phase || 'Year 1 complete');
   // Professional Experience fields (load from primary lang overlay)
   (function(){
     var pLang = CONFIG.primaryLang || 'en';
@@ -3971,6 +4012,12 @@ async function saveEdits() {
   newCfg.yr2Label=g('ep-yr2l')||CONFIG.yr2Label; newCfg.yr2Text=g('ep-yr2t')||CONFIG.yr2Text; newCfg.yr2Benefit=g('ep-yr2b')||CONFIG.yr2Benefit||'';
   newCfg.yr3Label=g('ep-yr3l')||CONFIG.yr3Label; newCfg.yr3Text=g('ep-yr3t')||CONFIG.yr3Text; newCfg.yr3Benefit=g('ep-yr3b')||CONFIG.yr3Benefit||'';
   newCfg.yr4Label=g('ep-yr4l')||CONFIG.yr4Label; newCfg.yr4Text=g('ep-yr4t')||CONFIG.yr4Text; newCfg.yr4Benefit=g('ep-yr4b')||CONFIG.yr4Benefit||'';
+  newCfg.progMilestoneLabel = g('ep-prog-milestone-label')||CONFIG.progMilestoneLabel||'Milestone achieved';
+  newCfg.progBenefitLabel   = g('ep-prog-benefit-label')  ||CONFIG.progBenefitLabel  ||'↑ Value to your team';
+  newCfg.yr1Phase = g('ep-yr1phase')||CONFIG.yr1Phase||'Phase 1 complete';
+  newCfg.yr2Phase = g('ep-yr2phase')||CONFIG.yr2Phase||'Phase 2 complete';
+  newCfg.yr3Phase = g('ep-yr3phase')||CONFIG.yr3Phase||'Phase 3 — mid';
+  newCfg.yr4Phase = g('ep-yr4phase')||CONFIG.yr4Phase||'Year 1 complete';
   newCfg.yearLabel=g('ep-year-label')||CONFIG.yearLabel||'12-month projected trajectory';
   newCfg.linkedInLabel=g('ep-linkedin-label')||CONFIG.linkedInLabel||'Connect on LinkedIn';
   // Education & Credentials
@@ -4026,6 +4073,8 @@ async function saveEdits() {
       expHeadPost = rawHead.slice(li + 1);
     }
     var expOverrides = {
+      // About / Professional Positioning — must be in langContent so setLang() reads it correctly
+      heroAbout: g('ep-about') || CONFIG.about,
       expHeading: expHeadPre, expHeadingEm: expHeadEm, expHeadingPost: expHeadPost,
       expDate1: g('ep-exp-date1'), expOrg1: g('ep-exp-org1'), expRole1: g('ep-exp-role1'), expBullets1: g('ep-exp-bullets1'),
       expDate2: g('ep-exp-date2'), expOrg2: g('ep-exp-org2'), expRole2: g('ep-exp-role2'), expBullets2: g('ep-exp-bullets2'),
@@ -4405,22 +4454,22 @@ function buildProgData() {
   var L = _getLangOverlay(_currentLang);
   return [
     { month: CONFIG.yr1Label || 'Month 3',
-      phase: 'Phase 1 complete',
+      phase: CONFIG.yr1Phase || 'Phase 1 complete',
       title: CONFIG.yr1Text || 'SIE certified. Full caseload, independent.',
       body:  CONFIG.yr1Body || L.yr1Body || 'Phase 1 complete: JPMorgan systems mastered, Portuguese-language service running without supervision, first certification earned.',
       benefit: CONFIG.yr1Benefit || 'Portuguese-language tier-1 cases handled without escalation. No LatAm coverage gap from day one.' },
     { month: CONFIG.yr2Label || 'Month 6',
-      phase: 'Phase 2 complete',
+      phase: CONFIG.yr2Phase || 'Phase 2 complete',
       title: CONFIG.yr2Text || 'Series 7 in progress. 3+ LatAm client relationships built.',
       body:  CONFIG.yr2Body || L.yr2Body || 'Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.',
       benefit: CONFIG.yr2Benefit || 'One fewer escalation per week from LatAm segment. Client relationships reduce cold-start time on every case.' },
     { month: CONFIG.yr3Label || 'Month 9',
-      phase: 'Phase 3 — mid',
+      phase: CONFIG.yr3Phase || 'Phase 3 — mid',
       title: CONFIG.yr3Text || 'Process improvement delivered. Series 63 begins.',
       body:  CONFIG.yr3Body || L.yr3Body || 'A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.',
       benefit: CONFIG.yr3Benefit || 'Documented process improvement — productivity gain measurable before year-end. Portuguese caseload fully owned.' },
     { month: CONFIG.yr4Label || 'Month 12',
-      phase: 'Year 1 complete',
+      phase: CONFIG.yr4Phase || 'Year 1 complete',
       title: CONFIG.yr4Text || 'Series 7 + 63 licensed. Senior track eligible.',
       body:  CONFIG.yr4Body || L.yr4Body || 'Year one milestone: fully licensed, full ownership of LatAm client segment, qualified for Senior Digital Concierge.',
       benefit: CONFIG.yr4Benefit || 'Two licensed credentials added from a single hire. Full LatAm ownership. Eligible for Senior track — zero recruiting cost.' }
@@ -4457,10 +4506,12 @@ function setProgIdx(idx) {
     card.classList.add('prog-card-anim');
   }
   var t = function(id, val){ var el=document.getElementById(id); if(el) el.textContent=val||''; };
-  t('pc-phase',   d.phase);
-  t('pc-title',   d.title);
-  t('pc-body',    d.body);
-  t('pc-benefit', d.benefit);
+  t('pc-phase',      d.phase);
+  t('pc-title',      d.title);
+  t('pc-body',       d.body);
+  t('pc-benefit',    d.benefit);
+  t('pc-col-label1', CONFIG.progMilestoneLabel || 'Milestone achieved');
+  t('pc-col-label2', CONFIG.progBenefitLabel   || '↑ Value to your team');
 
   // Update node labels from CONFIG (in case lang changed)
   var labels = [CONFIG.yr1Label,CONFIG.yr2Label,CONFIG.yr3Label,CONFIG.yr4Label];
