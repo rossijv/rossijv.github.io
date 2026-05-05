@@ -233,12 +233,12 @@
       "recHeadingEm": "institucional.",
       "recNote": "Carta completa disponível mediante solicitação — assinada e em papel timbrado oficial.",
       "botGreeting": "Pergunte sobre a experiência, idiomas e perfil do Joao.",
-      "botGreetingNamed": "Olá {name}. Pergunte sobre a experiência, os idiomas ou o perfil do Joao para esta vaga.",
+      "botGreetingNamed": "Olá {name}. Pergunte sobre a experiência, os idiomas ou o perfil do Joao Victor para esta vaga.",
       "botFallbacks": [
-        "Essa é uma pergunta para o Joao responder diretamente. Use o botão de contato no final da página.",
-        "Boa pergunta — e merece uma resposta real, não uma suposição do chatbot. Entre em contato com o Joao diretamente.",
+        "Essa é uma pergunta para o Joao Victor responder diretamente. Use o botão de contato no final da página.",
+        "Boa pergunta — e merece uma resposta real, não uma suposição do chatbot. Entre em contato com o Joao Victor diretamente.",
         "Prefiro não especular sobre isso. Um clique no botão de contato te dará a resposta certa.",
-        "Isso está além do que consigo responder. O Joao pode. Use o botão de contato.",
+        "Isso está além do que consigo responder. O Joao Victor pode. Use o botão de contato.",
         "Vale perguntar. Vale uma conversa direta. O botão está no final da página."
       ],
       "expHeading": "Onde as credenciais",
