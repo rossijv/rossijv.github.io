@@ -1305,7 +1305,7 @@ body.sort-active .sort-handle{display:flex;}
         <strong>Name and initials</strong> appear in the hero monogram, nav bar, and password gate. Change here to reuse this portal for another candidate without touching the HTML.<br><br><strong>Target role</strong> should be copied exactly from the job posting — it appears in the hero eyebrow and nav. This level of precision signals the portal was built specifically for this application.
       </div>
       <div style="display:grid;grid-template-columns:1fr auto;gap:.55rem;align-items:end;margin-bottom:.6rem">
-        <div class="ep-fw" style="margin-bottom:0"><label class="ep-label">Full name</label><input id="ep-candidate-name" class="ep-field" type="text" placeholder="Joao Victor Rossi"></div>
+        <div class="ep-fw" style="margin-bottom:0"><label class="ep-label">Full name</label><input id="ep-candidate-name" class="ep-field" type="text" placeholder="Candidate full name"></div>
         <div class="ep-fw" style="margin-bottom:0;width:70px"><label class="ep-label">Initials</label><input id="ep-candidate-initials" class="ep-field" type="text" placeholder="JVR" maxlength="4" style="text-align:center;letter-spacing:.08em;font-weight:600"></div>
       </div>
       <div class="ep-fw"><label class="ep-label">Target role (eyebrow + nav) — copy from job posting</label><input id="ep-role" class="ep-field" type="text"></div>
@@ -1384,7 +1384,7 @@ body.sort-active .sort-handle{display:flex;}
         <div class="ep-fw"><label class="ep-label">Subject line</label><input id="ep-email-sub" class="ep-field" type="text" placeholder="Following up…"></div>
       </div>
       <div id="ep-cf-whatsapp" class="ep-cfields">
-        <div class="ep-fw"><label class="ep-label">WhatsApp number (digits only)</label><input id="ep-wa" class="ep-field" type="text" placeholder="17866093110"></div>
+        <div class="ep-fw"><label class="ep-label">WhatsApp number (digits only)</label><input id="ep-wa" class="ep-field" type="text" placeholder="digits only, no spaces"></div>
       </div>
       <div id="ep-cf-calendly" class="ep-cfields">
         <div class="ep-fw"><label class="ep-label">Calendly URL</label><input id="ep-calendly" class="ep-field" type="text" placeholder="https://calendly.com/you"></div>
@@ -1418,7 +1418,7 @@ body.sort-active .sort-handle{display:flex;}
       </div>
       <div class="ep-fw">
         <label class="ep-label">Signee name</label>
-        <input id="ep-rec-name" class="ep-field" type="text" placeholder="Fernando Augusto Moreira Costa">
+        <input id="ep-rec-name" class="ep-field" type="text" placeholder="Recommender full name">
       </div>
       <div class="ep-fw">
         <label class="ep-label">Signee title</label>
@@ -1814,6 +1814,7 @@ body.sort-active .sort-handle{display:flex;}
 /* ═══════════════════════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════════════════════ */
+/* @@CONFIG_BLOCK_START@@ */
 var CONFIG = {
   // Passwords stored as SHA-256 hashes — plain text never in production source
   passwordHash:      'd7ad47e338f2989d98e3b3266cbcf5736d1e5de25d5b58cca7cf7103b53e0d4b',
@@ -1927,7 +1928,11 @@ var CONFIG = {
   progPointCount: 4,
   yr5Label:'Month 15', yr5Phase:'Phase 5', yr5Text:'', yr5Body:'', yr5Benefit:'',
   yr6Label:'Month 18', yr6Phase:'Phase 6', yr6Text:'', yr6Body:'', yr6Benefit:'',
+  // Recommendation letter details (institutional — not PII)
+  recLetterDate: 'March 24, 2026',
+  recLetterQuote: 'His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments.',
 };
+/* @@CONFIG_BLOCK_END@@ */
 
 /* ═══════════════════════════════════════════════════════
    SHA-256 HELPER — password hashing (no server needed)
@@ -2186,6 +2191,31 @@ async function downloadUpdatedPortal() {
     if (CONFIG.adminPasswordHash) {
       html = html.replace(/(adminPasswordHash\s*:\s*)'[^']*'/, '$1\'' + CONFIG.adminPasswordHash + '\'');
     }
+
+    // ── Bake full CONFIG block (all admin edits persist across deployments) ──
+    (function() {
+      var bakedCfg = {};
+      Object.keys(CONFIG).forEach(function(k) { bakedCfg[k] = CONFIG[k]; });
+      // Never bake decoded plaintext PII — keep only encoded versions
+      ['candidateName','contactEmail','contactEmailSubject','contactWhatsApp',
+       'contactLinkedIn','recSigneeName','recSigneeTitle'].forEach(function(f){ bakedCfg[f] = ''; });
+      bakedCfg.password = ''; bakedCfg.adminPassword = '';
+      var cfgJson = JSON.stringify(bakedCfg).replace(/<\/script>/gi, '<\\/script>');
+      var cfgBlock = '/* @@CONFIG_BLOCK_START@@ */\nvar CONFIG = JSON.parse(' + JSON.stringify(cfgJson) + ');\n/* @@CONFIG_BLOCK_END@@ */';
+      html = html.replace(/\/\* @@CONFIG_BLOCK_START@@ \*\/[\s\S]*?\/\* @@CONFIG_BLOCK_END@@ \*\//, cfgBlock);
+    })();
+
+    // ── Bake language content overrides (_BAKED_LANG) ──
+    (function() {
+      var langContent = {};
+      try { langContent = JSON.parse(localStorage.getItem('vr_lang_content') || '{}'); } catch(e){}
+      var tabLabels = {};
+      try { tabLabels = JSON.parse(localStorage.getItem('vr_tab_labels') || '{}'); } catch(e){}
+      langContent.__tabLabels = tabLabels;
+      var langJson = JSON.stringify(langContent).replace(/<\/script>/gi, '<\\/script>');
+      var langBlock = '/* @@BAKED_LANG_START@@ */\nvar _BAKED_LANG = JSON.parse(' + JSON.stringify(langJson) + ');\n/* @@BAKED_LANG_END@@ */';
+      html = html.replace(/\/\* @@BAKED_LANG_START@@ \*\/[\s\S]*?\/\* @@BAKED_LANG_END@@ \*\//, langBlock);
+    })();
 
     // Trigger download
     var blob = new Blob([html], {type: 'text/html; charset=utf-8'});
@@ -2826,12 +2856,19 @@ var _currentLang = 'en';
    Returns the effective LANG_PORTAL[lang] merged with admin-saved overrides.
    Admin edits (from Language Translations panel) are stored in localStorage
    under 'vr_lang_content' as { en:{key:val}, es:{}, pt:{}, fr:{} }.        */
+/* @@BAKED_LANG_START@@ */
+var _BAKED_LANG = {};
+/* @@BAKED_LANG_END@@ */
+
 function _getLangOverlay(lang) {
   var base = LANG_PORTAL[lang] || LANG_PORTAL['en'];
   try {
+    // Baked overrides from last download (serve as defaults on any device)
+    var bakedOv = (_BAKED_LANG && _BAKED_LANG[lang]) || {};
+    // localStorage overrides from admin edits on this device — take precedence
     var saved = JSON.parse(localStorage.getItem('vr_lang_content') || '{}');
-    var overrides = saved[lang] || {};
-    return Object.assign({}, base, overrides);
+    var localOv = saved[lang] || {};
+    return Object.assign({}, base, bakedOv, localOv);
   } catch(e) { return base; }
 }
 
@@ -2848,10 +2885,12 @@ function setLang(lang) {
   document.querySelectorAll('.lt').forEach(function(el){
     el.classList.toggle('on', el.dataset.lang === lang);
   });
-  // Apply custom tab labels
+  // Apply custom tab labels (from baked data or localStorage override)
   (function(){
     try {
-      var tabLabels = JSON.parse(localStorage.getItem('vr_tab_labels') || '{}');
+      var bakedLabels = (_BAKED_LANG && _BAKED_LANG.__tabLabels) || {};
+      var localLabels = JSON.parse(localStorage.getItem('vr_tab_labels') || '{}');
+      var tabLabels = Object.assign({}, bakedLabels, localLabels);
       document.querySelectorAll('.lt').forEach(function(tab){
         var lc = tab.dataset.lang;
         if (tabLabels[lc]) tab.textContent = tabLabels[lc];
@@ -2930,7 +2969,30 @@ function setLang(lang) {
   var rq2=document.getElementById('rec-q2'); if(rq2 && L.recQ2) rq2.textContent=L.recQ2;
   // Progress timeline intro
   t('prog-intro-text', L.progIntro || 'Slide to each milestone — see what it means for your team');
-  // Refresh timeline card body with language-appropriate text
+  // 90 Days section — apply per-language translations when available
+  if (L.d1Phase || L.d1Range || L.d1Title || L.d1Items) {
+    if (L.d1Phase) t('d1-phase', L.d1Phase);
+    if (L.d1Range) t('d1-range', L.d1Range);
+    if (L.d1Title) t('d1-title', L.d1Title);
+    if (L.d1Items && typeof applyDaysItems === 'function') applyDaysItems('d1-items', L.d1Items);
+  }
+  if (L.d2Phase || L.d2Range || L.d2Title || L.d2Items) {
+    if (L.d2Phase) t('d2-phase', L.d2Phase);
+    if (L.d2Range) t('d2-range', L.d2Range);
+    if (L.d2Title) t('d2-title', L.d2Title);
+    if (L.d2Items && typeof applyDaysItems === 'function') applyDaysItems('d2-items', L.d2Items);
+  }
+  if (L.d3Phase || L.d3Range || L.d3Title || L.d3Items) {
+    if (L.d3Phase) t('d3-phase', L.d3Phase);
+    if (L.d3Range) t('d3-range', L.d3Range);
+    if (L.d3Title) t('d3-title', L.d3Title);
+    if (L.d3Items && typeof applyDaysItems === 'function') applyDaysItems('d3-items', L.d3Items);
+  }
+  // Refresh timeline — rebuilds labels from lang overlay via buildProgData()
+  if (typeof _progInited !== 'undefined') {
+    _progInited = false;
+    if (typeof rebuildTimelineTrack === 'function') rebuildTimelineTrack();
+  }
   if (typeof setProgIdx === 'function') setProgIdx(typeof _progIdx !== 'undefined' ? _progIdx : 0);
   // Persist
   document.documentElement.lang=lang;
@@ -3057,12 +3119,31 @@ function renderLangTransEditor() {
     fld('Earlier Experience label', 'expDate4') + fld('Earlier Experience text (HTML)', 'expEarlier')
   );
 
+  var _yrSection = function(n, defLabel, defPhase, defTitle, defBenefit) {
+    return '<div style="margin:.6rem 0 .3rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Point '+n+'</div>' +
+      fld('Slider label (ex: "Mês 3")', 'yr'+n+'Label') +
+      fld('Phase badge', 'yr'+n+'Phase') +
+      fld('Milestone headline', 'yr'+n+'Text') +
+      fld('Body text', 'yr'+n+'Body', true, 2) +
+      fld('Team benefit', 'yr'+n+'Benefit', true, 2);
+  };
+  var _dSection = function(n) {
+    return '<div style="margin:.6rem 0 .3rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Fase '+n+'</div>' +
+      fld('Label (ex: "Fase 1")', 'd'+n+'Phase') +
+      fld('Período (ex: "Dias 1 – 30")', 'd'+n+'Range') +
+      fld('Título', 'd'+n+'Title') +
+      fld('Bullets (1 por linha)', 'd'+n+'Items', true, 4);
+  };
   var sec_plan = section('Plan — 90 Days &amp; Timeline',
+    '<div style="font-size:.65rem;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.5);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:.5px solid rgba(255,255,255,.06)">▸ 90 DAYS CARDS</div>' +
+    fld('Section subtitle', 'daysSub', true, 2) +
+    _dSection(1) + _dSection(2) + _dSection(3) +
+    '<div style="font-size:.65rem;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.5);margin:.85rem 0 .5rem;padding-bottom:.35rem;border-bottom:.5px solid rgba(255,255,255,.06)">▸ 12-MONTH TIMELINE</div>' +
     fld('Progress intro text', 'progIntro') +
-    fld('Month 3 body text', 'yr1Body', true, 2) +
-    fld('Month 6 body text', 'yr2Body', true, 2) +
-    fld('Month 9 body text', 'yr3Body', true, 2) +
-    fld('Month 12 body text', 'yr4Body', true, 2)
+    fld('Left column header', 'progMilestoneLabel') +
+    fld('Right column header', 'progBenefitLabel') +
+    _yrSection(1) + _yrSection(2) + _yrSection(3) + _yrSection(4) +
+    _yrSection(5) + _yrSection(6)
   );
 
   var sec_contact = section('Contact &amp; CTA',
@@ -3525,6 +3606,7 @@ function initWordReveal() {
 }
 
 function openPortal() {
+  buildKB();
   loadKBOverrides();
   applyConfig();
   document.getElementById('portal').style.display = 'block';
@@ -4347,7 +4429,14 @@ function confirmDeactivate() {
 /* ═══════════════════════════════════════════════════════
    CHATBOT KB — 19 intents
 ═══════════════════════════════════════════════════════ */
-var KB = [
+var KB = [];
+
+function buildKB() {
+  var rName  = CONFIG.recSigneeName  || 'a senior official';
+  var rTitle = CONFIG.recSigneeTitle || 'Deputy Consul General of Brazil in Miami';
+  var rDate  = CONFIG.recLetterDate  || 'March 24, 2026';
+  var rQuote = CONFIG.recLetterQuote || 'His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments.';
+  KB = [
   {tags:['about','yourself','background','tell me','introduce','who is','summary','overview','profile'],a:"Joao is a client services and operations professional built for high-stakes environments. At the Consulate General of Brazil in Miami, he was the go-to person for citizens navigating complex digital and in-person processes — proactively resolving frustrated client situations, troubleshooting government systems, training staff, and collaborating with IT to build a new internal tool. Before that, he coordinated wire transfers and multi-party financial operations at VR Capital. He speaks Portuguese (native), English, Spanish, and French at professional level, holds CompTIA Network+ and Security+ certifications, and is currently studying for the SIE exam."},
   {tags:['client service','customer','difficult','frustrated','handle','resolve','service','high expectation','vip','sensitive','urgent'],a:"Story 1 — Frustrated client: A passport application had been returned multiple times due to an incomplete online step. Joao identified the pattern proactively, contacted the client (who was frustrated), stayed calm, clarified the issue, and guided him step by step through the missing requirement. Resolved same day, escalated for priority processing. Story 2 — VIP case: A priority case referred by senior management involved a client unfamiliar with multiple documentation requirements. Joao mapped her situation, provided structured guidance across every requirement, and she successfully completed the process — improving her experience and reducing institutional risk."},
   {tags:['digital','troubleshoot','technical','login','access','system','mobile','app','website','platform','navigate','tablet','zoom','call'],a:"Joao's troubleshooting protocol is structured: (1) identify whether the issue is credentials, session, cache, device, or system-related; (2) guide the client step by step while keeping communication calm and clear; (3) escalate to IT with full documentation if unresolved; (4) follow through until the client is operational. He applied this daily in the passport system environment connected to a federal government database. In banking operations, he reviewed transaction inputs carefully before submission to prevent downstream rejections — the same mindset applies to any digital platform."},
@@ -4362,13 +4451,14 @@ var KB = [
   {tags:['weakness','challenge','working on','improve','criticism','feedback'],a:"Earlier in his career, Joao tended to over-explain to ensure clarity — providing all the context before the answer. Over time, he restructured his communication: context first, action second, result third — no more than 30 seconds. He now leads with the answer and offers detail only if the client or colleague needs it. This applies both in client calls and in team communication."},
   {tags:['certification','comptia','azure','splunk','technology','technical','network','security','sie','exam'],a:"Joao holds CompTIA Network+ and Security+ certifications — which gave him a structured troubleshooting mindset and systems knowledge. He's also Microsoft Azure AZ-900 certified (cloud fundamentals) and a Splunk Core Certified User. He is currently self-studying for the SIE exam to build his financial markets knowledge, directly applicable to the Private Banking environment."},
   {tags:['banking','financial','finance','private banking','wealth','investment','wire','transaction','dual control'],a:"At VR Capital LLC, Joao coordinated payments, wire transfers, and multi-party financial documentation for private clients. He understands dual-control financial processes, the precision required before transaction submission, and how errors in financial documentation create downstream risk. He is also studying for the SIE exam to deepen his financial markets knowledge."},
-  {tags:['recommendation','reference','letter','consul','consulate','fernando','moreira','deputy'],a:"Joao has a formal letter of recommendation from Fernando Augusto Moreira Costa, Deputy Consul General of Brazil in Miami, dated March 24, 2026. The letter describes his work during a period of heightened operational demand, noting: 'His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments.' The full signed letter on official letterhead is available upon request."},
+  {tags:['recommendation','reference','letter','consul','consulate','reference','endorsement'],a:"Joao has a formal letter of recommendation from " + rName + ", " + rTitle + ", dated " + rDate + ". The letter describes his work during a period of heightened operational demand, noting: '" + rQuote + "' The full signed letter on official letterhead is available upon request."},
   {tags:['contact','email','phone','reach','available','linkedin','schedule','whatsapp'],a:"Joao is available immediately in Miami, FL. Click the 'Let's Connect' button at the bottom of the page to reach out directly — it opens the preferred contact channel without requiring any app to be installed."},
   {tags:['education','degree','bba','university','study','school','academic'],a:"Joao holds a Bachelor of Business Administration (BBA) from PUC-Campinas, Brazil — equivalent to a U.S. four-year degree. Certifications: CompTIA Network+ & Security+, Microsoft Azure AZ-900, Splunk Core Certified User. SIE exam currently in progress."},
   {tags:['availability','start','when','notice period','immediately','join'],a:"Joao is based in Miami, FL and available to start immediately."},
   {tags:['disney','disneyland','paris','hospitality','guest relations'],a:"Joao worked in Guest Relations at Disneyland Resort Paris — a multicultural, high-volume service environment with extremely high service standards and zero tolerance for inconsistency. This is where his instinct for reading client emotion, maintaining composure, and delivering consistent quality was first developed at scale."},
   {tags:['scenario','login','frustrated','mobile','zoom','demo','walk me through','what would you do'],a:"Joao's approach for a frustrated Private Banking client who can't log in: (1) Acknowledge the frustration calmly and immediately reassure them. (2) Ask structured questions to identify the root cause — credentials, session, device, or app-related. (3) Guide them step by step in plain language, confirming each step before moving on. (4) If unresolved, escalate internally while keeping the client informed — no dead air. (5) Once access is restored, deliver a brief, effective walkthrough of the key features they need. (6) Confirm everything is working and the client is comfortable before closing the interaction."}
-];
+  ]; // end buildKB array
+}
 
 /* ═══════════════════════════════════════════════════════
    CHATBOT ENGINE
@@ -4666,26 +4756,26 @@ function buildProgData() {
   var L = _getLangOverlay(_currentLang);
   var n = Math.max(2, Math.min(6, parseInt(CONFIG.progPointCount || 4, 10)));
   var defs = [
-    { month: CONFIG.yr1Label || 'Month 3',   phase: CONFIG.yr1Phase || 'Phase 1 complete',
-      title: CONFIG.yr1Text || 'SIE certified. Full caseload, independent.',
+    { month: L.yr1Label || CONFIG.yr1Label || 'Month 3',   phase: L.yr1Phase || CONFIG.yr1Phase || 'Phase 1 complete',
+      title: L.yr1Text  || CONFIG.yr1Text  || 'SIE certified. Full caseload, independent.',
       body:  CONFIG.yr1Body || L.yr1Body || 'Phase 1 complete: JPMorgan systems mastered, Portuguese-language service running without supervision, first certification earned.',
-      benefit: CONFIG.yr1Benefit || 'Portuguese-language tier-1 cases handled without escalation. No LatAm coverage gap from day one.' },
-    { month: CONFIG.yr2Label || 'Month 6',   phase: CONFIG.yr2Phase || 'Phase 2 complete',
-      title: CONFIG.yr2Text || 'Series 7 in progress. 3+ LatAm client relationships built.',
+      benefit: L.yr1Benefit || CONFIG.yr1Benefit || 'Portuguese-language tier-1 cases handled without escalation. No LatAm coverage gap from day one.' },
+    { month: L.yr2Label || CONFIG.yr2Label || 'Month 6',   phase: L.yr2Phase || CONFIG.yr2Phase || 'Phase 2 complete',
+      title: L.yr2Text  || CONFIG.yr2Text  || 'Series 7 in progress. 3+ LatAm client relationships built.',
       body:  CONFIG.yr2Body || L.yr2Body || 'Phase 2 complete: Independent case handling across all tiers, Series 7 preparation active, LatAm client trust established.',
-      benefit: CONFIG.yr2Benefit || 'One fewer escalation per week from LatAm segment. Client relationships reduce cold-start time on every case.' },
-    { month: CONFIG.yr3Label || 'Month 9',   phase: CONFIG.yr3Phase || 'Phase 3 — mid',
-      title: CONFIG.yr3Text || 'Process improvement delivered. Series 63 begins.',
+      benefit: L.yr2Benefit || CONFIG.yr2Benefit || 'One fewer escalation per week from LatAm segment. Client relationships reduce cold-start time on every case.' },
+    { month: L.yr3Label || CONFIG.yr3Label || 'Month 9',   phase: L.yr3Phase || CONFIG.yr3Phase || 'Phase 3 — mid',
+      title: L.yr3Text  || CONFIG.yr3Text  || 'Process improvement delivered. Series 63 begins.',
       body:  CONFIG.yr3Body || L.yr3Body || 'A concrete efficiency gain on the table. Caseload fully owned. Two active licensing tracks progressing simultaneously.',
-      benefit: CONFIG.yr3Benefit || 'Documented process improvement — productivity gain measurable before year-end. Portuguese caseload fully owned.' },
-    { month: CONFIG.yr4Label || 'Month 12',  phase: CONFIG.yr4Phase || 'Year 1 complete',
-      title: CONFIG.yr4Text || 'Series 7 + 63 licensed. Senior track eligible.',
+      benefit: L.yr3Benefit || CONFIG.yr3Benefit || 'Documented process improvement — productivity gain measurable before year-end. Portuguese caseload fully owned.' },
+    { month: L.yr4Label || CONFIG.yr4Label || 'Month 12',  phase: L.yr4Phase || CONFIG.yr4Phase || 'Year 1 complete',
+      title: L.yr4Text  || CONFIG.yr4Text  || 'Series 7 + 63 licensed. Senior track eligible.',
       body:  CONFIG.yr4Body || L.yr4Body || 'Year one milestone: fully licensed, full ownership of LatAm client segment, qualified for Senior Digital Concierge.',
-      benefit: CONFIG.yr4Benefit || 'Two licensed credentials added from a single hire. Full LatAm ownership. Eligible for Senior track — zero recruiting cost.' },
-    { month: CONFIG.yr5Label || 'Month 15',  phase: CONFIG.yr5Phase || 'Phase 5',
-      title: CONFIG.yr5Text || '', body: CONFIG.yr5Body || '', benefit: CONFIG.yr5Benefit || '' },
-    { month: CONFIG.yr6Label || 'Month 18',  phase: CONFIG.yr6Phase || 'Phase 6',
-      title: CONFIG.yr6Text || '', body: CONFIG.yr6Body || '', benefit: CONFIG.yr6Benefit || '' }
+      benefit: L.yr4Benefit || CONFIG.yr4Benefit || 'Two licensed credentials added from a single hire. Full LatAm ownership. Eligible for Senior track — zero recruiting cost.' },
+    { month: L.yr5Label || CONFIG.yr5Label || 'Month 15',  phase: L.yr5Phase || CONFIG.yr5Phase || 'Phase 5',
+      title: L.yr5Text  || CONFIG.yr5Text  || '', body: CONFIG.yr5Body || L.yr5Body || '', benefit: L.yr5Benefit || CONFIG.yr5Benefit || '' },
+    { month: L.yr6Label || CONFIG.yr6Label || 'Month 18',  phase: L.yr6Phase || CONFIG.yr6Phase || 'Phase 6',
+      title: L.yr6Text  || CONFIG.yr6Text  || '', body: CONFIG.yr6Body || L.yr6Body || '', benefit: L.yr6Benefit || CONFIG.yr6Benefit || '' }
   ];
   return defs.slice(0, n);
 }
