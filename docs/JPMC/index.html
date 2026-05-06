@@ -1165,10 +1165,10 @@ body.sort-active .sort-handle{display:flex;}
       <div class="rec-header">
         <div class="rec-seal">🇧🇷</div>
         <div class="rec-inst">
-          <div class="rec-inst-name" id="rec-inst-name">Consulado-Geral do Brasil em Miami</div>
-          <div class="rec-inst-sub" id="rec-inst-sub">Consulate General of Brazil · Miami, Florida</div>
+          <div class="rec-inst-name">Consulado-Geral do Brasil em Miami</div>
+          <div class="rec-inst-sub">Consulate General of Brazil · Miami, Florida</div>
         </div>
-        <div class="rec-date" id="rec-date">March 24, 2026</div>
+        <div class="rec-date">March 24, 2026</div>
       </div>
       <div class="rec-body">
         <div class="rec-quote" id="rec-q1">
@@ -1181,7 +1181,7 @@ body.sort-active .sort-handle{display:flex;}
           <div class="rec-signee-name" id="rec-signee-name"></div>
           <div class="rec-signee-title" id="rec-signee-title"></div>
         </div>
-        <div class="rec-full-note" id="rec-full-note">Full letter available upon request — signed and on official letterhead.</div>
+        <div class="rec-full-note">Full letter available upon request — signed and on official letterhead.</div>
       </div>
     </div>
   </section>
@@ -1407,18 +1407,6 @@ body.sort-active .sort-handle{display:flex;}
       <div class="ep-anno-tip" id="ep-anno-rec">
         <div class="ep-anno-label">★ AI context</div>
         Uma carta de recomendação de um <strong>Cônsul-Geral Adjunto</strong> é equivalente a uma referência de um C-level em instituição governamental. Para JPMorgan, que valoriza integridade e confiabilidade acima de tudo, ter essa validação imediatamente visível no portal cria confiança antes de qualquer conversa. As duas citações foram selecionadas para cobrir: (1) confiabilidade institucional, (2) autonomia e comunicação — as duas competências mais valorizadas no job description.
-      </div>
-      <div class="ep-fw">
-        <label class="ep-label">Institution name</label>
-        <input id="ep-rec-inst-name" class="ep-field" type="text" placeholder="Consulate General of Brazil in Miami">
-      </div>
-      <div class="ep-fw">
-        <label class="ep-label">Institution subtitle</label>
-        <input id="ep-rec-inst-sub" class="ep-field" type="text" placeholder="Consulate General of Brazil · Miami, Florida">
-      </div>
-      <div class="ep-fw">
-        <label class="ep-label">Letter date</label>
-        <input id="ep-rec-date" class="ep-field" type="text" placeholder="March 24, 2026">
       </div>
       <div class="ep-fw">
         <label class="ep-label">Quote 1</label>
@@ -1833,49 +1821,9 @@ var CONFIG = JSON.parse("{\"passwordHash\":\"d7ad47e338f2989d98e3b3266cbcf5736d1
 /* ═══════════════════════════════════════════════════════
    SHA-256 HELPER — password hashing (no server needed)
 ═══════════════════════════════════════════════════════ */
-// Pure-JS SHA-256 fallback — works in file://, http://, and https:// contexts
-function _sha256Pure(str) {
-  function rr(v,a){return(v>>>a)|(v<<(32-a));}
-  var MW=Math.pow(2,32),h=_sha256Pure.h,k=_sha256Pure.k,i,j,res='',words=[];
-  if(!h){
-    h=_sha256Pure.h=[];k=_sha256Pure.k=[];
-    var pc=0,comp={};
-    for(var c=2;pc<64;c++){
-      if(!comp[c]){
-        for(i=0;i<313;i+=c)comp[i]=c;
-        h[pc]=(Math.pow(c,.5)*MW)|0;
-        k[pc++]=(Math.pow(c,1/3)*MW)|0;
-      }
-    }
-  }
-  var bits=str.length*8;
-  str+='\x80';
-  while(str.length%64!==56)str+='\x00';
-  for(i=0;i<str.length;i++){words[i>>2]|=str.charCodeAt(i)<<((3-i%4)*8);}
-  words[words.length]=(bits/MW)|0;words[words.length]=bits;
-  var hs=h.slice(0);
-  for(j=0;j<words.length;){
-    var w=words.slice(j,j+=16),oh=hs.slice(0);
-    for(i=0;i<64;i++){
-      var w15=w[i-15],w2=w[i-2],a=oh[0],e=oh[4];
-      var t1=oh[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&oh[5])^(~e&oh[6]))+k[i]+(
-        w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
-      var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&oh[1])^(a&oh[2])^(oh[1]&oh[2]));
-      oh=[t1+t2,a,oh[1],oh[2],oh[3]+t1,e,oh[5],oh[6]];
-    }
-    for(i=0;i<8;i++)hs[i]=(hs[i]+oh[i])|0;
-  }
-  for(i=0;i<8;i++)for(j=3;j>=0;j--){var b=(hs[i]>>(j*8))&255;res+=(b<16?'0':'')+b.toString(16);}
-  return res;
-}
 async function sha256(str) {
-  if(typeof crypto!=='undefined'&&crypto.subtle){
-    try{
-      var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-    }catch(e){}
-  }
-  return _sha256Pure(str);
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1986,9 +1934,6 @@ async function initToken(pw) {
 function buildFullBundle() {
   var cfg = {};
   try { cfg = JSON.parse(localStorage.getItem('jvr_portal_config') || '{}'); } catch(e){}
-  // Never persist plaintext passwords to GitHub — use hashed versions only
-  delete cfg.password;
-  delete cfg.adminPassword;
   var bundle = {
     _v: 2,          // bundle version — distinguishes from legacy flat format
     config:      cfg,
@@ -2049,11 +1994,8 @@ async function fetchGHConfig() {
 
     if (json._v === 2 && json.config) {
       // ── New bundle format (v2) ────────────────────────────────
-      // CONFIG — skip security hash keys; baked values always take precedence
-      var _ghPwH = CONFIG.passwordHash, _ghAdH = CONFIG.adminPasswordHash;
+      // CONFIG
       Object.keys(json.config).forEach(function(k){ CONFIG[k] = json.config[k]; });
-      if (_ghPwH)  CONFIG.passwordHash      = _ghPwH;
-      if (_ghAdH)  CONFIG.adminPasswordHash = _ghAdH;
       localStorage.setItem('jvr_portal_config', JSON.stringify(json.config));
       // Language content overrides
       if (json.langContent)  localStorage.setItem('vr_lang_content',    JSON.stringify(json.langContent));
@@ -2157,11 +2099,10 @@ async function downloadUpdatedPortal() {
       try { tabLabels = JSON.parse(localStorage.getItem('vr_tab_labels') || '{}'); } catch(e){}
       langContent.__tabLabels = tabLabels;
       var langJson = JSON.stringify(langContent).replace(/<\/script>/gi, '<\\/script>');
-      // Build sentinel markers via concatenation — never as literal text in source
-      var _s = '\x2f\x2a \x40\x40', _e = '\x40\x40 \x2a\x2f';
-      var langBaked = _s+'BAKED_LANG_START'+_e+'\nvar _BAKED_LANG = JSON.parse('+JSON.stringify('__PLACEHOLDER__')+');\n'+_s+'BAKED_LANG_END'+_e;
-      langBaked = langBaked.replace('__PLACEHOLDER__', langJson);
-      html = html.replace(/\/\* @@BAKED_LANG_START@@ \*\/[\s\S]*?\/\* @@BAKED_LANG_END@@ \*\//, langBaked);
+      var langBlock = '/* @@BAKED_LANG_START@@ */
+var _BAKED_LANG = JSON.parse("{\"en\":{\"expHeading\":\"Where the credentials became \",\"expHeadingEm\":\"instincts.\",\"expHeadingPost\":\" come from.\",\"expDate1\":\"Jun 2025 – Mar 2026 · Miami, FL\",\"expOrg1\":\"Consulate General of Brazil in Miami\",\"expRole1\":\"Administrative Operations Assistant — Consular Operations\",\"expBullets1\":\"<li>Part of a <strong>high-volume, client-facing operations</strong> team supporting digital, in-person, and mail-in services — closely aligned with a Digital Concierge model in a government setting.</li><li>Supported Portuguese-speaking clients through <strong>complex digital application processes,</strong> resolving issues, guiding system navigation, and improving completion rates.</li><li>Handled escalated cases via phone, balancing <strong>technical troubleshooting with clear, client-focused communication.</strong></li><li>Maintained <strong>workflow accuracy across multiple systems</strong> and contributed to operational continuity, including basic IT support when needed.<li>Co-developed a <strong>narrated video tutorial</strong> to guide applicants through the online passport process — reducing recurring errors and improving service scale.</li><li>Worked directly with IT to <strong>translate operational workflows into system requirements</strong>, participated in development meetings, and provided feedback for a new internal admin tool.</li><li><strong>Trained new staff on systems and processes,</strong> reinforcing consistency in client experience and internal operations.</li>\",\"expDate2\":\"Mar 2025 – May 2025 · Miami, FL\",\"expOrg2\":\"Consulate General of Brazil in Miami\",\"expRole2\":\"Administrative Assistant — Cultural & Education Department\",\"expBullets2\":\"<li>Coordinated public-facing events for diverse audiences, managed logistics and execution.</li><li>Created video and social media content for departmental outreach.</li>\",\"expDate3\":\"Jul 2019 – Present · Miami, FL\",\"expOrg3\":\"VR Capital LLC\",\"expRole3\":\"Operations Support & Process Coordination — Private Clients\",\"expBullets3\":\"<li>Coordinated <strong>payments, wire transfers, vendor management, and multi-party documentation</strong> for private clients — dual-control financial operations requiring zero-error precision.</li><li>Developed workflow documentation and tracking structures; provided research-driven operational support for high-stakes client decisions.</li>\",\"expDate4\":\"Earlier Experience\",\"expEarlier\":\"Guest Relations · Disneyland Resort Paris &nbsp;·&nbsp; Financial Advisor / Bank Teller · Brazil &nbsp;·&nbsp; Customer Service · Quebec, Canada\",\"yr1Body\":\"Qualification Exams | FINRA\\n\",\"yr2Body\":\"Client Coverage | LatAm Private Banking\",\"yr3Body\":\" Full Integration | Team & Practice\",\"yr4Body\":\"1-Year Milestone | Licensed | Embedded | Contributing\",\"heroAbout\":\"A client-facing professional shaped by high-stakes environments — consular services, complex operations, and financial transactions where precision is the baseline. Structured process thinking, composure under pressure, and the instinct to navigate both the operational and the *human side* of every interaction. As a native Portuguese speaker with deep roots in Brazilian culture, I bring the cultural fluency that Latin American private banking demands at the highest level.\"},\"pt\":{\"gateTitle\":\"Este portal é privado. Digite o código de acesso para continuar.\",\"gatePlaceholder\":\"Código de acesso\",\"gateBtn\":\"Entrar →\",\"navBadge\":\"Confidencial\",\"activeProcessLabel\":\"Processo Ativo\",\"confidentialMsg\":\"Briefing preparado exclusivamente para acesso do JPMorgan Chase.\",\"labelPositioning\":\"Posicionamento Profissional\",\"labelComp\":\"Competências da Vaga — IPB Digital Concierge Specialist\",\"labelExp\":\"Experiência Profissional\",\"labelEdu\":\"Educação e Certificações\",\"labelDays\":\"Roteiro de integração\",\"labelYear\":\"Trajetória projetada de 12 meses\",\"labelRec\":\"Carta de Recomendação\",\"nextStepLabel\":\"Próximo passo\",\"compHeading\":\"O perfil desejado.\",\"compHeadingEm\":\"Encontrado.\",\"expHeadingEm\":\"se tornaram instinto.\",\"eduHeading\":\"A base\",\"eduHeadingEm\":\"técnica.\",\"daysHeading\":\"Os primeiros *12 meses.*\",\"daysSub\":\"Um plano estruturado - Como será a integração na prática.\",\"heroRole\":\"IPB Digital Concierge Specialist · JPMorganChase\",\"heroTitle\":\"Profissional de Atendimento ao Cliente e Operações\",\"heroAbout\":\"Um profissional de atendimento ao cliente e suporte operacional, formado em ambientes de altos padrões de exigência e qualidade — como serviços consulares, operações complexas e transações financeiras onde a precisão é o ponto de partida. Com pensamento estruturado em processos, equilíbrio sob pressão e a capacidade de transitar com naturalidade entre o lado operacional e o humano em cada interação. Como falante nativo de português, com raízes profundas na cultura brasileira, trago a fluência cultural que o private banking latino-americano exige no mais alto nível.\",\"stat0l\":\"Anos de experiência\",\"stat1l\":\"Idiomas\",\"stat2l\":\"Certificações técnicas\",\"stat3l\":\"Miami, FL\",\"langPill1\":\"🇧🇷 Português — Nativo\",\"langPill2\":\"🇺🇸 Inglês — Profissional\",\"langPill3\":\"🇪🇸 Espanhol — Profissional\",\"langPill4\":\"🇫🇷 Francês — Profissional\",\"hubSub\":\"Cada requisito da vaga se conecta diretamente à experiência. Clique em cada card para confirmar.\",\"c1name\":\"Atendimento ao Cliente — Alto Padrão\",\"c1desc\":\"Prestei suporte a cidadãos em solicitações consulares, incluindo renovações de passaporte, documentação e agendamentos. Nos casos de maior complexidade, atuei diretamente na resolução com discernimento e atenção às particularidades de cada situação.\",\"c1proof\":\"Consulado Geral do Brasil · Casos escalados gerenciados com supervisão da direção\",\"c2name\":\"Suporte Digital e Resolução de Problemas\",\"c2desc\":\"Realizei contato proativo com cidadãos com dificuldades no processo digital, conduzindo o atendimento passo a passo até a resolução. Priorizei a solução direta antes de qualquer encaminhamento, assumindo as responsabilidades de suporte técnico aos colegas durante a ausência do profissional de TI.\",\"c2proof\":\"Plataforma digital do Consulado · Orientação direta ao cliente · Cobertura de TI\",\"c3name\":\"Treinamento e Apresentação de Demos\",\"c3desc\":\"Conduzi sessões de orientação digital, adaptando a comunicação ao perfil de cada cidadão. Em parceria com uma colega, desenvolvi um tutorial em vídeo narrado que complementou os esforços para reduzir as dúvidas recorrentes no canal de atendimento.\",\"c3proof\":\"Tutorial narrado · Onboarding de funcionários · Orientação digital em tempo real\",\"c4name\":\"Projetos e Melhoria de Processos (UAT)\",\"c4desc\":\"Identifiquei que uma planilha compartilhada gerava um gargalo real — tempos de carregamento lentos, entrada de dados impraticável. Traduzi o problema operacional em requisitos claros para TI, que construiu um novo sistema de documentação.\",\"c4proof\":\"Excel → Sistema construído por TI · Tradução de requisitos · Adoção pela equipe\",\"c5name\":\"Gestão de Partes Interessadas\",\"c5desc\":\"Coordenei operações de ponta a ponta para clientes privados, cobrindo fornecedores, cotações, aprovações, pagamentos com duplo controle e consolidação logística para o Brasil. Carteira diversificada com um relacionamento central mantido por cinco anos consecutivos.\",\"c5proof\":\"Clientes privados VR Capital · Coordenação de escalações no Consulado\",\"c6name\":\"Tickets e Operações\",\"c6desc\":\"Gerenciei casos de atendimento por correspondência física e presencialmente, acompanhando cada solicitação até a resolução com documentação completa. Mantive precisão e organização sob alto volume, incluindo uma interrupção de sistema de dois dias com mais de 100 casos em aberto.\",\"c6proof\":\"Gestão de tickets de TI · Priorização de filas · Documentação de ciclo completo\",\"c7name\":\"Fluência em Português · Captação de Clientes LatAm\",\"c7desc\":\"Falante nativo de português com plena proficiência profissional em contextos verbais, escritos e de atendimento ao cliente. Cada ponto de contato com o cliente brasileiro, coberto com autenticidade.\",\"c7proof\":\"Nativo · Uso diário com clientes · 4 idiomas profissionais\",\"expDate1\":\"Jun 2025 – Mar 2026 · Miami, FL\",\"expOrg1\":\"Consulado Geral do Brasil em Miami\",\"expRole1\":\"Assistente de Operações Administrativas — Operações Consulares\",\"expBullets1\":\"<li>Integrante de equipe operacional <strong>de alto volume e atendimento direto ao cliente</strong>, com suporte a serviços digitais, presenciais e por correspondência — em modelo alinhado a um Concierge Digital em ambiente governamental.</li> <li>Suporte a cidadãos brasileiros em <strong>processos digitais complexos</strong>, atuando na resolução de problemas, orientação de navegação em sistemas e aumento das taxas de conclusão.</li> <li>Atuação em casos escalados por telefone, combinando <strong>solução de problemas técnicos com comunicação clara e centrada no cliente.</strong></li> <li>Garantia de <strong>precisão operacional em múltiplos sistemas</strong>, contribuindo para a continuidade dos fluxos de trabalho e prestando suporte básico de TI quando necessário.</li> <li>Co-desenvolvimento de <strong>vídeo tutorial narrado</strong> para orientar solicitantes no processo online de passaporte, reduzindo erros recorrentes e ampliando a escalabilidade do atendimento.</li> <li>Colaboração com a equipe de TI para <strong>traduzir fluxos operacionais em requisitos de sistema</strong>, participação em reuniões de desenvolvimento e contribuição com feedback para nova ferramenta administrativa interna.</li> <li><strong>Treinamento de novos colaboradores em sistemas e processos</strong>, promovendo consistência na experiência do cliente e na execução operacional.</li>\",\"expDate2\":\"Mar 2025 – Mai 2025 · Miami, FL\",\"expOrg2\":\"Consulado Geral do Brasil em Miami\",\"expRole2\":\"Assistente Administrativo — Departamento Cultural e de Educação\",\"expBullets2\":\"<li>Coordenação de eventos voltados ao público, atendendo diferentes perfis de audiência, incluindo planejamento logístico e execução.</li><li>Criação de conteúdo em vídeo e mídias sociais para iniciativas de comunicação e divulgação institucional do departamento.</li>\",\"expDate3\":\"Jul 2019 – Presente · Miami, FL\",\"expOrg3\":\"VR Capital LLC\",\"expRole3\":\"Suporte de Operações e Coordenação de Processos — Clientes Privados\",\"expBullets3\":\"<li>Coordenação de <strong>pagamentos, transferências bancárias (wire transfers), gestão de fornecedores e documentação envolvendo múltiplas partes</strong> para clientes privados — operações financeiras em modelo de dupla checagem com exigência de precisão absoluta.</li><li>Desenvolvimento de documentação de processos e estruturas de acompanhamento; suporte operacional baseado em pesquisa para decisões de alto impacto de clientes.</li>\",\"expDate4\":\"Experiências Anteriores Selecionadas\",\"expEarlier\":\"Guest Relations · Disneyland Resort Paris &nbsp;·&nbsp; Assessor Financeiro / Caixa Bancário · Brasil &nbsp;·&nbsp; Atendimento ao Cliente · Quebec, Canadá\",\"progIntro\":\"Deslize por cada marco — veja o que significa para a sua equipe\",\"yr1Body\":\"Cerificações FINRA\",\"yr2Body\":\"Familiaridade & Reflexos da profissão\",\"yr3Body\":\"Uma melhoria de processo concreta na mesa. Carteira de casos totalmente gerenciada. Duas trilhas de certificação ativas.\",\"yr4Body\":\"Primeiro ano concluído: licenças Series 7 + 63, propriedade total do segmento LatAm, elegível para Senior Digital Concierge.\",\"contactStatus\":\"Processo ativo\",\"contactHeading\":\"Pronto para *conectar?*\",\"contactSubtitle\":\"Este portal foi criado para esta candidatura. Se o que você leu adiciona contexto — uma conversa está a um clique.\",\"ctaGetInTouch\":\"Vamos conversar ✦\",\"ctaLinkedIn\":\"Conectar no LinkedIn\",\"ctaWhatsApp\":\"Mensagem no WhatsApp\",\"ctaCalendly\":\"Agendar uma reunião\",\"recHeading\":\"Recomendação\",\"recHeadingEm\":\"institucional.\",\"recNote\":\"Carta completa disponível mediante solicitação — assinada e em papel timbrado oficial.\",\"botGreeting\":\"Pergunte sobre a experiência, idiomas e perfil do Joao.\",\"botGreetingNamed\":\"Olá {name}. Pergunte sobre a experiência, os idiomas ou o perfil do Joao Victor para esta vaga.\",\"botFallbacks\":[\"Essa é uma pergunta para o Joao Victor responder diretamente. Use o botão de contato no final da página.\",\"Boa pergunta — e merece uma resposta real, não uma suposição do chatbot. Entre em contato com o Joao Victor diretamente.\",\"Prefiro não especular sobre isso. Um clique no botão de contato te dará a resposta certa.\",\"Isso está além do que consigo responder. O Joao Victor pode. Use o botão de contato.\",\"Vale perguntar. Vale uma conversa direta. O botão está no final da página.\"],\"expHeading\":\"Onde as credenciais\",\"recQ1\":\"\\\"Seu perfil reflete confiabilidade institucional, integridade profissional e capacidade de contribuir com propósito e efetividade em ambientes de alta exigência. Tenho plena confiança de que levará essas mesmas qualidades a qualquer organização que venha a integrar.\\\"\",\"recQ2\":\"\\\"Durante seu período conosco, o Sr. Rossi se destacou consistentemente por sua dedicação, eficiência e comprometimento com suas responsabilidades profissionais. Demonstrou excelentes habilidades de comunicação verbal e escrita, aliadas a alto grau de organização e capacidade de conduzir suas atribuições com autonomia e confiabilidade.\\\"\",\"cred1Badge\":\"Graduação\",\"cred1Name\":\"Bacharel em Administração de Empresas\",\"cred1Body\":\"PUC-Campinas, Brasil\",\"cred2Badge\":\"CompTIA\",\"cred2Name\":\"Network+ & Security+\",\"cred2Body\":\"2023 · Raciocínio sistêmico, troubleshooting, fundamentos de redes e segurança\",\"cred3Badge\":\"Tecnologia\",\"cred3Name\":\"Azure AZ-900 · Splunk Core Certified\",\"cred3Body\":\"Computação em nuvem · Análise de logs · Inteligência operacional · Microsoft 365 e Google Workspace\",\"cred4Badge\":\"Em Andamento\",\"cred4Name\":\"SIE — Securities Industry Essentials\",\"cred4Body\":\"Autodidata · Mercados e instrumentos financeiros · Contexto regulatório de Private Banking\",\"d1Phase\":\"Fase 1\",\"d1Range\":\"Meses 1–3\",\"d1Title\":\"Fundação. Foco. Certificar.\",\"d1Items\":\"Dedicado ao onboarding e à conclusão das certificações FINRA exigidas para o cargo: SIE, Série 7 e Série 63 — com preparação já em andamento. Sem atenção dividida. Um objetivo. Foco total.\",\"d2Phase\":\"Fase 2\",\"d2Range\":\"Meses 4–6\",\"d2Title\":\"Contribuir. Integrar. Construir.\",\"d2Items\":\"Atuação independente, atendimentos em português e observação ativa dos fluxos de trabalho — contribuindo com o aprimoramento contínuo da equipe conforme a evolução dos cenários.\",\"d3Phase\":\"Fase 3\",\"d3Range\":\"Meses 7–12\",\"d3Title\":\"Assumir. Otimizar. Avançar.\",\"d3Items\":\"Atendimento completo em todos os níveis de complexidade, lapidação dos relacionamentos com clientes LatAm e equipes internas, com atenção constante aos ajustes e aprimoramentos das práticas — documentação e participação de comitês internos\",\"progMilestoneLabel\":\"Marco projetado\",\"progBenefitLabel\":\"↑ Valor para sua equipe\",\"yr1Label\":\"Mês 3\",\"yr1Phase\":\"Fase 1\",\"yr1Text\":\"Trilha de certificações iniciada. Onboarding no time. Base estabelecida.\",\"yr1Benefit\":\"Ao terceiro mês, a equipe ganha uma presença preparada. Licenciado, orientado e pronto para contribuir.\",\"yr2Label\":\"Mês 6\",\"yr2Phase\":\"Fase 2\",\"yr2Text\":\"Carteira ativa. Atendimentos independentes. Padrões sendo identificados.\",\"yr2Benefit\":\"Cobertura LatAm funcionando. Mais uma presença confiável na equipe.\",\"yr3Label\":\"Mês 9\",\"yr3Phase\":\"Fase 3 — meio\",\"yr3Text\":\"Complexidade total. Relacionamentos ativos. Refinamento contínuo.\",\"yr3Benefit\":\"Nove meses de contexto — e já tornando a prática incrementalmente mais eficiente.\",\"yr4Label\":\"Mês 12 — Ano 1\",\"yr4Phase\":\"Meta do Ano 1\",\"yr4Text\":\"Três licenças. Responsabilidade total. Momentum.\",\"yr4Benefit\":\"Um Digital Concierge com o contexto, as credenciais e uma base construída para o que vem a seguir — incluindo o trabalho multifuncional que torna a prática melhor por dentro.\"},\"__tabLabels\":{}}");
+/* @@BAKED_LANG_END@@ */';
+      html = html.replace(/\/\* @@BAKED_LANG_START@@ \*\/[\s\S]*?\/\* @@BAKED_LANG_END@@ \*\//, langBlock);
     })();
 
     // Trigger download
@@ -2224,19 +2165,10 @@ function setRich(id, val) {
    CONFIG LOAD / APPLY
 ═══════════════════════════════════════════════════════ */
 function loadConfig() {
-  // Capture baked password hashes BEFORE localStorage can overwrite them.
-  // These were explicitly baked by the admin via download + push — they are
-  // the authoritative source of truth and must never be overridden by stale
-  // localStorage data from a previous session or a broken portal version.
-  var _bakedPwHash    = CONFIG.passwordHash      || '';
-  var _bakedAdminHash = CONFIG.adminPasswordHash || '';
   var saved = localStorage.getItem('jvr_portal_config');
   if (saved) {
     try { var o = JSON.parse(saved); Object.keys(o).forEach(function(k){ CONFIG[k] = o[k]; }); } catch(e) {}
   }
-  // Restore baked hashes — never let localStorage override security keys
-  if (_bakedPwHash)    CONFIG.passwordHash      = _bakedPwHash;
-  if (_bakedAdminHash) CONFIG.adminPasswordHash = _bakedAdminHash;
   var repo = localStorage.getItem('vr_gh_repo');
   var path = localStorage.getItem('vr_gh_path');
   if (repo) CONFIG.ghRepo = repo;
@@ -2531,9 +2463,6 @@ var LANG_PORTAL = {
     ctaConnect:'Get in touch', ctaWhatsApp:'Message on WhatsApp',
     ctaCalendly:'Schedule a Call', ctaLinkedIn:'Connect on LinkedIn',
     // Rec note
-    recInstName:'Consulate General of Brazil in Miami',
-    recInstSub:'Consulate General of Brazil · Miami, Florida',
-    recDate:'March 24, 2026',
     recNote:'Full letter available upon request — signed and on official letterhead.',
     // Missing / new keys (EN)
     labelPositioning:'Professional Positioning',
@@ -2619,9 +2548,6 @@ var LANG_PORTAL = {
     contactSubtitle:'Este portal fue creado para esta candidatura. Si lo que has leído añade contexto — una conversación está a un clic.',
     ctaConnect:'Ponerse en contacto', ctaWhatsApp:'Mensaje por WhatsApp',
     ctaCalendly:'Agendar una llamada', ctaLinkedIn:'Conectar en LinkedIn',
-    recInstName:'Consulado General de Brasil en Miami',
-    recInstSub:'Consulado General de Brasil · Miami, Florida',
-    recDate:'24 de marzo de 2026',
     recNote:'Carta completa disponible bajo solicitud — firmada y en papel membretado oficial.',
     // Missing / new keys (ES)
     labelPositioning:'Posicionamiento Profesional',
@@ -2705,9 +2631,6 @@ var LANG_PORTAL = {
     contactSubtitle:'Este portal foi criado para esta candidatura. Se o que você leu adiciona contexto — uma conversa está a um clique.',
     ctaConnect:'Vamos conversar', ctaWhatsApp:'Mensagem no WhatsApp',
     ctaCalendly:'Agendar uma reunião', ctaLinkedIn:'Conectar no LinkedIn',
-    recInstName:'Consulado-Geral do Brasil em Miami',
-    recInstSub:'Consulado-Geral do Brasil · Miami, Flórida',
-    recDate:'24 de março de 2026',
     recNote:'Carta completa disponível mediante solicitação — assinada e em papel timbrado oficial.',
     // Missing / new keys (PT)
     labelPositioning:'Posicionamento Profissional',
@@ -2813,9 +2736,6 @@ var LANG_PORTAL = {
     contactSubtitle:"Ce portail a été créé pour cette candidature. Si ce que vous avez lu apporte du contexte — une conversation est à un clic.",
     ctaConnect:'Entrons en contact', ctaWhatsApp:'Message sur WhatsApp',
     ctaCalendly:'Planifier un appel', ctaLinkedIn:'Connecter sur LinkedIn',
-    recInstName:'Consulat général du Brésil à Miami',
-    recInstSub:'Consulat général du Brésil · Miami, Floride',
-    recDate:'24 mars 2026',
     recNote:"Lettre complète disponible sur demande — signée et sur papier à en-tête officiel.",
     // Missing / new keys (FR)
     labelPositioning:'Positionnement Professionnel',
@@ -2966,15 +2886,7 @@ function setLang(lang) {
   var lnLblLang=document.getElementById('linkedin-label-text');
   if(lnLblLang) lnLblLang.textContent=L.ctaLinkedIn;
   // Rec note + quotes (language-specific overrides from translation editor)
-  var rn=document.getElementById('rec-full-note')||document.querySelector('.rec-full-note');
-  if(rn && L.recNote) rn.textContent=L.recNote;
-  // Institution name, subtitle, date (language-specific)
-  var riName=document.getElementById('rec-inst-name');
-  if(riName) riName.textContent=L.recInstName||CONFIG.recInstName||'Consulate General of Brazil in Miami';
-  var riSub=document.getElementById('rec-inst-sub');
-  if(riSub) riSub.textContent=L.recInstSub||CONFIG.recInstSub||'Consulate General of Brazil · Miami, Florida';
-  var riDate=document.getElementById('rec-date');
-  if(riDate) riDate.textContent=L.recDate||CONFIG.recDate||'March 24, 2026';
+  var rn=document.querySelector('.rec-full-note'); if(rn) rn.textContent=L.recNote;
   var rq1=document.getElementById('rec-q1'); if(rq1 && L.recQ1) rq1.textContent=L.recQ1;
   var rq2=document.getElementById('rec-q2'); if(rq2 && L.recQ2) rq2.textContent=L.recQ2;
   // Progress timeline intro
@@ -3167,8 +3079,6 @@ function renderLangTransEditor() {
   );
 
   var sec_rec = section('Recommendation &amp; Validation',
-    fld('Institution name', 'recInstName') + fld('Institution subtitle', 'recInstSub') +
-    fld('Letter date', 'recDate') +
     fld('Rec heading', 'recHeading') + fld('Rec heading — italic', 'recHeadingEm') +
     fld('Rec quote 1', 'recQ1', true, 3) + fld('Rec quote 2', 'recQ2', true, 3) +
     fld('Rec note (full letter available...)', 'recNote')
@@ -4093,9 +4003,6 @@ function populateEditPanel() {
   s('ep-rec-q2',    CONFIG.recQ2);
   s('ep-rec-name',  CONFIG.recSigneeName);
   s('ep-rec-title', CONFIG.recSigneeTitle);
-  s('ep-rec-inst-name', CONFIG.recInstName || 'Consulate General of Brazil in Miami');
-  s('ep-rec-inst-sub',  CONFIG.recInstSub  || 'Consulate General of Brazil · Miami, Florida');
-  s('ep-rec-date',      CONFIG.recDate     || 'March 24, 2026');
   // Chatbot
   s('ep-chat-name', CONFIG.chatName);
   var toneEl = document.getElementById('ep-chat-tone');
@@ -4253,9 +4160,6 @@ async function saveEdits() {
     recQ2:         g('ep-rec-q2'),
     recSigneeName: g('ep-rec-name'),
     recSigneeTitle:g('ep-rec-title'),
-    recInstName:   g('ep-rec-inst-name') || CONFIG.recInstName,
-    recInstSub:    g('ep-rec-inst-sub')  || CONFIG.recInstSub,
-    recDate:       g('ep-rec-date')      || CONFIG.recDate,
     // Chatbot
     chatEnabled:  chk('ep-chat-enabled'),
     chatName:     g('ep-chat-name') || 'Professional Assistant',
@@ -4312,8 +4216,8 @@ async function saveEdits() {
     CONFIG.contactEmailSubject= g('ep-email-sub') || CONFIG.contactEmailSubject;
     CONFIG.contactWhatsApp    = g('ep-wa') || CONFIG.contactWhatsApp;
     CONFIG.contactLinkedIn    = g('ep-linkedin') || CONFIG.contactLinkedIn;
-    CONFIG.recSigneeName      = g('ep-rec-name');
-    CONFIG.recSigneeTitle     = g('ep-rec-title');
+    CONFIG.recSigneeName      = g('ep-rec-name') || CONFIG.recSigneeName;
+    CONFIG.recSigneeTitle     = g('ep-rec-title') || CONFIG.recSigneeTitle;
     encodeProtectedPII(newCfg.passwordHash);
     newCfg._enc_candidateName      = CONFIG._enc_candidateName;
     newCfg._enc_contactEmail       = CONFIG._enc_contactEmail;
@@ -4329,8 +4233,8 @@ async function saveEdits() {
       contactEmailSubject: g('ep-email-sub') || CONFIG.contactEmailSubject,
       contactWhatsApp: g('ep-wa') || CONFIG.contactWhatsApp,
       contactLinkedIn: g('ep-linkedin') || CONFIG.contactLinkedIn,
-      recSigneeName: g('ep-rec-name'),
-      recSigneeTitle: g('ep-rec-title')};
+      recSigneeName: g('ep-rec-name') || CONFIG.recSigneeName,
+      recSigneeTitle: g('ep-rec-title') || CONFIG.recSigneeTitle};
     Object.keys(_piiFields).forEach(function(f){ if (_piiFields[f]) CONFIG[f] = _piiFields[f]; });
     encodeProtectedPII(CONFIG.passwordHash);
     ['candidateName','contactEmail','contactEmailSubject','contactWhatsApp','contactLinkedIn','recSigneeName','recSigneeTitle'].forEach(function(f){
