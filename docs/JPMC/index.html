@@ -1986,6 +1986,9 @@ async function initToken(pw) {
 function buildFullBundle() {
   var cfg = {};
   try { cfg = JSON.parse(localStorage.getItem('jvr_portal_config') || '{}'); } catch(e){}
+  // Never persist plaintext passwords to GitHub — use hashed versions only
+  delete cfg.password;
+  delete cfg.adminPassword;
   var bundle = {
     _v: 2,          // bundle version — distinguishes from legacy flat format
     config:      cfg,
@@ -2046,8 +2049,11 @@ async function fetchGHConfig() {
 
     if (json._v === 2 && json.config) {
       // ── New bundle format (v2) ────────────────────────────────
-      // CONFIG
+      // CONFIG — skip security hash keys; baked values always take precedence
+      var _ghPwH = CONFIG.passwordHash, _ghAdH = CONFIG.adminPasswordHash;
       Object.keys(json.config).forEach(function(k){ CONFIG[k] = json.config[k]; });
+      if (_ghPwH)  CONFIG.passwordHash      = _ghPwH;
+      if (_ghAdH)  CONFIG.adminPasswordHash = _ghAdH;
       localStorage.setItem('jvr_portal_config', JSON.stringify(json.config));
       // Language content overrides
       if (json.langContent)  localStorage.setItem('vr_lang_content',    JSON.stringify(json.langContent));
@@ -2218,10 +2224,19 @@ function setRich(id, val) {
    CONFIG LOAD / APPLY
 ═══════════════════════════════════════════════════════ */
 function loadConfig() {
+  // Capture baked password hashes BEFORE localStorage can overwrite them.
+  // These were explicitly baked by the admin via download + push — they are
+  // the authoritative source of truth and must never be overridden by stale
+  // localStorage data from a previous session or a broken portal version.
+  var _bakedPwHash    = CONFIG.passwordHash      || '';
+  var _bakedAdminHash = CONFIG.adminPasswordHash || '';
   var saved = localStorage.getItem('jvr_portal_config');
   if (saved) {
     try { var o = JSON.parse(saved); Object.keys(o).forEach(function(k){ CONFIG[k] = o[k]; }); } catch(e) {}
   }
+  // Restore baked hashes — never let localStorage override security keys
+  if (_bakedPwHash)    CONFIG.passwordHash      = _bakedPwHash;
+  if (_bakedAdminHash) CONFIG.adminPasswordHash = _bakedAdminHash;
   var repo = localStorage.getItem('vr_gh_repo');
   var path = localStorage.getItem('vr_gh_path');
   if (repo) CONFIG.ghRepo = repo;
