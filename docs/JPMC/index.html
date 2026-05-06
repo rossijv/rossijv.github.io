@@ -1878,8 +1878,10 @@ var CONFIG = {
   // Palette
   palette:           'B',
   // GitHub
-  ghRepo:            'rossijv/rossijv.github.io',
-  ghPath:            'docs/JPMC/config.json',
+  _b64_ghRepo:       'cm9zc2lqdi9yb3NzaWp2LmdpdGh1Yi5pbw==',
+  _b64_ghPath:       'ZG9jcy9KUE1DL2NvbmZpZy5qc29u',
+  ghRepo:            '',  // decoded at startup from _b64_ghRepo — never stored plaintext
+  ghPath:            '',  // decoded at startup from _b64_ghPath — never stored plaintext
   // First 90 Days
   daysHeading:  'The first *90 days.*',
   daysSub:      'A structured plan — not theory. What this hire looks like in practice.',
@@ -2178,10 +2180,7 @@ async function downloadUpdatedPortal() {
     if (!r.ok) throw new Error('fetch failed');
     var html = await r.text();
 
-    // Bake ghRepo, ghPath, palette, and password hashes into the CONFIG block
-    // All visitors/devices get the correct config immediately, without needing localStorage
-    html = html.replace(/(ghRepo\s*:\s*)('')/,  '$1\'' + repo.replace(/'/g,"\\'") + '\'');
-    html = html.replace(/(ghPath\s*:\s*)'[^']*'/, '$1\'' + path.replace(/'/g,"\\'") + '\'');
+    // Bake palette and password hashes (ghRepo/ghPath handled in CONFIG baking block below)
     var pal = CONFIG.palette || 'D';
     html = html.replace(/(palette\s*:\s*)'[A-Z]'/, '$1\'' + pal + '\'');
     // Bake current password hashes so portal works on any device without localStorage
@@ -2200,6 +2199,11 @@ async function downloadUpdatedPortal() {
       ['candidateName','contactEmail','contactEmailSubject','contactWhatsApp',
        'contactLinkedIn','recSigneeName','recSigneeTitle'].forEach(function(f){ bakedCfg[f] = ''; });
       bakedCfg.password = ''; bakedCfg.adminPassword = '';
+      // Re-encode repo as b64 before baking (keeps plaintext out of deployed file)
+      if (bakedCfg.ghRepo) {
+        try { bakedCfg._b64_ghRepo = btoa(bakedCfg.ghRepo); bakedCfg._b64_ghPath = btoa(bakedCfg.ghPath || 'config.json'); } catch(e) {}
+        bakedCfg.ghRepo = ''; bakedCfg.ghPath = '';
+      }
       var cfgJson = JSON.stringify(bakedCfg).replace(/<\/script>/gi, '<\\/script>');
       var cfgBlock = '/* @@CONFIG_BLOCK_START@@ */\nvar CONFIG = JSON.parse(' + JSON.stringify(cfgJson) + ');\n/* @@CONFIG_BLOCK_END@@ */';
       html = html.replace(/\/\* @@CONFIG_BLOCK_START@@ \*\/[\s\S]*?\/\* @@CONFIG_BLOCK_END@@ \*\//, cfgBlock);
@@ -2285,6 +2289,13 @@ function loadConfig() {
   var path = localStorage.getItem('vr_gh_path');
   if (repo) CONFIG.ghRepo = repo;
   if (path) CONFIG.ghPath = path;
+  // Decode b64-obfuscated repo (set in static file; prevents casual view-source discovery)
+  if (!CONFIG.ghRepo && CONFIG._b64_ghRepo) {
+    try { CONFIG.ghRepo = atob(CONFIG._b64_ghRepo); } catch(e) {}
+  }
+  if (!CONFIG.ghPath && CONFIG._b64_ghPath) {
+    try { CONFIG.ghPath = atob(CONFIG._b64_ghPath); } catch(e) {}
+  }
 }
 
 function applyConfig() {
@@ -2754,6 +2765,28 @@ var LANG_PORTAL = {
     yr2Body:'Fase 2 completa: gestão independente de casos em todos os níveis, Series 7 em andamento, relacionamentos com clientes LatAm estabelecidos.',
     yr3Body:'Uma melhoria de processo concreta na mesa. Carteira de casos totalmente gerenciada. Duas trilhas de certificação ativas.',
     yr4Body:'Primeiro ano concluído: licenças Series 7 + 63, propriedade total do segmento LatAm, elegível para Senior Digital Concierge.',
+    // Education & Credentials — PT
+    cred1Badge:'Graduação', cred1Name:'Bacharel em Administração de Empresas', cred1Body:'PUC-Campinas, Brasil · Equivalente a um diploma universitário de quatro anos nos EUA',
+    cred2Badge:'CompTIA', cred2Name:'Network+ & Security+', cred2Body:'2023 · Raciocínio sistêmico, troubleshooting, fundamentos de redes e segurança',
+    cred3Badge:'Tecnologia', cred3Name:'Azure AZ-900 · Splunk Core Certified', cred3Body:'Computação em nuvem · Análise de logs · Inteligência operacional · Microsoft 365 e Google Workspace',
+    cred4Badge:'Em Andamento', cred4Name:'SIE — Securities Industry Essentials', cred4Body:'Autoestudo · Mercados e instrumentos financeiros · Contexto regulatório de Private Banking',
+    // 90 Days — PT
+    d1Phase:'Fase 1', d1Range:'Meses 1–3', d1Title:'Fundação. Foco. Certificar.',
+    d1Items:'Dedicado ao onboarding e à conclusão completa do licenciamento — SIE, Série 63 e Série 7 — com preparação já em andamento. Sem atenção dividida. Um objetivo. Foco total.',
+    d2Phase:'Fase 2', d2Range:'Meses 4–6', d2Title:'Contribuir. Integrar. Construir.',
+    d2Items:'Carteira independente, atendimentos em português e observação ativa dos fluxos — contribuindo com o aprimoramento contínuo da equipe conforme o cenário evolui.',
+    d3Phase:'Fase 3', d3Range:'Meses 7–12', d3Title:'Assumir. Otimizar. Avançar.',
+    d3Items:'Carteira completa em todos os níveis de complexidade, relacionamentos em construção com clientes LatAm e equipes internas, com atenção constante ao que a equipe e a prática podem fazer melhor — documentado onde importa.',
+    // Timeline points — PT
+    progMilestoneLabel:'Marco projetado', progBenefitLabel:'↑ Valor para sua equipe',
+    yr1Label:'Mês 3', yr1Phase:'Fase 1', yr1Text:'Trilha de licenciamento aberta. Onboarding absorvido. Base estabelecida.',
+    yr1Benefit:'Ao terceiro mês, a equipe ganha uma presença preparada. Licenciado, orientado e pronto para contribuir.',
+    yr2Label:'Mês 6', yr2Phase:'Fase 2', yr2Text:'Carteira ativa. Atendimentos independentes. Padrões sendo identificados.',
+    yr2Benefit:'Cobertura LatAm funcionando. Mais uma presença confiável na equipe.',
+    yr3Label:'Mês 9', yr3Phase:'Fase 3 — meio', yr3Text:'Complexidade total. Relacionamentos ativos. Refinamento contínuo.',
+    yr3Benefit:'Nove meses de contexto — e já tornando a prática incrementalmente mais eficiente.',
+    yr4Label:'Mês 12 — Ano 1', yr4Phase:'Meta do Ano 1', yr4Text:'Três licenças. Responsabilidade total. Momentum.',
+    yr4Benefit:'Um Digital Concierge com o contexto, as credenciais e uma base construída para o que vem a seguir — incluindo o trabalho multifuncional que torna a prática melhor por dentro.',
     eduHeading:'A base', eduHeadingEm:'técnica.',
     botGreeting:'Pergunte sobre a experiência, idiomas e perfil do Joao.',
     botGreetingNamed:'Olá {name}. Pergunte sobre a experiência, os idiomas ou o perfil do Joao para esta vaga.',
@@ -2942,6 +2975,11 @@ function setLang(lang) {
   for(var i=1;i<=7;i++){ t('c'+i+'-name',L['c'+i+'name']); t('c'+i+'-desc',L['c'+i+'desc']); t('c'+i+'-proof',L['c'+i+'proof']); }
   // Comp hub sub
   t('hub-sub', L.hubSub);
+  // Education / Credential cards (lang overlay takes precedence over CONFIG)
+  if (L.cred1Badge) { t('cred1-badge',L.cred1Badge); t('cred1-name',L.cred1Name); t('cred1-body',L.cred1Body); }
+  if (L.cred2Badge) { t('cred2-badge',L.cred2Badge); t('cred2-name',L.cred2Name); t('cred2-body',L.cred2Body); }
+  if (L.cred3Badge) { t('cred3-badge',L.cred3Badge); t('cred3-name',L.cred3Name); t('cred3-body',L.cred3Body); }
+  if (L.cred4Badge) { t('cred4-badge',L.cred4Badge); t('cred4-name',L.cred4Name); t('cred4-body',L.cred4Body); }
   // Experience
   t('exp-date1',L.expDate1); t('exp-org1',L.expOrg1); t('exp-role1',L.expRole1); h('exp-bullets1',L.expBullets1);
   t('exp-date2',L.expDate2); t('exp-org2',L.expOrg2); t('exp-role2',L.expRole2); h('exp-bullets2',L.expBullets2);
@@ -3171,7 +3209,18 @@ function renderLangTransEditor() {
   var saveBtn = '<button class="ep-save-btn" style="margin-top:.75rem" onclick="saveLangTranslations()">Save translations for ' + tabLabel + '</button>' +
     '<div class="ep-status" id="ep-lt-status" style="margin-top:.35rem"></div>';
 
-  container.innerHTML = tabsHtml + sec_ui + sec_labels + sec_hero + sec_comp + sec_exp + sec_plan + sec_contact + sec_rec + sec_bot + saveBtn;
+  var sec_edu = section('Education &amp; Credentials',
+    fld('Section heading', 'eduHeading') + fld('Section heading — italic part', 'eduHeadingEm') +
+    '<div style="margin:.5rem 0 .25rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Card 1</div>' +
+    fld('Badge', 'cred1Badge') + fld('Name', 'cred1Name') + fld('Body', 'cred1Body', true, 2) +
+    '<div style="margin:.5rem 0 .25rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Card 2</div>' +
+    fld('Badge', 'cred2Badge') + fld('Name', 'cred2Name') + fld('Body', 'cred2Body', true, 2) +
+    '<div style="margin:.5rem 0 .25rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Card 3</div>' +
+    fld('Badge', 'cred3Badge') + fld('Name', 'cred3Name') + fld('Body', 'cred3Body', true, 2) +
+    '<div style="margin:.5rem 0 .25rem;font-size:.52rem;color:rgba(200,168,75,.55);font-weight:600;letter-spacing:.1em;text-transform:uppercase">Card 4</div>' +
+    fld('Badge', 'cred4Badge') + fld('Name', 'cred4Name') + fld('Body', 'cred4Body', true, 2)
+  );
+  container.innerHTML = tabsHtml + sec_ui + sec_labels + sec_hero + sec_comp + sec_exp + sec_edu + sec_plan + sec_contact + sec_rec + sec_bot + saveBtn;
 }
 
 function switchLtTab(lang) {
@@ -4343,9 +4392,22 @@ async function saveEdits() {
   }
   if (newAdminPw) _adminPw = newAdminPw;
 
-  // GH repo/path to localStorage
-  localStorage.setItem('vr_gh_repo', newCfg.ghRepo);
-  localStorage.setItem('vr_gh_path', newCfg.ghPath);
+  // Re-encode repo as b64 before saving (keeps plaintext out of stored config)
+  var _repoPlain = newCfg.ghRepo || '';
+  var _pathPlain = newCfg.ghPath || 'config.json';
+  if (_repoPlain) {
+    try {
+      newCfg._b64_ghRepo = btoa(_repoPlain);
+      newCfg._b64_ghPath = btoa(_pathPlain);
+    } catch(e) {}
+    newCfg.ghRepo = '';
+    newCfg.ghPath = '';
+    // Decode again into CONFIG so it works immediately after save
+    CONFIG.ghRepo = _repoPlain;
+    CONFIG.ghPath = _pathPlain;
+  }
+  localStorage.setItem('vr_gh_repo', _repoPlain);
+  localStorage.setItem('vr_gh_path', _pathPlain);
 
   // Save locally
   localStorage.setItem('jvr_portal_config', JSON.stringify(newCfg));
@@ -4841,8 +4903,9 @@ function setProgIdx(idx) {
   t('pc-title',      d.title);
   t('pc-body',       d.body);
   t('pc-benefit',    d.benefit);
-  t('pc-col-label1', CONFIG.progMilestoneLabel || 'Milestone achieved');
-  t('pc-col-label2', CONFIG.progBenefitLabel   || '↑ Value to your team');
+  var _pL = (typeof _getLangOverlay === 'function' && typeof _currentLang !== 'undefined') ? _getLangOverlay(_currentLang) : {};
+  t('pc-col-label1', _pL.progMilestoneLabel || CONFIG.progMilestoneLabel || 'Milestone achieved');
+  t('pc-col-label2', _pL.progBenefitLabel || CONFIG.progBenefitLabel || '↑ Value to your team');
 }
 
 function initProgTimeline() {
