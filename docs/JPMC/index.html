@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Joao Victor Rossi — Professional Briefing Portal</title>
+<title>Professional Briefing Portal</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://api.emailjs.com;">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="no-referrer">
@@ -779,7 +779,7 @@ body.sort-active .sort-handle{display:flex;}
     <div class="gate-stripe"></div>
     <div class="gate-inner">
       <div class="gate-mono">J<em>V</em>R</div>
-      <div class="gate-label" id="gate-label-el">Joao Victor Rossi · Professional Portal</div>
+      <div class="gate-label" id="gate-label-el">Confidential · Professional Portal</div>
       <div class="gate-title" id="gate-title-el">This briefing portal is private. Enter the access code to continue.</div>
       <input type="password" id="gate-input" class="gate-field" placeholder="Access code" autocomplete="off" maxlength="32">
       <button class="gate-btn" id="gate-btn-el" onclick="checkPassword()">Enter →</button>
@@ -816,7 +816,7 @@ body.sort-active .sort-handle{display:flex;}
     </div>
     <div class="p-hero-right fi d1">
       <div class="p-hero-eyebrow" id="hero-eyebrow-display">IPB Digital Concierge Specialist · JPMorgan Chase</div>
-      <h1 class="p-hero-name" id="hero-name-display">Joao Victor <em>Rossi</em></h1>
+      <h1 class="p-hero-name" id="hero-name-display"></h1>
       <div class="p-hero-title" id="hero-title-display">Client Services &amp; Operations Professional</div>
       <div class="p-hero-langs">
         <span class="lang-pill" id="lang-pill-1">🇧🇷 Portuguese — Native</span>
@@ -1178,8 +1178,8 @@ body.sort-active .sort-handle{display:flex;}
           "During his tenure, Mr. Rossi consistently distinguished himself through his <em>diligence, efficiency, and commitment</em> to his professional responsibilities. He demonstrated excellent written and oral communication skills, coupled with a high degree of organization and the ability to carry out his responsibilities with autonomy and reliability."
         </div>
         <div class="rec-signee">
-          <div class="rec-signee-name" id="rec-signee-name">Fernando Augusto Moreira Costa</div>
-          <div class="rec-signee-title" id="rec-signee-title">Deputy Consul General · Consulate General of Brazil in Miami</div>
+          <div class="rec-signee-name" id="rec-signee-name"></div>
+          <div class="rec-signee-title" id="rec-signee-title"></div>
         </div>
         <div class="rec-full-note">Full letter available upon request — signed and on official letterhead.</div>
       </div>
@@ -1222,7 +1222,7 @@ body.sort-active .sort-handle{display:flex;}
   <div id="conf-toast"></div>
 
   <footer class="p-footer">
-    <div class="ft-copy">© 2026 Joao Victor Rossi · Confidential</div>
+    <div class="ft-copy" id="ft-copy-el">© 2026 · Confidential</div>
     <div class="ft-sep">·</div>
     <div class="ft-vr">Powered by <span class="ft-vr-badge">VentureReady</span></div>
   </footer>
@@ -1821,7 +1821,17 @@ var CONFIG = {
   password:          '',
   adminPassword:     '',
   // Candidate
-  candidateName:     'Joao Victor Rossi',
+  // ── PII fields — XOR-encoded with visitor password hash ──────────────────────
+  // Decoded client-side after successful authentication. Never readable in source.
+  // To regenerate: XOR(utf8_bytes, sha256_hex_key), then base64.
+  _enc_candidateName:      'LlgACxRhDFBHVxQSa1dKF1A=',
+  _enc_contactEmail:       'DkETC0dEDHNUVQdbVRZaC1Q=',
+  _enc_contactEmailSubject:'IlgNCFtADF1UGBNCGdq58BlyNX4NQVVXWEMrDRJQRUVfAUY=',
+  _enc_contactWhatsApp:    'VQBZUgIHXAACCVY=',
+  _enc_contactLinkedIn:    'DEMVFEcNShxfUQhZXFxQChdbCl5NWlwZRAwREA9fQQ==',
+  _enc_recSigneeName:      'IlITClVZAVwTeRNVTEtNCxl1CkEHWkBXFiANEBJU',
+  _enc_recSigneeTitle:     'IFIREUBORXBcVhVHVRh+AVddF1IOE/CBFiANDRVAW1JCAREiUAoAQFQIFQ1TGCERAE0KChdYXhMvXFIIWQ==',
+  // ── Non-sensitive identity (visible before auth is acceptable) ───────────────
   candidateInitials: 'JVR',
   primaryLang:       'en',
   // Identity
@@ -1829,20 +1839,21 @@ var CONFIG = {
   title:             'Client Services & Operations Professional',
   company:           'JPMorgan Chase Private Banking',
   about:             'A client-facing professional shaped by high-stakes environments — consular services during peak demand, complex multi-party operations, and financial transactions requiring zero-error precision. I bring structured process thinking, calm under pressure, and the ability to navigate both the technology side and the human side of any client interaction. My four languages are not a footnote — they are the core of the value I bring to a Latin American private banking practice.',
-  // Contact
-  contactType:       'email',
-  contactEmail:      'jvrossi@gmail.com',
-  contactEmailSubject:'Following up — JPMorgan Interview',
-  contactWhatsApp:   '17866093110',
-  contactCalendly:   '',
-  contactCustom:     '',
-  contactCustomLabel:'',
-  contactLinkedIn:   'https://linkedin.com/in/rossijv',
+  // ── Runtime-only fields (populated after auth by decodeProtectedPII) ─────────
+  candidateName:      '',
+  contactType:        'email',
+  contactEmail:       '',
+  contactEmailSubject:'',
+  contactWhatsApp:    '',
+  contactCalendly:    '',
+  contactCustom:      '',
+  contactCustomLabel: '',
+  contactLinkedIn:    '',
   // Recommendation
   recQ1:             '"His profile reflects institutional reliability, professional integrity, and the capacity to contribute with purpose and effectiveness in demanding environments. I am confident that he will bring these same qualities to any organization he joins."',
   recQ2:             '"During his tenure, Mr. Rossi consistently distinguished himself through his diligence, efficiency, and commitment to his professional responsibilities. He demonstrated excellent written and oral communication skills, coupled with a high degree of organization and the ability to carry out his responsibilities with autonomy and reliability."',
-  recSigneeName:     'Fernando Augusto Moreira Costa',
-  recSigneeTitle:    'Deputy Consul General · Consulate General of Brazil in Miami',
+  recSigneeName:     '',
+  recSigneeTitle:    '',
   // Stats
   stat0n:'9+', stat0l:'Years of experience',
   stat1n:'4',  stat1l:'Languages',
@@ -1924,6 +1935,65 @@ var CONFIG = {
 async function sha256(str) {
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   PII PROTECTION — XOR decode with password-derived key
+   All sensitive contact fields are stored as base64(XOR(plaintext, sha256_key)).
+   Only readable after the visitor provides the correct password.
+   Source code never contains plaintext PII.
+═══════════════════════════════════════════════════════ */
+function _xorDecode(encoded, hexKey) {
+  try {
+    var raw = atob(encoded);
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      out.push(String.fromCharCode(raw.charCodeAt(i) ^ hexKey.charCodeAt(i % hexKey.length)));
+    }
+    // Handle UTF-8 multi-byte characters (e.g. em-dash in subject)
+    return decodeURIComponent(escape(out.join('')));
+  } catch(e) { return ''; }
+}
+
+function decodeProtectedPII(passwordPlaintext, passwordHashHex) {
+  // Use the SHA-256 hex string as XOR key — same key that was used to encode
+  var key = passwordHashHex;
+  var piiMap = {
+    candidateName:      '_enc_candidateName',
+    contactEmail:       '_enc_contactEmail',
+    contactEmailSubject:'_enc_contactEmailSubject',
+    contactWhatsApp:    '_enc_contactWhatsApp',
+    contactLinkedIn:    '_enc_contactLinkedIn',
+    recSigneeName:      '_enc_recSigneeName',
+    recSigneeTitle:     '_enc_recSigneeTitle',
+  };
+  Object.keys(piiMap).forEach(function(field) {
+    var encKey = piiMap[field];
+    // Check CONFIG first, then localStorage-loaded config
+    var encoded = CONFIG[encKey] || '';
+    if (encoded) CONFIG[field] = _xorDecode(encoded, key);
+  });
+}
+
+/* Re-encode PII fields for storage (called when admin saves new contact info or changes visitor password) */
+function _xorEncode(text, hexKey) {
+  try {
+    // Handle UTF-8 multi-byte chars
+    var utf8 = unescape(encodeURIComponent(text));
+    var out = [];
+    for (var i = 0; i < utf8.length; i++) {
+      out.push(String.fromCharCode(utf8.charCodeAt(i) ^ hexKey.charCodeAt(i % hexKey.length)));
+    }
+    return btoa(out.join(''));
+  } catch(e) { return ''; }
+}
+
+function encodeProtectedPII(passwordHashHex) {
+  var key = passwordHashHex;
+  var fields = ['candidateName','contactEmail','contactEmailSubject','contactWhatsApp','contactLinkedIn','recSigneeName','recSigneeTitle'];
+  fields.forEach(function(f) {
+    if (CONFIG[f]) CONFIG['_enc_' + f] = _xorEncode(CONFIG[f], key);
+  });
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -2190,7 +2260,7 @@ function loadConfig() {
 function applyConfig() {
   var t = function(id, val){ var el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
   // Candidate identity (name + initials)
-  var name     = CONFIG.candidateName     || 'Joao Victor Rossi';
+  var name     = CONFIG.candidateName     || ''; // decoded after auth — empty before
   var initials = CONFIG.candidateInitials || 'JVR';
   // Render initials as "J<em>V</em>R" — first plain, middle italic gold, last plain
   function renderInitials(el, ini) {
@@ -2217,8 +2287,12 @@ function applyConfig() {
   // Gate monogram
   renderInitials(document.querySelector('.gate-mono'), initials);
   // Gate label
+  // Gate label — only show name after auth decoded PII; before auth stays generic
   var glEl = document.getElementById('gate-label-el');
-  if (glEl) glEl.textContent = name + ' · Professional Portal';
+  if (glEl) glEl.textContent = (name ? name + ' · ' : '') + 'Professional Portal';
+  // Footer — populate name once decoded
+  var ftCopy = document.getElementById('ft-copy-el');
+  if (ftCopy && name) ftCopy.textContent = '© 2026 ' + name + ' · Confidential';
   // Language
   setLang(CONFIG.primaryLang || 'en');
   // Identity
@@ -3315,6 +3389,8 @@ async function checkPassword() {
   var storedHash = CONFIG.passwordHash || (CONFIG.password ? await sha256(CONFIG.password) : '');
   var ok = storedHash ? (hash === storedHash) : (val === CONFIG.password);
   if (ok) {
+    // Decode all protected PII using the hash as XOR key — now safe to display
+    decodeProtectedPII(val, storedHash || hash);
     sessionStorage.setItem('jvr_auth', '1');
     document.getElementById('gate').classList.add('fade-out');
     setTimeout(function(){
@@ -4115,8 +4191,42 @@ async function saveEdits() {
   newCfg.yearLabel=g('ep-year-label')||CONFIG.yearLabel||'12-month projected trajectory';
   newCfg.linkedInLabel=g('ep-linkedin-label')||CONFIG.linkedInLabel||'Connect on LinkedIn';
   newCfg.progPointCount = parseInt(g('ep-prog-point-count') || CONFIG.progPointCount || 4, 10);
-  // Hash new passwords if provided
-  var newVisitorPw = g('ep-password'); if (newVisitorPw) newCfg.passwordHash = await sha256(newVisitorPw);
+  // Hash new passwords if provided + re-encode PII with new visitor password hash
+  var newVisitorPw = g('ep-password');
+  if (newVisitorPw) {
+    newCfg.passwordHash = await sha256(newVisitorPw);
+    // Re-encode all PII with new key so they remain accessible after password change
+    CONFIG.candidateName      = g('ep-candidate-name') || CONFIG.candidateName;
+    CONFIG.contactEmail       = g('ep-email') || CONFIG.contactEmail;
+    CONFIG.contactEmailSubject= g('ep-email-sub') || CONFIG.contactEmailSubject;
+    CONFIG.contactWhatsApp    = g('ep-wa') || CONFIG.contactWhatsApp;
+    CONFIG.contactLinkedIn    = g('ep-linkedin') || CONFIG.contactLinkedIn;
+    CONFIG.recSigneeName      = g('ep-rec-name') || CONFIG.recSigneeName;
+    CONFIG.recSigneeTitle     = g('ep-rec-title') || CONFIG.recSigneeTitle;
+    encodeProtectedPII(newCfg.passwordHash);
+    newCfg._enc_candidateName      = CONFIG._enc_candidateName;
+    newCfg._enc_contactEmail       = CONFIG._enc_contactEmail;
+    newCfg._enc_contactEmailSubject= CONFIG._enc_contactEmailSubject;
+    newCfg._enc_contactWhatsApp    = CONFIG._enc_contactWhatsApp;
+    newCfg._enc_contactLinkedIn    = CONFIG._enc_contactLinkedIn;
+    newCfg._enc_recSigneeName      = CONFIG._enc_recSigneeName;
+    newCfg._enc_recSigneeTitle     = CONFIG._enc_recSigneeTitle;
+  } else if (CONFIG.passwordHash) {
+    // No new visitor password — re-encode PII in case contact fields changed
+    var _piiFields = {candidateName: g('ep-candidate-name') || CONFIG.candidateName,
+      contactEmail: g('ep-email') || CONFIG.contactEmail,
+      contactEmailSubject: g('ep-email-sub') || CONFIG.contactEmailSubject,
+      contactWhatsApp: g('ep-wa') || CONFIG.contactWhatsApp,
+      contactLinkedIn: g('ep-linkedin') || CONFIG.contactLinkedIn,
+      recSigneeName: g('ep-rec-name') || CONFIG.recSigneeName,
+      recSigneeTitle: g('ep-rec-title') || CONFIG.recSigneeTitle};
+    Object.keys(_piiFields).forEach(function(f){ if (_piiFields[f]) CONFIG[f] = _piiFields[f]; });
+    encodeProtectedPII(CONFIG.passwordHash);
+    ['candidateName','contactEmail','contactEmailSubject','contactWhatsApp','contactLinkedIn','recSigneeName','recSigneeTitle'].forEach(function(f){
+      newCfg['_enc_'+f] = CONFIG['_enc_'+f];
+      newCfg[f] = ''; // clear plaintext in stored config
+    });
+  }
   var newAdminPwRaw = g('ep-admin-pw'); if (newAdminPwRaw) { newCfg.adminPasswordHash = await sha256(newAdminPwRaw); newAdminPw = newAdminPwRaw; }
   // Education & Credentials
   newCfg.eduHeading = g('ep-edu-heading') || CONFIG.eduHeading || 'The technical *foundation.*';
