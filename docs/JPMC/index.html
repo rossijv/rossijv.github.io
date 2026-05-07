@@ -2331,8 +2331,11 @@ function applyConfig() {
       lbl.innerHTML = (CONFIG.hubBarLabel || 'Coverage') + countHtml;
     }
   })();
-  // Rec
-  t('rec-signee-name',  CONFIG.recSigneeName);
+  // Rec — name intentionally hidden; only title shown
+  (function(){
+    var el = document.getElementById('rec-signee-name');
+    if (el) { el.textContent = ''; el.style.display = 'none'; }
+  })();
   t('rec-signee-title', CONFIG.recSigneeTitle);
   var q1 = document.getElementById('rec-q1');
   var q2 = document.getElementById('rec-q2');
