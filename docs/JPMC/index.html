@@ -4725,25 +4725,45 @@ async function _sendTranscriptToAdmin() {
    SCROLL ANIMATION — multi-class observer
 ═══════════════════════════════════════════════════════ */
 function initObserver() {
-  // Use different rootMargin on mobile vs desktop to ensure sections reveal properly
-  var isMob = window.innerWidth < 700;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if (!e.isIntersecting) return;
-      var el = e.target;
-      el.classList.add('on');
-      io.unobserve(el);
-      // Number counter for numbers-strip
-      if (el.classList.contains('numbers-strip')) runCounters();
-      // Progress timeline init
-      if (el.classList.contains('prog-wrap')) initProgTimeline();
-    });
-  }, {threshold: isMob ? 0.04 : 0.08, rootMargin: isMob ? '0px 0px -10px 0px' : '0px 0px -40px 0px'});
+  var isMob = window.innerWidth < 768 || ('ontouchstart' in window);
 
-  // All animation classes
-  document.querySelectorAll('.fi, .fi-left, .fi-head, .fi-stagger').forEach(function(el){
-    io.observe(el);
-  });
+  // Reveal helper — shared by IO and scroll fallback
+  function revealEl(el) {
+    if (el.classList.contains('on')) return;
+    el.classList.add('on');
+    if (el.classList.contains('numbers-strip')) runCounters();
+    if (el.classList.contains('prog-wrap')) initProgTimeline();
+  }
+
+  var sel = '.fi, .fi-left, .fi-head, .fi-stagger';
+
+  if (isMob) {
+    // ── MOBILE: pure scroll listener — most reliable on all mobile browsers ──
+    function checkVisible() {
+      var vh = window.innerHeight;
+      document.querySelectorAll(sel).forEach(function(el){
+        if (el.classList.contains('on')) return;
+        var r = el.getBoundingClientRect();
+        // Reveal as soon as any part of element is within viewport + 80px lookahead
+        if (r.top < vh + 80 && r.bottom > -80) revealEl(el);
+      });
+    }
+    window.addEventListener('scroll', checkVisible, {passive: true});
+    // Also check on resize (orientation change)
+    window.addEventListener('resize', checkVisible, {passive: true});
+    // Initial check
+    checkVisible();
+  } else {
+    // ── DESKTOP: IntersectionObserver ──
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        revealEl(e.target);
+        io.unobserve(e.target);
+      });
+    }, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
+    document.querySelectorAll(sel).forEach(function(el){ io.observe(el); });
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
