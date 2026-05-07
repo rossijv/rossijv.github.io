@@ -3415,7 +3415,7 @@ function _buildContactHref() {
 
 function contactAction() {
   var href = _buildContactHref();
-  if (href) window.open(href, '_blank');
+  if (href) location.href = href;
 }
 
 function applyContactCTA() {
