@@ -3643,7 +3643,11 @@ function openPortal() {
   applyConfig();
   document.getElementById('portal').style.display = 'block';
   if (CONFIG.chatEnabled) document.getElementById('chat-btn').style.display = 'flex';
-  initObserver();
+  // Defer observer until browser has laid out the newly-visible portal,
+  // otherwise positions are stale on mobile and sections never reveal.
+  requestAnimationFrame(function(){
+    requestAnimationFrame(initObserver);
+  });
   initChat();
   initAdminTriggers();
   restoreSectionOrder();
